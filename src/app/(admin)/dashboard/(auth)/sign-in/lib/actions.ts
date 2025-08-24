@@ -1,0 +1,59 @@
+'use server'
+
+import { schemaSignIn } from "@/lib/schema"
+import { ActionResult } from "@/types"
+import { redirect } from "next/navigation"
+import bcrypt from "bcrypt"
+import { lucia } from "@/lib/auth"
+import { cookies } from "next/headers"
+import { prisma } from "lib/prisma"
+
+export async function SignIn( 
+    _: unknown,
+    formData: FormData
+): Promise<ActionResult> {
+    const validate = schemaSignIn.safeParse({
+        email: String(formData.get('email') ?? ''),
+        password: String(formData.get('password') ?? '')
+    })
+
+
+    if(!validate.success) {
+
+        return {
+            error: validate.error?.errors[0].message ?? 'Invalid input'
+        }
+    }
+
+    const existingUser = await prisma.user.findFirst({
+        where: {
+            email: validate.data.email,
+            role: 'superadmin'
+        }
+    })
+    
+    if(!existingUser) {
+        return {
+            error: 'Email not found'
+        }
+    }
+
+    const comparePassword = await bcrypt.compare(validate.data.password, existingUser.password)
+
+
+    if(!comparePassword) {
+        return {
+            error: 'Email/password incorrect'
+        }
+    }
+
+    const session = await lucia.createSession(existingUser.id, {})
+    const sessionCookie = await lucia.createSessionCookie(session.id)
+    ;(await cookies()).set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+    )
+
+    return redirect('/dashboard/index/page')
+}

@@ -4,7 +4,7 @@ import { Lucia } from "lucia";
 import { cookies } from "next/headers";
 import { cache } from "react";
 import { RoleUser } from "@/generated/prisma";
-import prisma from "../../lib/prisma";
+import { prisma } from "lib/prisma";
 
 // 1. Fixed Prisma adapter initialization
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
@@ -12,6 +12,7 @@ const adapter = new PrismaAdapter(prisma.session, prisma.user);
 // 2. Improved Lucia configuration with proper types
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
+    expires: false,
     attributes: {
       secure: process.env.NODE_ENV === "production",
     },
@@ -63,7 +64,22 @@ export const validateSession = cache(async () => {
 
 // 5. Simplified user retrieval
 export const getUser = cache(async () => {
-  const { user } = await validateSession();
+  const sessionId = (await cookies()).get(lucia.sessionCookieName)?.value ?? null;
+  if(!sessionId) return null;
+  const { user, session } = await lucia.invalidateSession(sessionId);
+  try {
+    if(session && session.fresh) {
+      const sessionCookie = lucia.createSessionCookie(session.id);
+      (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+    }
+    if(!session) {
+      const sessionCookie = lucia.createBlankSessionCookie();
+      (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes)
+    }
+  } catch (err) {
+    
+  }
+
   return user;
 });
 
@@ -71,6 +87,7 @@ export const getUser = cache(async () => {
 declare module "lucia" {
   interface Register {
     Lucia: typeof lucia;
+    UserId: number;
     DatabaseUserAttributes: DatabaseUserAttributes;
   }
 }
