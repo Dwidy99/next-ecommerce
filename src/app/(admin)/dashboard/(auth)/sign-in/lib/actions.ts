@@ -55,5 +55,5 @@ export async function SignIn(
         sessionCookie.attributes,
     )
 
-    return redirect('/dashboard/index/page')
+    return redirect('/dashboard')
 }

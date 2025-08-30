@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
+import { getUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Dashboard",
@@ -15,6 +15,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
+  const {session, user} = await getUser();
+  if(session && user.role === "superadmin") {
+    return redirect('/dashboard')
+  }
 
   return (
     <div className="dashboard-layout">{children}</div>
