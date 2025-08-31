@@ -1,3 +1,4 @@
+'use client'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -6,10 +7,20 @@ import { Label } from '@radix-ui/react-label'
 import { AlertCircle, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+import { useFormState } from 'react-dom'
+import { postCategory } from '../categories/lib/action'
+import { ActionResult } from '@/types'
 
 export default function FormCategory() {
+
+    const initialState: ActionResult = {
+        error: ""
+    }
+
+    const [state, formAction] = useFormState(postCategory, initialState)
+
     return (
-        <form>
+        <form action={formAction}>
             <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
                 <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
                     <div className="flex items-center gap-4">
@@ -31,7 +42,9 @@ export default function FormCategory() {
                             <Button variant="outline" size="sm">
                                 Discard
                             </Button>
-                            {/* <SubmitButton /> */}
+                            <Button type="submit" size="sm" >
+                                Save Category
+                            </Button>
                         </div>
                     </div>
                     <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
