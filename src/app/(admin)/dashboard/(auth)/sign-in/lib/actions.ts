@@ -18,11 +18,13 @@ export async function SignIn(
     })
 
 
-    if(!validate.success) {
+    if (!validate.success) {
+        // Zod v4: gunakan .issues untuk ambil array error
+        const firstError = validate.error.issues?.[0]?.message ?? "Invalid input";
 
         return {
-            error: validate.error?.errors[0].message ?? 'Invalid input'
-        }
+        error: firstError,
+        };
     }
 
     const existingUser = await prisma.user.findFirst({
