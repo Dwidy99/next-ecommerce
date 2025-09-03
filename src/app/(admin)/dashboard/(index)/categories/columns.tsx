@@ -25,6 +25,7 @@ export const columns: ColumnDef<Category>[] = [
 							<Edit className="w-4 h-4 mr-2" /> Edit
 						</Link>
 					</Button>
+					<Button variant="destructive" size="sm"><Trash className="w-4 h-4 mr-2"/> Delete</Button>
 				</div>
 			);
 		},

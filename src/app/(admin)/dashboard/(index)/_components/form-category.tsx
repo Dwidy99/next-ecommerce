@@ -6,10 +6,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@radix-ui/react-label'
 import { AlertCircle, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
-import { useFormState } from 'react-dom'
+import React, { useActionState } from 'react'
 import { postCategory } from '../categories/lib/action'
 import { ActionResult } from '@/types'
+import { useFormStatus } from 'react-dom'
 
 export default function FormCategory() {
 
@@ -17,7 +17,15 @@ export default function FormCategory() {
         error: ""
     }
 
-    const [state, formAction] = useFormState(postCategory, initialState)
+    const [state, formAction] = useActionState(postCategory, initialState)
+
+    function SubmitButton() {
+        const {pending} = useFormStatus()
+
+        return (
+            <Button type="submit" size="sm" disabled={pending}>{pending ? "Loading..." : "Save Category"}</Button>
+        )
+    }
 
     return (
         <form action={formAction}>
@@ -42,9 +50,7 @@ export default function FormCategory() {
                             <Button variant="outline" size="sm">
                                 Discard
                             </Button>
-                            <Button type="submit" size="sm" >
-                                Save Category
-                            </Button>
+                            <SubmitButton/>
                         </div>
                     </div>
                     <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
@@ -61,7 +67,7 @@ export default function FormCategory() {
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    {/* {state.error !== "" && ( */}
+                                    {state.error !== "" && (
                                         <Alert
                                             variant="destructive"
                                             className="mb-4"
@@ -69,10 +75,10 @@ export default function FormCategory() {
                                             <AlertCircle className="h-4 w-4" />
                                             <AlertTitle>Error</AlertTitle>
                                             <AlertDescription>
-                                                {/* {state.error} */}
+                                                {state.error}
                                             </AlertDescription>
                                         </Alert>
-                                    {/* )} */}
+                                    )}
 
                                     <div className="grid gap-6">
                                         <div className="grid gap-3">

@@ -8,9 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { ActionResult } from "@/types";
 import { LogOut } from "lucide-react";
-import Link from "next/link";
-import React from "react";
-import { useFormState } from "react-dom";
+import React, { useActionState } from "react";
 import { Logout } from "../lib/actions";
 
 const initialState: ActionResult = {
@@ -18,7 +16,7 @@ const initialState: ActionResult = {
 }
 
 export default function FormLogout() {
-    const [state, formAction] = useFormState(Logout, initialState)
+    const [state, formAction] = useActionState(Logout, initialState)
 
 
 	return (

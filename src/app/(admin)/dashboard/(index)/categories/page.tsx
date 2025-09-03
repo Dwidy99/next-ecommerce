@@ -27,6 +27,8 @@ import { DataTable } from "./data-table";
 
 export default async function CategoriesPage() {
 
+	const data = await getCategories();
+
 	return (
 		<div className="space-y-4">
 			<div className="text-right">
@@ -47,7 +49,7 @@ export default async function CategoriesPage() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-                    <DataTable columns={columns} data={[]} />
+                    <DataTable columns={columns} data={data} />
 				</CardContent>
 			</Card>
 		</div>
