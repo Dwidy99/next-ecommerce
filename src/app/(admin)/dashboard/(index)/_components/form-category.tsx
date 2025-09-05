@@ -7,25 +7,34 @@ import { Label } from '@radix-ui/react-label'
 import { AlertCircle, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import React, { useActionState } from 'react'
-import { postCategory } from '../categories/lib/action'
+import { postCategory, updateCategory } from '../categories/lib/action'
 import { ActionResult } from '@/types'
 import { useFormStatus } from 'react-dom'
+import { Category } from '@prisma/client'
 
-export default function FormCategory() {
+const initialState: ActionResult = {
+    error: ""
+}
 
-    const initialState: ActionResult = {
-        error: ""
-    }
+interface FormCategoryProps {
+    type?: 'ADD' | 'EDIT'
+    data?: Category | null
+}
 
-    const [state, formAction] = useActionState(postCategory, initialState)
 
-    function SubmitButton() {
-        const {pending} = useFormStatus()
+function SubmitButton() {
+    const {pending} = useFormStatus()
+    
+    return (
+        <Button type="submit" size="sm" disabled={pending}>{pending ? "Loading..." : "Save Category"}</Button>
+    )
+}
 
-        return (
-            <Button type="submit" size="sm" disabled={pending}>{pending ? "Loading..." : "Save Category"}</Button>
-        )
-    }
+export default function FormCategory({data = null, type = 'ADD'}: FormCategoryProps) {
+
+    const updateCategoryWithId = (_: unknown, formData: FormData) => updateCategory(_, formData, data?.id);
+
+    const [state, formAction] = useActionState(type === "ADD" ? postCategory : updateCategoryWithId, initialState)
 
     return (
         <form action={formAction}>
@@ -88,7 +97,7 @@ export default function FormCategory() {
                                                 type="text"
                                                 name="name"
                                                 className="w-full"
-                                                // defaultValue={data?.name}
+                                                defaultValue={data?.name}
                                             />
                                         </div>
                                         {/* <div className="grid gap-3">

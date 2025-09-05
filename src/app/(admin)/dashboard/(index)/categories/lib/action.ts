@@ -36,3 +36,43 @@ export async function postCategory(
 
   redirect("/dashboard/categories/");
 }
+
+export async function updateCategory(
+  _: unknown,
+  formData: FormData,
+  id: number | undefined
+): Promise<ActionResult>{
+  const validate = schemaCategory.safeParse({
+    name: formData.get("name"),
+  })
+
+  if(!validate.success) {
+    return {
+      error: validate.error.issues?.[0].message ?? "Invalid Input"
+    }
+  }
+
+  if(id === undefined) {
+    return {
+      error: "Id is not found"
+    }
+  }
+
+  try {
+    await prisma.category.update({
+      where: {
+        id: id
+      },
+      data: {
+        name: validate.data.name
+      }
+    })
+  } catch (err) {
+    console.log(err);
+    return {
+      error: "Failed to update data"
+    }
+  }
+
+  return redirect("/dashboard/categories");
+}

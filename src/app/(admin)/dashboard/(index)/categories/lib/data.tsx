@@ -13,3 +13,19 @@ export async function getCategories() {
     await prisma.$disconnect(); // penting untuk menghindari memory leak
   }
 }
+
+
+export async function getCategoryById(id: string) {
+  try {
+    return await prisma.category.findFirst({
+      where: {
+        id: Number.parseInt(id)
+      }
+    })
+  } catch (error) {
+    console.error(error);
+    return null;
+  } finally {
+    await prisma.$disconnect(); // penting untuk menghindari memory leak
+  }
+}

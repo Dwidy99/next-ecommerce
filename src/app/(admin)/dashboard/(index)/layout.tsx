@@ -6,7 +6,11 @@ import Sidebar from "./_components/sidebar";
 import { getUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter", // opsional, untuk Tailwind
+});
+
 
 export const metadata: Metadata = {
 	title: "Dashboard",
