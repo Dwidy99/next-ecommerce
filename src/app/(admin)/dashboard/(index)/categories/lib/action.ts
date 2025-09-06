@@ -76,3 +76,23 @@ export async function updateCategory(
 
   return redirect("/dashboard/categories");
 }
+
+export async function deleteCategory(
+  _:unknown,
+  formData: FormData,
+): Promise<ActionResult>{
+  const id = Number(formData.get("id"));
+
+  if (!id) {
+    return { error: "Invalid category ID" };
+  }
+
+  try {
+    await prisma.category.delete({ where: { id } });
+  } catch (err: any) {
+    console.error("Delete error:", err);
+    return { error: "Category could not be deleted. It may be linked to other data." };
+  }
+  
+  redirect("/dashboard/categories");
+}
