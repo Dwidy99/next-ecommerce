@@ -12,7 +12,7 @@ import Link from "next/link";
 export const columns: ColumnDef<Brand>[] = [
 	{
 		accessorKey: "name",
-		header: "Location",
+		header: "Brand",
         cell: ({row}) => {
             const brand = row.original;
 

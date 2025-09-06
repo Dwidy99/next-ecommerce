@@ -13,19 +13,19 @@ export default async function BrandPage() {
     <div className="space-y-4">
 			<div className="text-right">
 				<Button size="sm" className="h-8 gap-1" asChild>
-					<Link href="/dashboard/locations/create">
+					<Link href="/dashboard/brands/create">
 						<PlusCircle className="h-3.5 w-3.5" />
 						<span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-							Add Location
+							Add Brand
 						</span>
 					</Link>
 				</Button>
 			</div>
 			<Card x-chunk="dashboard-06-chunk-0">
 				<CardHeader>
-					<CardTitle>Locations</CardTitle>
+					<CardTitle>Brands</CardTitle>
 					<CardDescription>
-						Manage your Locations and view their sales performance.
+						Manage your Brands and view their sales performance.
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
