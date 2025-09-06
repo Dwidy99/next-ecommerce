@@ -7,7 +7,7 @@ import { Label } from '@radix-ui/react-label'
 import { AlertCircle, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import React, { useActionState } from 'react'
-// import { postBrand, updateBrand } from '../lib/action'
+import { postBrand } from '../lib/actions'
 import { ActionResult } from '@/types'
 import { useFormStatus } from 'react-dom'
 import { Brand } from '@prisma/client'
@@ -30,14 +30,17 @@ function SubmitButton() {
     )
 }
 
-export default function FormBrand({data = null, type = 'ADD'}: FormBrandProps) {
+// export default function FormBrand({data = null, type = 'ADD'}: FormBrandProps) {
+export default function FormBrand() {
+
+    const [state, formAction] = useActionState(postBrand, initialState)
 
     // const updateBrandWithId = (_: unknown, formData: FormData) => updateBrand(_, formData, data?.id);
 
     // const [state, formAction] = useActionState(type === "ADD" ? postBrand : updateBrandWithId, initialState)
 
     return (
-        <form >
+        <form action={formAction}>
             <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
                 <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
                     <div className="flex items-center gap-4">
@@ -76,7 +79,7 @@ export default function FormBrand({data = null, type = 'ADD'}: FormBrandProps) {
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    {/* {state.error !== "" && ( */}
+                                    {state.error !== "" && (
                                         <Alert
                                             variant="destructive"
                                             className="mb-4"
@@ -84,10 +87,10 @@ export default function FormBrand({data = null, type = 'ADD'}: FormBrandProps) {
                                             <AlertCircle className="h-4 w-4" />
                                             <AlertTitle>Error</AlertTitle>
                                             <AlertDescription>
-                                                {/* {state.error} */}
+                                                {state.error}
                                             </AlertDescription>
                                         </Alert>
-                                    {/* )} */}
+                                    )}
 
                                     <div className="grid gap-6">
                                         <div className="grid gap-3">
@@ -97,7 +100,7 @@ export default function FormBrand({data = null, type = 'ADD'}: FormBrandProps) {
                                                 type="text"
                                                 name="name"
                                                 className="w-full"
-                                                defaultValue={data?.name}
+                                                // defaultValue={data?.name}
                                             />
                                         </div>
                                         <div className="grid gap-3">

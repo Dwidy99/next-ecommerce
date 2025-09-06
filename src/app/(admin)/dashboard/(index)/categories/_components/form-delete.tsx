@@ -3,7 +3,7 @@ import { ActionResult } from '@/types'
 import { Trash } from 'lucide-react'
 import React, { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
-import { deleteCategory } from '../lib/action'
+import { deleteCategory } from '../lib/actions'
 
 const initialState: ActionResult = {
   error: ""
