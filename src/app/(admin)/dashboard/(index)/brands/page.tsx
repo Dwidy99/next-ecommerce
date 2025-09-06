@@ -5,8 +5,10 @@ import Link from 'next/link'
 import React from 'react'
 import { DataTable } from '../categories/data-table'
 import { columns } from './columns'
+import { getBrands } from './lib/data'
 
-export default function BrandPage() {
+export default async function BrandPage() {
+	const brands = await getBrands()
   return (
     <div className="space-y-4">
 			<div className="text-right">
@@ -27,7 +29,7 @@ export default function BrandPage() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-                    <DataTable columns={columns} data={[]} />
+                    <DataTable columns={columns} data={brands} />
 				</CardContent>
 			</Card>
 		</div>
