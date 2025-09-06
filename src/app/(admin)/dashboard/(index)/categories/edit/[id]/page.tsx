@@ -12,7 +12,8 @@ interface EditPageProp {
 }
 
 export default async function EditPage({params}: EditPageProp) {
-    const data = await getCategoryById(params.id);
+    const { id } = await params;
+    const data = await getCategoryById(id);
 
     if(!data) {
         return redirect("/dashboard/categories");

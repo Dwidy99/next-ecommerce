@@ -12,7 +12,8 @@ interface EditPageProp {
 }
 
 export default async function EditPage({params}: EditPageProp) {
-    const data = await getLocationById(params.id);
+    const { id } = await params;
+    const data = await getLocationById(id);
 
     if(!data) {
         return redirect("/dashboard/locations");
