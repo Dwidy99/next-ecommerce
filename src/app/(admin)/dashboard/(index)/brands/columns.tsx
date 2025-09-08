@@ -15,10 +15,13 @@ export const columns: ColumnDef<Brand>[] = [
 		header: "Brand",
         cell: ({row}) => {
             const brand = row.original;
+			    // 🔍 Log URL untuk debugging
+    console.log("Image URL:", getImageUrl(brand.logo));
+
 
             return (
                 <div className="inline-flex items-center gap-5">
-                    <Image src={getImageUrl(brand.logo)} alt="Product" width={80} height={80} />
+                    <img src={getImageUrl(brand.logo)} alt="Product" width={80} height={80} />
 					<span>{brand.name}</span>
                 </div>
             )

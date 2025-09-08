@@ -2,16 +2,9 @@ import React from 'react'
 import FormCategory from '../../_components/form-category';
 import { getCategoryById } from '../../lib/data';
 import { redirect } from 'next/navigation';
+import { Tedit } from '@/types';
 
-type Tparams = {
-    id: string;
-}
-
-interface EditPageProp {
-    params: Tparams;
-}
-
-export default async function EditPage({params}: EditPageProp) {
+export default async function EditPage({params}: Tedit) {
     const { id } = await params;
     const data = await getCategoryById(id);
 

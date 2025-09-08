@@ -2,16 +2,9 @@ import React from 'react'
 import FormLocation from '../../_components/form-location';
 import { getLocationById } from '../../lib/data';
 import { redirect } from 'next/navigation';
+import { Tedit } from '@/types';
 
-type Tparams = {
-    id: string;
-}
-
-interface EditPageProp {
-    params: Tparams;
-}
-
-export default async function EditPage({params}: EditPageProp) {
+export default async function EditPage({params}: Tedit) {
     const { id } = await params;
     const data = await getLocationById(id);
 

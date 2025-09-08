@@ -14,3 +14,22 @@ export const getImageUrl = (name: string) => {
 
     return data.publicUrl
 }
+
+export const uploadFile = async (file: File, path: 'brands' | 'products' = "brands") => {
+    'image/png'
+
+    const fileType = file.type.split('/')[1]
+    const filename = `${path}-${Date.now()}.${fileType}`;
+
+    const { error } = await supabase
+        .storage
+        .from('e-commerce')
+        .upload(`public/${path}/${filename}`, file, {
+            cacheControl: '3600',
+            upsert: false
+        })
+        
+    if (error) throw error;
+
+    return filename;
+}

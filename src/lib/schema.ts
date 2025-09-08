@@ -1,4 +1,4 @@
-import { file, z } from "zod";
+import { z } from "zod";
 
 export const ALLOW_MIME_TYPES = ["image/jpg", "image/jpeg", "image/png"];
 
@@ -30,9 +30,11 @@ export const schemaLocation = z.object({
 
 export const schemaBrand = schemaCategory.extend({
   image: z
-    .any()
-    .refine((file: File) => ALLOW_MIME_TYPES.includes(file.type), {
-      message: "File is not valid",
+    .instanceof(File)
+    .refine(file => file?.name?.trim().length > 0, {
+      message: "Image is required",
     })
-    .refine((file: File) => file?.name, {message: "Image is required"})
-})
+    .refine(file => ALLOW_MIME_TYPES.includes(file.type), {
+      message: "File type is not valid",
+    }),
+});

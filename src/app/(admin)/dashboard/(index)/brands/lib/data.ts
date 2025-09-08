@@ -11,3 +11,19 @@ export async function getBrands() {
     } 
     // finally {}
 }
+
+export async function getBrandById(id: string) {
+    try {
+        const brand = prisma.brand.findFirst({
+            where: {
+                id: Number.parseInt(id)
+            }
+        })
+
+        return brand
+    } catch (err) {
+        console.log(err);
+        return null
+    } 
+    // finally {}
+}
