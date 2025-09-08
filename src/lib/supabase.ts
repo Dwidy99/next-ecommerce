@@ -34,11 +34,11 @@ export const uploadFile = async (file: File, path: 'brands' | 'products' = "bran
     return filename;
 }
 
-export async function checkFileExists(path: string): Promise<boolean> {
+export async function checkFileExists(filename: string, path: "brands" | "products" = "brands"): Promise<boolean> {
   const { error } = await supabase
     .storage
     .from("e-commerce")
-    .download(`brands/${path}`);
+    .download(`public/${path}/${filename}`);
   return !error;
 }
 
@@ -47,4 +47,9 @@ export const deleteFile = async (filename: string, path: "brands" | "products" =
     .storage
     .from('e-commerce')
     .remove([`public/${path}/${filename}`]);
+
+    if (error) {
+    console.warn("Failed delete old file:", error.message);
+  }
+
 }

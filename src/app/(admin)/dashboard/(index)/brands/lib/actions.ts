@@ -76,9 +76,12 @@ export async function updateBrand(
     // ✅ Upload file baru jika file lama hilang atau ada file baru di form
     if ((logo instanceof File && logo.size > 0) || fileMissing) {
         if (logo instanceof File && logo.size > 0) {
-        fileName = await uploadFile(logo, "brands");
+                if (fileName) {
+                await deleteFile(fileName); // ✅ hapus file lama
+            }
+            fileName = await uploadFile(logo, "brands");
         } else {
-        return { error: "Logo file missing. Please upload a new one." };
+            return { error: "Logo file missing. Please upload a new one." };
         }
     }
 
@@ -108,7 +111,7 @@ export async function deleteBrand(
   formData: FormData,
 ): Promise<ActionResult>{
     const id = Number(formData.get("id"));
-    
+
     const brand = await prisma.brand.findFirst({
         where: {id},
         select: {logo: true}
