@@ -41,3 +41,10 @@ export async function checkFileExists(path: string): Promise<boolean> {
     .download(`brands/${path}`);
   return !error;
 }
+
+export const deleteFile = async (filename: string, path: "brands" | "products" = "brands") => {
+    const { data, error } = await supabase
+    .storage
+    .from('e-commerce')
+    .remove([`public/${path}/${filename}`]);
+}

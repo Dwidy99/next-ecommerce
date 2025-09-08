@@ -7,6 +7,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Edit } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import FormDelete from "./_components/form-delete";
 // import FormDelete from "./_components/form-delete";
 
 export const columns: ColumnDef<Brand>[] = [
@@ -21,7 +22,7 @@ export const columns: ColumnDef<Brand>[] = [
 
             return (
                 <div className="inline-flex items-center gap-5">
-                    <img src={getImageUrl(brand.logo)} alt="Product" width={80} height={80} />
+                    <Image src={getImageUrl(brand.logo)} alt="Product" width={80} height={80} />
 					<span>{brand.name}</span>
                 </div>
             )
@@ -41,7 +42,7 @@ export const columns: ColumnDef<Brand>[] = [
 							<Edit className="w-4 h-4 mr-2" /> Edit
 						</Link>
 					</Button>
-					{/* <FormDelete key={brand.id} id={brand.id} /> */}
+					<FormDelete key={brand.id} id={brand.id} />
 				</div>
 			);
 		},

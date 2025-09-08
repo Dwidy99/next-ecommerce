@@ -3,7 +3,7 @@ import { ActionResult } from '@/types'
 import { Trash } from 'lucide-react'
 import React, { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
-import { deleteBrand } from '../lib/action'
+import { deleteBrand } from '../lib/actions'
 
 const initialState: ActionResult = {
   error: ""
@@ -17,7 +17,7 @@ function SubmitButton() {
   const {pending} = useFormStatus();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const confirmed = window.confirm("Yakin ingin menghapus kategori ini?");
+    const confirmed = window.confirm("Are you sure delete this data?");
     if (!confirmed) {
       e.preventDefault(); // batalkan submit
     }

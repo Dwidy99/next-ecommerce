@@ -1,7 +1,7 @@
 "use server";
 
 import { schemaBrand } from "@/lib/schema";
-import { checkFileExists, uploadFile } from "@/lib/supabase";
+import { checkFileExists, deleteFile, uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/types";
 import { prisma } from "lib/prisma";
 import { redirect } from "next/navigation";
@@ -101,4 +101,33 @@ export async function updateBrand(
     // finally {}
 
     return redirect("/dashboard/brands/"); 
+}
+
+export async function deleteBrand(
+  _:unknown,
+  formData: FormData,
+): Promise<ActionResult>{
+    const id = Number(formData.get("id"));
+    
+    const brand = await prisma.brand.findFirst({
+        where: {id},
+        select: {logo: true}
+    })
+
+    if(!brand) {
+        return {
+            error: "Brand not found"
+        }
+    }
+
+  try {
+    deleteFile(brand.logo, "brands");
+
+    await prisma.brand.delete({ where: { id } });
+  } catch (err: any) {
+    console.error("Delete error:", err);
+    return { error: "Brand could not be deleted. It may be linked to other data." };
+  }
+  
+  redirect("/dashboard/brands");
 }
