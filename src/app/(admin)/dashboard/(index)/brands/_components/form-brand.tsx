@@ -7,7 +7,7 @@ import { Label } from '@radix-ui/react-label'
 import { AlertCircle, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import React, { useActionState } from 'react'
-import { postBrand } from '../lib/actions'
+import { postBrand, updateBrand } from '../lib/actions'
 import { ActionResult } from '@/types'
 import { useFormStatus } from 'react-dom'
 import { Brand } from '@prisma/client'
@@ -30,14 +30,11 @@ function SubmitButton() {
     )
 }
 
-// export default function FormBrand({data = null, type = 'ADD'}: FormBrandProps) {
-export default function FormBrand() {
+export default function FormBrand({data = null, type = 'ADD'}: FormBrandProps) {
 
-    const [state, formAction] = useActionState(postBrand, initialState)
+    const updateBrandWithId = (_: unknown, formData: FormData) => updateBrand(_, formData, data?.id ?? 0);
 
-    // const updateBrandWithId = (_: unknown, formData: FormData) => updateBrand(_, formData, data?.id);
-
-    // const [state, formAction] = useActionState(type === "ADD" ? postBrand : updateBrandWithId, initialState)
+    const [state, formAction] = useActionState(type === "ADD" ? postBrand : updateBrandWithId, initialState)
 
     return (
         <form action={formAction}>
@@ -100,7 +97,7 @@ export default function FormBrand() {
                                                 type="text"
                                                 name="name"
                                                 className="w-full"
-                                                // defaultValue={data?.name}
+                                                defaultValue={data?.name}
                                             />
                                         </div>
                                         <div className="grid gap-3">

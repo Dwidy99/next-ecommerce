@@ -33,3 +33,11 @@ export const uploadFile = async (file: File, path: 'brands' | 'products' = "bran
 
     return filename;
 }
+
+export async function checkFileExists(path: string): Promise<boolean> {
+  const { error } = await supabase
+    .storage
+    .from("e-commerce")
+    .download(`brands/${path}`);
+  return !error;
+}
