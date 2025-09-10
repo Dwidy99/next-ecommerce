@@ -7,8 +7,12 @@ import Link from 'next/link'
 import React from 'react'
 import { DataTable } from '../categories/data-table'
 import { columns } from './columns'
+import { getProducts } from './lib/data'
 
-export default function ProductPage() {
+export default async function ProductPage() {
+
+    const products = await getProducts()
+
   return (
     <div className="space-y-4">
         <div className="text-right">
@@ -29,7 +33,7 @@ export default function ProductPage() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <DataTable columns={columns} data={[]} />
+                <DataTable columns={columns} data={products} />
             </CardContent>
         </Card>
     </div>
