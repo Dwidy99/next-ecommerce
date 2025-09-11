@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -13,12 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { ChevronLeft, Upload } from "lucide-react";
 import Link from "next/link";
-import React, { useActionState } from "react";
+import React, { ReactNode } from "react";
 import { ActionResult } from "@/types";
 import { useFormStatus } from "react-dom";
-import { Product } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
-import Image from "next/image";
 import {
   Select,
   SelectContent,
@@ -33,8 +30,7 @@ const initialState: ActionResult = {
 };
 
 interface FormProductProps {
-  type?: "ADD" | "EDIT";
-  data?: Product | null;
+  children: ReactNode;
 }
 
 function SubmitButton() {
@@ -47,10 +43,7 @@ function SubmitButton() {
   );
 }
 
-export default function FormProduct({
-  data = null,
-  type = "ADD",
-}: FormProductProps) {
+export default function FormProduct({ children }: FormProductProps) {
   return (
     <form>
       <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -106,16 +99,12 @@ export default function FormProduct({
                         type="text"
                         name="name"
                         className="w-full"
-                        defaultValue={data?.name}
+                        // defaultValue={data?.name}
                       />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="description">Description</Label>
-                      <Textarea
-                        id="description"
-                        defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec ultricies ultricies, nunc nisl ultricies nunc, nec ultricies nunc nisl nec nunc."
-                        className="min-h-32"
-                      />
+                      <Textarea id="description" className="min-h-32" />
                     </div>
                   </div>
                 </CardContent>
@@ -126,61 +115,7 @@ export default function FormProduct({
                   <CardTitle>Product Product</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid gap-6 sm:grid-cols-3">
-                    <div className="grid gap-3">
-                      <Label htmlFor="location">Product</Label>
-                      <Select>
-                        <SelectTrigger
-                          id="location"
-                          aria-label="Select location"
-                        >
-                          <SelectValue placeholder="Select location" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="clothing">Clothing</SelectItem>
-                          <SelectItem value="electronics">
-                            Electronics
-                          </SelectItem>
-                          <SelectItem value="accessories">
-                            Accessories
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="brand">Brand</Label>
-                      <Select name="brand_id">
-                        <SelectTrigger id="brand" aria-label="Select Brand">
-                          <SelectValue placeholder="Select Brand" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="t-shirts">T-Shirts</SelectItem>
-                          <SelectItem value="hoodies">Hoodies</SelectItem>
-                          <SelectItem value="sweatshirts">
-                            Sweatshirts
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="location">Location</Label>
-                      <Select name="location_id">
-                        <SelectTrigger
-                          id="location"
-                          aria-label="Select location"
-                        >
-                          <SelectValue placeholder="Select Location" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="t-shirts">T-Shirts</SelectItem>
-                          <SelectItem value="hoodies">Hoodies</SelectItem>
-                          <SelectItem value="sweatshirts">
-                            Sweatshirts
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
+                  <div className="grid gap-6 sm:grid-cols-3">{children}</div>
                 </CardContent>
               </Card>
             </div>
@@ -198,9 +133,8 @@ export default function FormProduct({
                           <SelectValue placeholder="Select status" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="draft">Draft</SelectItem>
-                          <SelectItem value="published">Active</SelectItem>
-                          <SelectItem value="archived">Archived</SelectItem>
+                          <SelectItem value="ready">Ready</SelectItem>
+                          <SelectItem value="preorder">Pre-Order</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
