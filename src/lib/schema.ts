@@ -1,4 +1,5 @@
-import { z } from "zod";
+import { Files } from "lucide-react";
+import { refine, z } from "zod";
 
 export const ALLOW_MIME_TYPES = ["image/jpg", "image/jpeg", "image/png"];
 
@@ -37,4 +38,57 @@ export const schemaBrand = schemaCategory.extend({
     .refine(file => ALLOW_MIME_TYPES.includes(file.type), {
       message: "File type is not valid",
     }),
+});
+
+
+export const schemaProduct = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Name is required" })
+    .min(4, { message: "Name must have at least 4 characters" }),
+
+  description: z
+    .string()
+    .min(1, { message: "Description is required" })
+    .min(4, { message: "Description must have at least 5 characters" }),
+  
+    price: z
+    .string()
+    .min(1, { message: "Price is required" }),
+    
+    stock: z
+    .string()
+    .min(1, { message: "Stock is required" }),
+    
+    brand_id: z
+    .string()
+    .min(1, { message: "Brand is required" }),
+    
+    category_id: z
+    .string()
+    .min(1, { message: "Category is required" }),
+    
+    location_id: z
+    .string()
+    .min(1, { message: "Location is required" }),
+    
+    images_id: z
+    .any()
+    .refine((files: File[]) => files.length === 3, {
+      message: "Please upload 3 image product",
+    })
+    .refine(
+      (files: File[]) => {
+        let validate = false;
+
+        Array.from(files).find((file) => {
+          validate = ALLOW_MIME_TYPES.includes(file.type)
+        })
+
+        return validate;
+      },
+      {
+        message: "Upload file should image"
+      }
+    )
 });
