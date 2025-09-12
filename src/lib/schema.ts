@@ -45,7 +45,8 @@ export const schemaProduct = z.object({
   name: z
     .string()
     .min(1, { message: "Name is required" })
-    .min(4, { message: "Name must have at least 4 characters" }),
+    .min(4, { message: "Name must have at least 4 characters" })
+    .max(255),
 
   description: z
     .string()
@@ -72,23 +73,13 @@ export const schemaProduct = z.object({
     .string()
     .min(1, { message: "Location is required" }),
     
-    images_id: z
-    .any()
-    .refine((files: File[]) => files.length === 3, {
-      message: "Please upload 3 image product",
-    })
+    images: z
+    .array(z.instanceof(File))
+    .length(3, { message: "Please upload exactly 3 images" })
     .refine(
-      (files: File[]) => {
-        let validate = false;
-
-        Array.from(files).find((file) => {
-          validate = ALLOW_MIME_TYPES.includes(file.type)
-        })
-
-        return validate;
-      },
+      (files) => files.every((file) => ALLOW_MIME_TYPES.includes(file.type)),
       {
-        message: "Upload file should image"
+        message: "All files must be valid image types",
       }
     )
 });

@@ -30,7 +30,7 @@ export default function UploadImages() {
       return;
     }
 
-    if (e.target.files && e.target.files.length >= 3) {
+    if (e.target.files && e.target.files.length >= 1) {
       thumbnailRef.current.src = URL.createObjectURL(e.target.files[0]);
       imageFirstRef.current.src = URL.createObjectURL(e.target.files[1]);
       imageSecondRef.current.src = URL.createObjectURL(e.target.files[2]);
@@ -68,10 +68,11 @@ export default function UploadImages() {
             </button>
             <button>
               <Image
-                src="/profile.png"
-                width={500}
-                height={500}
-                alt="Picture of the author"
+                alt="Product image"
+                className="aspect-square w-full rounded-md object-cover"
+                height={84}
+                src="/placeholder.svg"
+                width={84}
                 ref={imageSecondRef}
               />
             </button>

@@ -36,16 +36,16 @@ export async function getProducts() {
         })
 
         const response_products: TColumn[] = products.map((product) => ({
-            brand_name: product.brand.name,
-            category_name: product.category.name,
-            createdAt: product.created_at,
-            image_url: product.images[0],
             id: product.id,
             name: product.name,
-            price: product.price,
-            stock: product.stock,
+            image_url: product.images[0] ?? "",
+            category: product.category?.name ?? "",
+            brand_name: product.brand?.name ?? "",
+            price: Number(product.price),
             total_sales: product._count.orders,
-        }) )
+            stock: product.stock,
+            createdAt: product.created_at,
+        }));
         
         return response_products
     } catch (err) {

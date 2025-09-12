@@ -1,13 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-   images: {
+  images: {
     remotePatterns: [
-        {
-        protocol: 'https',
-        hostname: 'ypguddizaarcqalpozre.supabase.co'
-      }
+      {
+        protocol: "https",
+        hostname: "ypguddizaarcqalpozre.supabase.co",
+      },
     ],
+  },
+  serverActions: {
+    bodySizeLimit: "1mb", // ⬅️ Tambahkan ini untuk mengizinkan upload hingga 5MB
   },
 };
 

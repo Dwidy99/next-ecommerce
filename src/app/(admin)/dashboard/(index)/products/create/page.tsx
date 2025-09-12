@@ -20,9 +20,9 @@ export default async function CreatePage() {
   return (
     <FormProduct>
       <div className="grid gap-3">
-        <Label htmlFor="location">Category</Label>
-        <Select>
-          <SelectTrigger id="location" aria-label="Select location">
+        <Label htmlFor="category_id">Category</Label>
+        <Select name="category_id">
+          <SelectTrigger id="category" aria-label="Select category">
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
           <SelectContent>
