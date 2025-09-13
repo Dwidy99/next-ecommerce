@@ -83,3 +83,7 @@ export const schemaProduct = z.object({
       }
     )
 });
+
+export const schemaProductEdit = schemaProduct.extend({
+  id: z.number().min(1, { message: "Category is required" }),
+}).omit({images: true});
