@@ -1,5 +1,5 @@
 'use server';
-import { schemaProduct, schemaProductEdit, schemaProductImagesOptional } from "@/lib/schema";
+import { schemaProduct, schemaProductEdit } from "@/lib/schema";
 import { checkFileExists, deleteFile, uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/types";
 import { ProductStock } from "@prisma/client";
@@ -162,4 +162,43 @@ export async function updateProduct(
 
   // 🚀 Redirect ke halaman list
   return redirect("/dashboard/products");
+}
+
+
+export async function deleteProduct(
+  formData: FormData,
+  id: number
+): Promise<ActionResult> {
+
+  const product = await prisma.product.findFirst({
+    where: { id: id },
+    select: { id: true, images: true }
+  })
+
+  if (!product) {
+    return {
+      error: "Product not found"
+    }
+  }
+
+  try {
+    for (const image of product.images) {
+      console.log(image)
+      await deleteFile(image, 'products')
+    }
+
+    await prisma.product.delete({
+      where: {
+        id
+      }
+    })
+  } catch (err) {
+    console.log(err)
+    return {
+      error: "Failed to delete data"
+    }
+  }
+  // finally {}
+
+  return redirect("/dashboard/products/")
 }
