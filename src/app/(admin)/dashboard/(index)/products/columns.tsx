@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getImageUrl } from "@/lib/supabase";
@@ -13,7 +15,7 @@ export type TColumn = {
   name: string;
   image_url: string;
   category: string;
-  brand_name: string;
+  product_name: string;
   price: number;
   total_sales: number;
   stock: ProductStock;
@@ -72,18 +74,20 @@ export const columns: ColumnDef<TColumn>[] = [
     },
   },
   {
+    accessorKey: "actions",
+    header: "Actions",
     id: "actions",
     cell: ({ row }) => {
-      const brand = row.original;
+      const product = row.original;
 
       return (
         <div className="space-x-4 inline-flex">
           <Button size="sm" asChild>
-            <Link href={`/dashboard/brands/edit/${brand.id}`}>
+            <Link href={`/dashboard/products/edit/${product.id}`}>
               <Edit className="w-4 h-4 mr-2" /> Edit
             </Link>
           </Button>
-          {/* <FormDelete key={brand.id} id={brand.id} /> */}
+          {/* <FormDelete key={product.id} id={product.id} /> */}
         </div>
       );
     },

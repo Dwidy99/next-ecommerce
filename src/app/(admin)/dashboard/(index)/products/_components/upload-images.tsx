@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -6,35 +8,43 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Upload } from "lucide-react";
-import Image from "next/image";
-import React, { ChangeEvent, useRef } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 
-export default function UploadImages() {
+type UploadImagesProps = {
+  defaultImages?: string[];
+};
+
+export default function UploadImages({
+  defaultImages = [],
+}: UploadImagesProps) {
+  const [previewImages, setPreviewImages] = useState<string[]>([
+    "/placeholder.svg",
+    "/placeholder.svg",
+    "/placeholder.svg",
+  ]);
+
   const ref = useRef<HTMLInputElement>(null);
-  const thumbnailRef = useRef<HTMLImageElement>(null);
-  const imageFirstRef = useRef<HTMLImageElement>(null);
-  const imageSecondRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (defaultImages.length >= 3) {
+      setPreviewImages([defaultImages[0], defaultImages[1], defaultImages[2]]);
+    }
+  }, [defaultImages]);
 
   const openFolder = () => {
-    if (ref.current) {
-      ref.current.click();
-    }
+    ref.current?.click();
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (
-      !thumbnailRef.current ||
-      !imageFirstRef.current ||
-      !imageSecondRef.current
-    ) {
-      return;
-    }
+    const files = e.target.files;
+    if (!files || files.length < 3) return;
 
-    if (e.target.files && e.target.files.length >= 1) {
-      thumbnailRef.current.src = URL.createObjectURL(e.target.files[0]);
-      imageFirstRef.current.src = URL.createObjectURL(e.target.files[1]);
-      imageSecondRef.current.src = URL.createObjectURL(e.target.files[2]);
-    }
+    const newPreviews = [
+      URL.createObjectURL(files[0]),
+      URL.createObjectURL(files[1]),
+      URL.createObjectURL(files[2]),
+    ];
+    setPreviewImages(newPreviews);
   };
 
   return (
@@ -42,38 +52,35 @@ export default function UploadImages() {
       <CardHeader>
         <CardTitle>Product Images</CardTitle>
         <CardDescription>
-          Lipsum dolor sit amet, consectetur adipiscing elit
+          Upload or preview up to 3 (jpg, jpeg, png)
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-2">
-          <Image
-            alt="Product image"
+          <img
+            alt="Thumbnail"
             className="aspect-square w-full rounded-md object-cover"
-            height="300"
-            src="/placeholder.svg"
-            width="300"
-            ref={thumbnailRef}
+            height={300}
+            width={300}
+            src={previewImages[0]}
           />
           <div className="grid grid-cols-3 gap-2">
-            <button>
-              <Image
-                alt="Product image"
-                className="aspect-square w-full rounded-md object-cover"
-                height="84"
-                src="/placeholder.svg"
-                width="84"
-                ref={imageFirstRef}
-              />
-            </button>
-            <button>
-              <Image
-                alt="Product image"
+            <button type="button">
+              <img
+                alt="Image 1"
                 className="aspect-square w-full rounded-md object-cover"
                 height={84}
-                src="/placeholder.svg"
                 width={84}
-                ref={imageSecondRef}
+                src={previewImages[1]}
+              />
+            </button>
+            <button type="button">
+              <img
+                alt="Image 2"
+                className="aspect-square w-full rounded-md object-cover"
+                height={84}
+                width={84}
+                src={previewImages[2]}
               />
             </button>
             <button
@@ -86,11 +93,10 @@ export default function UploadImages() {
             </button>
             <input
               type="file"
-              id="images"
               name="images"
-              className="hidden"
-              accept="images/*"
               multiple
+              accept="image/*"
+              className="hidden"
               ref={ref}
               onChange={onChange}
             />

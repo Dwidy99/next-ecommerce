@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
-import { AlertCircle, ChevronLeft, Upload } from "lucide-react";
+import { AlertCircle, ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import React, { ReactNode, useActionState } from "react";
+import React, { ReactNode, startTransition, useActionState } from "react";
 import { ActionResult } from "@/types";
 import { useFormStatus } from "react-dom";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,7 +24,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import UploadImages from "./upload-images";
-import { storeProduct } from "../lib/actions";
+import { storeProduct, updateProduct } from "../lib/actions";
+import { Product } from "@prisma/client";
+import { validateFiles } from "@/lib/utils";
 
 const initialState: ActionResult = {
   error: "",
@@ -32,6 +34,9 @@ const initialState: ActionResult = {
 
 interface FormProductProps {
   children: ReactNode;
+  type: "ADD" | "EDIT";
+  data: Product | null;
+  defaultImages?: string[];
 }
 
 function SubmitButton() {
@@ -44,11 +49,52 @@ function SubmitButton() {
   );
 }
 
-export default function FormProduct({ children }: FormProductProps) {
-  const [state, formAction] = useActionState(storeProduct, initialState);
+export default function FormProduct({
+  children,
+  type,
+  data,
+  defaultImages,
+}: FormProductProps) {
+  const [clientError, setClientError] = React.useState("");
+
+  const updateProductWithId = (_: unknown, formData: FormData) =>
+    updateProduct(_, formData, data?.id ?? 0);
+
+  const [state, formAction] = useActionState(
+    type === "ADD" ? storeProduct : updateProductWithId,
+    initialState
+  );
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const form = e.currentTarget as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const files = formData.getAll("images") as File[];
+
+    const hasNewImage = files.some(
+      (file) => file instanceof File && file.size > 0
+    );
+
+    // Hanya validasi jika type === "ADD" atau user upload gambar baru
+    if ((type === "ADD" || hasNewImage) && files.length > 0) {
+      const error = validateFiles(files);
+      if (error) {
+        setClientError(error);
+        return;
+      }
+    }
+
+    setClientError("");
+
+    startTransition(() => {
+      formAction(formData); // ✅ panggil manual
+    });
+  };
 
   return (
-    <form action={formAction}>
+    <form onSubmit={handleSubmit}>
       <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
         <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
           <div className="flex items-center gap-4">
@@ -88,6 +134,13 @@ export default function FormProduct({ children }: FormProductProps) {
                       <AlertDescription>{state.error}</AlertDescription>
                     </Alert>
                   )}
+                  {clientError && (
+                    <Alert variant="destructive" className="mb-4">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertTitle>File Error</AlertTitle>
+                      <AlertDescription>{clientError}</AlertDescription>
+                    </Alert>
+                  )}
 
                   <div className="grid gap-6">
                     <div className="grid gap-3">
@@ -97,7 +150,7 @@ export default function FormProduct({ children }: FormProductProps) {
                         type="text"
                         name="name"
                         className="w-full"
-                        // defaultValue={data?.name}
+                        defaultValue={data?.name}
                       />
                     </div>
                     <div className="grid gap-3">
@@ -107,6 +160,7 @@ export default function FormProduct({ children }: FormProductProps) {
                         type="number"
                         name="price"
                         className="w-full"
+                        defaultValue={Number(data?.price ?? 0)}
                       />
                     </div>
                     <div className="grid gap-3">
@@ -115,6 +169,7 @@ export default function FormProduct({ children }: FormProductProps) {
                         name="description"
                         id="description"
                         className="min-h-32"
+                        defaultValue={data?.description}
                       />
                     </div>
                   </div>
@@ -139,7 +194,7 @@ export default function FormProduct({ children }: FormProductProps) {
                   <div className="grid gap-6">
                     <div className="grid gap-3">
                       <Label htmlFor="status">Status</Label>
-                      <Select name="stock">
+                      <Select name="stock" defaultValue={data?.stock}>
                         <SelectTrigger id="status" aria-label="Select status">
                           <SelectValue placeholder="Select status" />
                         </SelectTrigger>
@@ -152,7 +207,18 @@ export default function FormProduct({ children }: FormProductProps) {
                   </div>
                 </CardContent>
               </Card>
-              <UploadImages />
+
+              <Card x-chunk="dashboard-07-chunk-4">
+                <CardHeader>
+                  <CardTitle>Product Images</CardTitle>
+                  <CardDescription>
+                    Upload or preview up to 3 images
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <UploadImages defaultImages={defaultImages ?? []} />
+                </CardContent>
+              </Card>
             </div>
           </div>
           <div className="flex items-center justify-center gap-2 md:hidden">

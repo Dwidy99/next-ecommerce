@@ -1,5 +1,4 @@
 import React from "react";
-import FormProduct from "../_components/form-product";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -8,20 +7,44 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getBrands } from "../../brands/lib/data";
-import { getCategories } from "../../categories/lib/data";
-import { getLocations } from "../../locations/lib/data";
+import FormProduct from "../../_components/form-product";
+import { getBrands } from "../../../brands/lib/data";
+import { getCategories } from "../../../categories/lib/data";
+import { getLocations } from "../../../locations/lib/data";
+import { getProductById } from "../../lib/data";
+import { redirect } from "next/navigation";
 
-export default async function CreatePage() {
+export default async function EditPage({ params }: { params: { id: string } }) {
+  const resolvedParams = await Promise.resolve(params); // ✅ paksa resolve Proxy
+  const id = Number(resolvedParams.id);
+
+  if (!resolvedParams.id || isNaN(id)) {
+    console.error("Invalid product ID:", resolvedParams.id);
+    throw new Error("Invalid product ID");
+  }
+
+  const product = await getProductById(id);
   const brands = await getBrands();
   const categories = await getCategories();
   const locations = await getLocations();
 
+  if (!product) {
+    return redirect("/dashboard/products");
+  }
+
+  const imageBaseUrl =
+    "https://ypguddizaarcqalpozre.supabase.co/storage/v1/object/public/e-commerce/public/products/";
+  const defaultImages = product.images?.map((img) => imageBaseUrl + img) ?? [];
+
   return (
-    <FormProduct type="ADD" data={null}>
+    <FormProduct type="EDIT" data={product} defaultImages={defaultImages}>
       <div className="grid gap-3">
         <Label htmlFor="category_id">Category</Label>
-        <Select name="category_id">
+
+        <Select
+          name="category_id"
+          defaultValue={product?.category_id.toString()}
+        >
           <SelectTrigger id="category" aria-label="Select category">
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
@@ -36,7 +59,8 @@ export default async function CreatePage() {
       </div>
       <div className="grid gap-3">
         <Label htmlFor="brand">Brand</Label>
-        <Select name="brand_id">
+
+        <Select name="brand_id" defaultValue={product?.brand_id.toString()}>
           <SelectTrigger id="brand" aria-label="Select Brand">
             <SelectValue placeholder="Select Brand" />
           </SelectTrigger>
@@ -51,7 +75,11 @@ export default async function CreatePage() {
       </div>
       <div className="grid gap-3">
         <Label htmlFor="location">Location</Label>
-        <Select name="location_id">
+
+        <Select
+          name="location_id"
+          defaultValue={product?.location_id.toString()}
+        >
           <SelectTrigger id="location" aria-label="Select location">
             <SelectValue placeholder="Select Location" />
           </SelectTrigger>

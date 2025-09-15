@@ -38,9 +38,9 @@ export async function getProducts() {
         const response_products: TColumn[] = products.map((product) => ({
             id: product.id,
             name: product.name,
+            product_name: product.name, // ✅ ini wajib
             image_url: product.images[0] ?? "",
             category: product.category?.name ?? "",
-            brand_name: product.brand?.name ?? "",
             price: Number(product.price),
             total_sales: product._count.orders,
             stock: product.stock,
@@ -54,4 +54,15 @@ export async function getProducts() {
         return []
     } 
     // finally {}
+}
+
+export async function getProductById(id: number) {
+    try {
+        const product = await prisma.product.findUnique({ where: { id } });
+        return product;
+    } catch (error) {
+        console.error("Error fetching product:", error);
+        return null;
+    } 
+    // finally {console.log("getProductById() selesai dijalankan");}
 }

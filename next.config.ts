@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     ],
   },
   serverActions: {
-    bodySizeLimit: "1mb", // ⬅️ Tambahkan ini untuk mengizinkan upload hingga 5MB
+    bodySizeLimit: "2mb", // ⬅️ Tambahkan ini untuk mengizinkan upload hingga 5MB
   },
 };
 

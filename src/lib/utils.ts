@@ -20,3 +20,23 @@ export function dateFormat(date: Date | null, format = 'DD MMMM YYYY') {
   }
   return dayjs(date).format(format)
 }
+
+export function validateFiles(files: File[]): string | null {
+  const MAX_SIZE = 300 * 1024; // 300 KB
+  const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+
+  if (files.length !== 3) {
+    return "You must upload exactly 3 images.";
+  }
+
+  for (const file of files) {
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      return `File ${file.name} is not a supported image type.`;
+    }
+    if (file.size > MAX_SIZE) {
+      return `File ${file.name} is too large. Maximum allowed size is 300 KB.`;
+    }
+  }
+
+  return null; // valid
+}
