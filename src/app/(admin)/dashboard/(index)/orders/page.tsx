@@ -11,8 +11,10 @@ import Link from "next/link";
 import React from "react";
 import { DataTable } from "../categories/data-table";
 import { columns } from "./columns";
+import { getOrders } from "./lib/data";
 
 export default async function OrderPage() {
+  const orders = await getOrders();
   return (
     <div className="space-y-4">
       <Card x-chunk="dashboard-06-chunk-0">
@@ -23,7 +25,7 @@ export default async function OrderPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <DataTable columns={columns} data={[]} />
+          <DataTable columns={columns} data={orders} />
         </CardContent>
       </Card>
     </div>

@@ -14,7 +14,7 @@ type TProduct = {
 export type TColumn = {
   id: number;
   products: TProduct[];
-  customer_naem: string;
+  customer_name: string | undefined;
   price: number;
   status: StatusOrder;
 };
