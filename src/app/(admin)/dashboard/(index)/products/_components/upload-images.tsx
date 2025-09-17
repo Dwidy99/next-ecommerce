@@ -18,16 +18,20 @@ export default function UploadImages({
   defaultImages = [],
 }: UploadImagesProps) {
   const [previewImages, setPreviewImages] = useState<string[]>([
-    "/placeholder.svg",
-    "/placeholder.svg",
-    "/placeholder.svg",
+    "/assets/products/placeholder.svg",
+    "/assets/products/placeholder.svg",
+    "/assets/products/placeholder.svg",
   ]);
 
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (defaultImages.length >= 3) {
-      setPreviewImages([defaultImages[0], defaultImages[1], defaultImages[2]]);
+      setPreviewImages([
+        defaultImages[0] || "/assets/products/placeholder.svg",
+        defaultImages[1] || "/assets/products/placeholder.svg",
+        defaultImages[2] || "/assets/products/placeholder.svg",
+      ]);
     }
   }, [defaultImages]);
 
@@ -39,11 +43,10 @@ export default function UploadImages({
     const files = e.target.files;
     if (!files || files.length < 3) return;
 
-    const newPreviews = [
-      URL.createObjectURL(files[0]),
-      URL.createObjectURL(files[1]),
-      URL.createObjectURL(files[2]),
-    ];
+    const newPreviews = Array.from(files)
+      .slice(0, 3)
+      .map((file) => URL.createObjectURL(file));
+
     setPreviewImages(newPreviews);
   };
 
@@ -65,24 +68,17 @@ export default function UploadImages({
             src={previewImages[0]}
           />
           <div className="grid grid-cols-3 gap-2">
-            <button type="button">
-              <img
-                alt="Image 1"
-                className="aspect-square w-full rounded-md object-cover"
-                height={84}
-                width={84}
-                src={previewImages[1]}
-              />
-            </button>
-            <button type="button">
-              <img
-                alt="Image 2"
-                className="aspect-square w-full rounded-md object-cover"
-                height={84}
-                width={84}
-                src={previewImages[2]}
-              />
-            </button>
+            {previewImages.slice(1).map((src, i) => (
+              <button key={i} type="button">
+                <img
+                  alt={`Image ${i + 1}`}
+                  className="aspect-square w-full rounded-md object-cover"
+                  height={84}
+                  width={84}
+                  src={src}
+                />
+              </button>
+            ))}
             <button
               type="button"
               onClick={openFolder}
