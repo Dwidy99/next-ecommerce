@@ -1,6 +1,6 @@
 'use server'
 
-import { schemaSignIn } from "@/lib/schema"
+import { schemaSignIn, schemaSignUp } from "@/lib/schema"
 import { ActionResult } from "@/types"
 import { redirect } from "next/navigation"
 import bcrypt from "bcrypt"
@@ -58,4 +58,44 @@ export async function SignIn(
         )
 
     return redirect('/')
+}
+
+export async function SignUp(
+    _: unknown,
+    formData: FormData
+): Promise<ActionResult> {
+
+    const parse = schemaSignUp.safeParse({
+        name: formData.get("name"),
+        email: formData.get("email"),
+        password: formData.get("password"),
+    })
+
+    if (!parse.success) {
+        return {
+            error: parse.error.issues[0].message ?? "Invalid validation"
+        }
+    }
+
+    const hashPassword = bcrypt.hashSync(parse.data.password, 12);
+
+    try {
+        await prisma.user.create({
+            data: {
+                name: parse.data.name,
+                email: parse.data.email,
+                password: parse.data.password,
+                role: 'customer',
+            }
+        })
+    } catch (err) {
+        console.log(err)
+        return {
+            error: 'Failed to sign in'
+        }
+    }
+    // finally {}
+
+    return redirect("sign-in");
+
 }

@@ -1,6 +1,31 @@
+"use client";
+
+import { ActionResult } from "@/types";
 import React from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import { SignUp } from "../sign-in/lib/actions";
+import Link from "next/link";
+
+const initialState: ActionResult = {
+  error: "",
+};
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white"
+    >
+      {pending ? "Loading..." : "Sign In to My Account"}
+    </button>
+  );
+}
 
 export default function SignUpPage() {
+  const [state, formAction] = useFormState(SignUp, initialState);
+
   return (
     <div
       id="signin"
@@ -8,21 +33,27 @@ export default function SignUpPage() {
     >
       <div className="container max-w-[1130px] mx-auto flex flex-1 items-center justify-center py-5">
         <form
-          action="signin.html"
+          action={formAction}
           className="w-[500px] bg-white p-[50px_30px] flex flex-col gap-5 rounded-3xl border border-[#E5E5E5]"
         >
           <div className="flex justify-center">
             <img src="assets/logos/logo-black.svg" alt="logo" />
           </div>
           <h1 className="font-bold text-2xl leading-[34px]">Sign Up</h1>
+          {state.error !== "" && (
+            <div className="border border-red-300 text-red-500 p-3 rounded">
+              <h4 className="font-semibold">Error</h4>
+              <p className="text-sm">{state.error}</p>
+            </div>
+          )}
           <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
             <div className="flex shrink-0">
               <img src="assets/icons/profile-circle.svg" alt="icon" />
             </div>
             <input
               type="text"
-              id=""
-              name=""
+              id="name"
+              name="name"
               className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
               placeholder="Write your complete name"
             />
@@ -33,8 +64,8 @@ export default function SignUpPage() {
             </div>
             <input
               type="email"
-              id=""
-              name=""
+              id="email"
+              name="email"
               className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
               placeholder="Write your email address"
             />
@@ -47,7 +78,7 @@ export default function SignUpPage() {
               <input
                 type="password"
                 id="password"
-                name=""
+                name="password"
                 className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
                 placeholder="Write your password"
               />
@@ -67,18 +98,13 @@ export default function SignUpPage() {
             </a>
           </div>
           <div className="flex flex-col gap-3">
-            <button
-              type="submit"
-              className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white"
-            >
-              Create New Account
-            </button>
-            <a
-              href="signin.html"
+            <SubmitButton />
+            <Link
+              href={"/sign-in"}
               className="p-[12px_24px] bg-white rounded-full text-center font-semibold border border-[#E5E5E5]"
             >
               Sign In
-            </a>
+            </Link>
           </div>
         </form>
       </div>
