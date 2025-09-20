@@ -6,6 +6,8 @@ const poppins = Poppins({
   subsets: ["latin-ext"],
 });
 
+import "../../globalsLanding.css";
+
 export default function LandingRootLayout({
   children,
 }: Readonly<{
