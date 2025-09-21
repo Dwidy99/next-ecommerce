@@ -1,6 +1,9 @@
+import Link from "next/link";
 import React from "react";
+import { getBrands } from "../lib/data";
 
-export default function ListBrand() {
+export default async function ListBrand() {
+  const brands = await getBrands();
   return (
     <div id="brands" className="flex flex-col gap-[30px]">
       <div className="flex items-center justify-between">
@@ -15,61 +18,25 @@ export default function ListBrand() {
         </a>
       </div>
       <div className="grid grid-cols-5 gap-[30px]">
-        <a href="" className="logo-card">
-          <div className="bg-white flex items-center justify-center p-[30px_20px] rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
-            <div className="w-full h-[30px] flex shrink-0 items-center justify-center overflow-hidden">
-              <img
-                src="assets/logos/microsoft.svg"
-                className="w-full h-full object-contain"
-                alt="thumbnail"
-              />
-            </div>
-          </div>
-        </a>
-        <a href="" className="logo-card">
-          <div className="bg-white flex items-center justify-center p-[30px_20px] rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
-            <div className="w-full h-[30px] flex shrink-0 items-center justify-center overflow-hidden">
-              <img
-                src="assets/logos/apple.svg"
-                className="w-full h-full object-contain"
-                alt="thumbnail"
-              />
-            </div>
-          </div>
-        </a>
-        <a href="" className="logo-card">
-          <div className="bg-white flex items-center justify-center p-[30px_20px] rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
-            <div className="w-full h-[30px] flex shrink-0 items-center justify-center overflow-hidden">
-              <img
-                src="assets/logos/samsung.svg"
-                className="w-full h-full object-contain"
-                alt="thumbnail"
-              />
-            </div>
-          </div>
-        </a>
-        <a href="" className="logo-card">
-          <div className="bg-white flex items-center justify-center p-[30px_20px] rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
-            <div className="w-full h-[30px] flex shrink-0 items-center justify-center overflow-hidden">
-              <img
-                src="assets/logos/huawei.svg"
-                className="w-full h-full object-contain"
-                alt="thumbnail"
-              />
-            </div>
-          </div>
-        </a>
-        <a href="" className="logo-card">
-          <div className="bg-white flex items-center justify-center p-[30px_20px] rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
-            <div className="w-full h-[30px] flex shrink-0 items-center justify-center overflow-hidden">
-              <img
-                src="assets/logos/nokia.svg"
-                className="w-full h-full object-contain"
-                alt="thumbnail"
-              />
-            </div>
-          </div>
-        </a>
+        {brands.map((brand) => {
+          return (
+            <Link
+              key={`${brand.id + brand.logo}`}
+              href="#"
+              className="logo-card"
+            >
+              <div className="bg-white flex items-center justify-center p-[30px_20px] rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
+                <div className="w-full h-[30px] flex shrink-0 items-center justify-center overflow-hidden">
+                  <img
+                    src={brand.logo_url}
+                    className="w-full h-full object-contain"
+                    alt={brand.logo}
+                  />
+                </div>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
