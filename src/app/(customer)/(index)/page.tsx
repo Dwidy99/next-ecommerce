@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Navbar from "./_components/navbar";
 import ListCategory from "./_components/list-category";
 import ListProduct from "./_components/list-product";
 import ListBrand from "./_components/list-brand";
+import Loading from "./_components/loading";
 
 export default function LandingPage() {
   return (
@@ -142,22 +143,24 @@ export default function LandingPage() {
         id="content"
         className="container max-w-[1130px] mx-auto flex flex-col gap-[50px] pt-[50px] pb-[100px]"
       >
-        <ListCategory />
-        <ListProduct
-          title={
-            <>
-              Most Picked <br /> Quality Products
-            </>
-          }
-        />
-        <ListBrand />
-        <ListProduct
-          title={
-            <>
-              Most Releases <br /> From Official Stores
-            </>
-          }
-        />
+        <Suspense fallback={<Loading />}>
+          <ListCategory />
+          <ListProduct
+            title={
+              <>
+                Most Picked <br /> Quality Products
+              </>
+            }
+          />
+          <ListBrand />
+          <ListProduct
+            title={
+              <>
+                Most Releases <br /> From Official Stores
+              </>
+            }
+          />
+        </Suspense>
         <div id="new-release" className="flex flex-col gap-[30px]">
           <div className="flex items-center justify-between">
             <h2 className="font-bold text-2xl leading-[34px]">
