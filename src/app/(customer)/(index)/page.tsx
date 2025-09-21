@@ -145,6 +145,8 @@ export default function LandingPage() {
       >
         <Suspense fallback={<Loading />}>
           <ListCategory />
+        </Suspense>
+        <Suspense fallback={<Loading />}>
           <ListProduct
             title={
               <>
@@ -152,7 +154,11 @@ export default function LandingPage() {
               </>
             }
           />
+        </Suspense>
+        <Suspense fallback={<Loading />}>
           <ListBrand />
+        </Suspense>
+        <Suspense fallback={<Loading />}>
           <ListProduct
             title={
               <>
