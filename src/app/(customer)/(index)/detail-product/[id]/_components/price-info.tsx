@@ -1,6 +1,12 @@
+import { rupiahFormat } from "@/lib/utils";
+import { TProduct } from "@/types";
 import React from "react";
 
-export default function PriceInfo() {
+interface PriceInfoProp {
+  item: TProduct;
+}
+
+export default function PriceInfo({ item }: PriceInfoProp) {
   return (
     <>
       <div className="w-[302px] flex flex-col shrink-0 gap-5 h-fit">
@@ -8,7 +14,7 @@ export default function PriceInfo() {
           <div className="flex flex-col gap-1">
             <p className="font-semibold">Brand New</p>
             <p className="font-bold text-[32px] leading-[48px]">
-              Rp 56.500.000
+              {rupiahFormat(Number(item.price))}
             </p>
           </div>
           <div className="flex flex-col gap-4">
@@ -16,7 +22,7 @@ export default function PriceInfo() {
               <div className="flex shrink-0">
                 <img src="/assets/icons/tick-circle.svg" alt="icon" />
               </div>
-              <p className="font-semibold">Peti telur packaging</p>
+              <p className="font-semibold">cute packaging</p>
             </div>
             <div className="flex items-center gap-2">
               <div className="flex shrink-0">

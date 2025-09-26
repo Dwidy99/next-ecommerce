@@ -2,7 +2,7 @@ import { getImageUrl } from "@/lib/supabase";
 import { prisma } from "lib/prisma";
 import { redirect } from "next/navigation";
 
-export async function getProductId(id: number) {
+export async function getProductById(id: number) {
     try {
         const product = await prisma.product.findFirst({
             where: {
@@ -19,6 +19,11 @@ export async function getProductId(id: number) {
                 images: true,
                 description: true,
                 price: true,
+                category: {
+                    select: {
+                        name: true
+                    }
+                }
             }
         })
 
