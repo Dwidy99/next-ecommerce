@@ -1,19 +1,29 @@
+"use client";
+
 import React from "react";
 import CardProduct from "../../_components/card-product";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProduct } from "../lib/data";
+import Loading from "../../_components/loading";
 
 export default function ProductListing() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["product-listing"],
+    queryFn: () => fetchProduct(),
+  });
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 gap-[30px]">
+        <Loading />;
+      </div>
+    );
+  }
   return (
     <div className="grid grid-cols-3 gap-[30px]">
-      <CardProduct
-        item={{
-          category_name: "Desktop",
-          id: 1,
-          image_url:
-            "assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png",
-          name: "Apple Desktop Imac",
-          price: 1200000,
-        }}
-      />
+      {data?.map((product) => (
+        <CardProduct key={product.id + product.name} item={product} />
+      ))}
     </div>
   );
 }
