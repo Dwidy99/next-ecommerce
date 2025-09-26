@@ -8,7 +8,16 @@ export async function POST(request: Request) {
     try {
         const res = await request.json() as TFilter
 
-        const ORQuery: Prisma.ProductWhereInput[] = []
+        const price: Prisma.BigIntFilter = {};
+        if (res.minPrice && res.minPrice > 0) price.gte = res.minPrice;
+        if (res.maxPrice && res.maxPrice > 0) price.lte = res.maxPrice;
+
+        const priceFilter: Prisma.ProductWhereInput = {};
+        if (Object.keys(price).length > 0) {
+            priceFilter.price = price;
+        }
+
+        const ORQuery: Prisma.ProductWhereInput[] = [];
 
         if (res.search && res.search !== "") {
             ORQuery.push({
@@ -16,23 +25,7 @@ export async function POST(request: Request) {
                     contains: res.search,
                     mode: "insensitive"
                 }
-            })
-        }
-
-        if (res.minPrice && res.minPrice > 0) {
-            ORQuery.push({
-                price: {
-                    gte: res.minPrice
-                }
-            })
-        }
-
-        if (res.maxPrice && res.maxPrice > 0) {
-            ORQuery.push({
-                price: {
-                    lte: res.maxPrice
-                }
-            })
+            });
         }
 
         if (res.brands && res.brands.length > 0) {
@@ -40,15 +33,15 @@ export async function POST(request: Request) {
                 brand: {
                     id: { in: res.brands }
                 }
-            })
+            });
         }
 
         if (res.categories && res.categories.length > 0) {
             ORQuery.push({
-                brand: {
+                category: {
                     id: { in: res.categories }
                 }
-            })
+            });
         }
 
         if (res.locations && res.locations.length > 0) {
@@ -56,25 +49,26 @@ export async function POST(request: Request) {
                 location: {
                     id: { in: res.locations }
                 }
-            })
+            });
         }
 
         const products = await prisma.product.findMany({
             where: {
-                OR: ORQuery.length > 0 ? ORQuery : undefined
+                AND: [
+                    priceFilter,
+                    ...(ORQuery.length > 0 ? [{ OR: ORQuery }] : [])
+                ]
             },
             select: {
                 id: true,
                 images: true,
                 name: true,
                 category: {
-                    select: {
-                        name: true
-                    }
+                    select: { name: true }
                 },
                 price: true
             }
-        })
+        });
 
         const response: TProduct[] = products.map((product) => {
             return {

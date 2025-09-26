@@ -5,11 +5,14 @@ import CardProduct from "../../_components/card-product";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProduct } from "../lib/data";
 import Loading from "../../_components/loading";
+import { useFilter } from "@/hooks/useFilter";
 
 export default function ProductListing() {
+  const { filter } = useFilter();
+
   const { data, isLoading } = useQuery({
-    queryKey: ["product-listing"],
-    queryFn: () => fetchProduct(),
+    queryKey: ["product-listing", filter],
+    queryFn: () => fetchProduct(filter),
   });
 
   if (isLoading) {

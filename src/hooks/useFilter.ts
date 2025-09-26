@@ -10,13 +10,12 @@ export type TFilter = {
     locations?: number[] | null,
     categories?: number[] | null,
 }
-
 export interface FilterState {
-    filter: TFilter
-    setFilter: (filter: TFilter) => void
+    filter: TFilter;
+    setFilter: (filter: TFilter | ((prev: TFilter) => TFilter)) => void;
 }
 
-export const useFilter = create<FilterState>()((set) => ({
+export const useFilter = create<FilterState>()((set, get) => ({
     filter: {
         search: "",
         minPrice: 0,
@@ -26,10 +25,9 @@ export const useFilter = create<FilterState>()((set) => ({
         locations: null,
         categories: null,
     },
-    setFilter: (filter) => set((state) => ({
-        filter: {
-            ...state.filter,
-            ...filter
-        }
-    }))
-}))
+    setFilter: (input) => {
+        const current = get().filter;
+        const next = typeof input === "function" ? input(current) : input;
+        set({ filter: { ...current, ...next } });
+    },
+}));
