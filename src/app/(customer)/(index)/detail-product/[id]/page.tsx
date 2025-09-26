@@ -4,8 +4,14 @@ import CarouselImages from "./_components/carousel-images";
 import Loading from "../../_components/loading";
 import ListProduct from "../../_components/list-product";
 import PriceInfo from "./_components/price-info";
+import { getProductById } from "@/app/(admin)/dashboard/(index)/products/lib/data";
 
-export default function DetailProduct() {
+export default async function DetailProduct({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const product = await getProductById(Number.parseInt(params.id));
   return (
     <>
       <header className="bg-[#EFF3FA] pt-[30px] h-[480px] -mb-[310px]">
