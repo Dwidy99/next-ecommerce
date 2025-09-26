@@ -1,12 +1,30 @@
+"use client";
+import { useCart } from "@/hooks/useCart";
 import { rupiahFormat } from "@/lib/utils";
-import { TProduct } from "@/types";
+import { TCart, TProduct } from "@/types";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface PriceInfoProp {
   item: TProduct;
+  isLogIn: boolean;
 }
 
-export default function PriceInfo({ item }: PriceInfoProp) {
+export default function PriceInfo({ item, isLogIn }: PriceInfoProp) {
+  const { addProduct } = useCart();
+
+  const router = useRouter();
+
+  const checkout = () => {
+    const newCart: TCart = {
+      ...item,
+      quantity: 1,
+    };
+
+    addProduct(newCart);
+
+    router.push("/");
+  };
   return (
     <>
       <div className="w-[302px] flex flex-col shrink-0 gap-5 h-fit">
@@ -50,12 +68,23 @@ export default function PriceInfo({ item }: PriceInfoProp) {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <a
-              href="cart.html"
-              className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white"
+            <button
+              type="button"
+              onClick={checkout}
+              disabled={!isLogIn}
+              className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white disabled:opacity-60"
             >
               Add to Cart
-            </a>
+            </button>
+            {!isLogIn && (
+              <p className="text-xs text-center text-gray-500 mt-1">
+                Please{" "}
+                <a href="/sign-in" className="text-[#0D5CD7] underline">
+                  sign in
+                </a>{" "}
+                to purchase.
+              </p>
+            )}
             <a
               href=""
               className="p-[12px_24px] bg-white rounded-full text-center font-semibold border border-[#E5E5E5]"

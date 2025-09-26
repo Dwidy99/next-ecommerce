@@ -7,14 +7,15 @@ import PriceInfo from "./_components/price-info";
 import { redirect } from "next/navigation";
 import { Tparams } from "@/types";
 import { getProductById } from "../lib/data";
+import { getUser } from "@/lib/auth";
 
 interface DetailProductProp {
   params: Tparams;
 }
 
 export default async function DetailProduct({ params }: DetailProductProp) {
+  const { session } = await getUser();
   const product = await getProductById(Number.parseInt(params.id));
-  // console.log(product);
 
   if (!product) {
     redirect("/");
@@ -315,6 +316,7 @@ export default async function DetailProduct({ params }: DetailProductProp) {
           </div>
         </div>
         <PriceInfo
+          isLogIn={session ? true : false}
           item={{
             id: product.id,
             category_name: product.category.name,
