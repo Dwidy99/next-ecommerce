@@ -2,6 +2,26 @@
 import { useCart } from "@/hooks/useCart";
 import { rupiahFormat } from "@/lib/utils";
 import React, { useMemo } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import { storeOrder } from "../lib/actions";
+import { ActionResult } from "@/types";
+
+const initialState: ActionResult = {
+  error: "",
+};
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white"
+    >
+      {pending ? "Checkout with xendit..." : "Checkout Now"}
+    </button>
+  );
+}
 
 export default function CheckoutForm() {
   const { products } = useCart();
@@ -12,10 +32,15 @@ export default function CheckoutForm() {
       0
     );
   }, [products]);
+
+  const storeOrderParams = (_: unknown, formData: FormData) =>
+    storeOrder(_, formData, grandTotal, products);
+
+  const [state, formAction] = useFormState(storeOrderParams, initialState);
   return (
     <>
       <form
-        action=""
+        action={formAction}
         id="checkout-info"
         className="container max-w-[1130px] mx-auto flex justify-between gap-5 mt-[50px] pb-[100px]"
       >
@@ -31,9 +56,10 @@ export default function CheckoutForm() {
               <input
                 type="text"
                 id=""
-                name=""
+                name="name"
                 className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
                 placeholder="Write your real complete name"
+                required
               />
             </div>
             <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
@@ -43,9 +69,10 @@ export default function CheckoutForm() {
               <input
                 type="text"
                 id=""
-                name=""
+                name="address"
                 className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
                 placeholder="Write your active house address"
+                required
               />
             </div>
             <div className="flex items-center gap-[30px]">
@@ -56,9 +83,10 @@ export default function CheckoutForm() {
                 <input
                   type="text"
                   id=""
-                  name=""
+                  name="city"
                   className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
                   placeholder="City"
+                  required
                 />
               </div>
               <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
@@ -68,9 +96,10 @@ export default function CheckoutForm() {
                 <input
                   type="number"
                   id=""
-                  name=""
+                  name="postal_code"
                   className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
                   placeholder="Post code"
+                  required
                 />
               </div>
             </div>
@@ -79,10 +108,10 @@ export default function CheckoutForm() {
                 <img src="/assets/icons/note.svg" alt="icon" />
               </div>
               <textarea
-                name=""
+                name="notes"
                 id=""
                 className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black resize-none"
-                rows="6"
+                rows={6}
                 placeholder="Additional notes for courier"
               ></textarea>
             </div>
@@ -93,9 +122,10 @@ export default function CheckoutForm() {
               <input
                 type="tel"
                 id=""
-                name=""
+                name="phone"
                 className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
                 placeholder="Write your phone number or whatsapp"
+                required
               />
             </div>
           </div>
@@ -173,12 +203,7 @@ export default function CheckoutForm() {
               </p>
             </div>
             <div className="flex flex-col gap-3">
-              <a
-                href=""
-                className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white"
-              >
-                Checkout Now
-              </a>
+              <SubmitButton />
               <a
                 href=""
                 className="p-[12px_24px] bg-white rounded-full text-center font-semibold border border-[#E5E5E5]"
