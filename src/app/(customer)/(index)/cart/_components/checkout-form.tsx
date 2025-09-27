@@ -1,6 +1,17 @@
-import React from "react";
+"use client";
+import { useCart } from "@/hooks/useCart";
+import { rupiahFormat } from "@/lib/utils";
+import React, { useMemo } from "react";
 
 export default function CheckoutForm() {
+  const { products } = useCart();
+
+  const grandTotal = useMemo(() => {
+    return products.reduce(
+      (prev, curr) => prev + curr.price * curr.quantity,
+      0
+    );
+  }, [products]);
   return (
     <>
       <form
@@ -116,7 +127,7 @@ export default function CheckoutForm() {
                   </div>
                   <p>Sub Total</p>
                 </div>
-                <p className="font-semibold">Rp 50.000.000</p>
+                <p className="font-semibold">{rupiahFormat(grandTotal)}</p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -125,7 +136,7 @@ export default function CheckoutForm() {
                   </div>
                   <p>Insurance 12%</p>
                 </div>
-                <p className="font-semibold">Rp 18.389.492</p>
+                <p className="font-semibold">0</p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -134,7 +145,7 @@ export default function CheckoutForm() {
                   </div>
                   <p>Shipping (Flat)</p>
                 </div>
-                <p className="font-semibold">Rp 200.000</p>
+                <p className="font-semibold">0</p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -143,7 +154,7 @@ export default function CheckoutForm() {
                   </div>
                   <p>Warranty Original</p>
                 </div>
-                <p className="font-semibold">Rp 0</p>
+                <p className="font-semibold">0</p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -152,13 +163,13 @@ export default function CheckoutForm() {
                   </div>
                   <p>PPN 11%</p>
                 </div>
-                <p className="font-semibold">Rp 123.489.333</p>
+                <p className="font-semibold">0</p>
               </div>
             </div>
             <div className="flex flex-col gap-1">
               <p className="font-semibold">Grand Total</p>
               <p className="font-bold text-[32px] leading-[48px] underline text-[#0D5CD7]">
-                Rp 18.498.492.444
+                {rupiahFormat(grandTotal)}
               </p>
             </div>
             <div className="flex flex-col gap-3">
