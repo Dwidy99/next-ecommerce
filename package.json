@@ -33,6 +33,7 @@
     "react-flickity-component": "^3.2.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.13",
+    "xendit-node": "^7.0.0",
     "zod": "^4.0.17",
     "zustand": "^5.0.8"
   },
