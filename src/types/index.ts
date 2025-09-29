@@ -1,5 +1,6 @@
-export type ActionResult = {
-    error: string
+export interface ActionResult {
+    error: string;
+    redirectUrl?: string; // ✅ tambahkan ini
 }
 
 export type Tparams = {

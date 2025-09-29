@@ -117,12 +117,32 @@ export const schemaProductEdit = schemaProduct.extend({
 }).omit({ images: true });
 
 // Customer
-export const schemaShippingAddress = schemaProduct.extend({
-  name: z.string().min(1, { message: "Name is required" }).min(5, { message: "Name should have at least 5 characters" }),
-  address: z.string().min(1, { message: "Address is required" }).min(5, { message: "Address should have at least 5 characters" }),
-  city: z.string().min(1, { message: "City is required" }).min(5, { message: "City should have at least 5 characters" }),
-  postal_code: z.string().min(1, { message: "Postal Code is required" }).min(5, { message: "Postal Code should have at least 5 characters" }),
-  notes: z.string().nullable(),
-  phone: z.string().min(1, { message: "Phone is required" }).min(5, { message: "Phone should have at least 5 characters" }),
+export const schemaShippingAddress = z.object({
+  name: z.string()
+    .min(1, { message: "Name is required" })
+    .min(5, { message: "Name should have at least 5 characters" }),
 
-})
+  address: z.string()
+    .min(1, { message: "Address is required" })
+    .min(5, { message: "Address should have at least 5 characters" }),
+
+  city: z.string()
+    .min(1, { message: "City is required" })
+    .min(3, { message: "City should have at least 3 characters" }),
+
+  postal_code: z.string()
+    .min(1, { message: "Postal Code is required" })
+    .min(4, { message: "Postal Code should have at least 4 characters" }),
+
+  notes: z
+    .string()
+    .optional()
+    .or(z.literal("")), // bisa kosong atau tidak dikirim
+
+  // atau kalau kamu pakai `.nullable()` di FormData:
+  // .nullable(),
+
+  phone: z.string()
+    .min(1, { message: "Phone is required" })
+    .min(5, { message: "Phone should have at least 5 characters" }),
+});

@@ -1,7 +1,7 @@
 "use client";
 import { useCart } from "@/hooks/useCart";
 import { rupiahFormat } from "@/lib/utils";
-import React, { useMemo } from "react";
+import React, { useActionState, useEffect, useMemo } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { storeOrder } from "../lib/actions";
 import { ActionResult } from "@/types";
@@ -9,6 +9,12 @@ import { ActionResult } from "@/types";
 const initialState: ActionResult = {
   error: "",
 };
+
+function FieldError({ keyword, error }: { keyword: string; error?: string }) {
+  if (!error || !error.toLowerCase().includes(keyword.toLowerCase()))
+    return null;
+  return <p className="text-sm text-red-500 px-2">{error}</p>;
+}
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -36,7 +42,14 @@ export default function CheckoutForm() {
   const storeOrderParams = (_: unknown, formData: FormData) =>
     storeOrder(_, formData, grandTotal, products);
 
-  const [state, formAction] = useFormState(storeOrderParams, initialState);
+  const [state, formAction] = useActionState(storeOrderParams, initialState);
+
+  useEffect(() => {
+    if (state?.redirectUrl) {
+      window.location.href = state.redirectUrl; // ✅ buka link pembayaran Xendit
+    }
+  }, [state?.redirectUrl]);
+
   return (
     <>
       <form
@@ -48,7 +61,11 @@ export default function CheckoutForm() {
           <h2 className="font-bold text-2xl leading-[34px]">
             Your Shipping Address
           </h2>
+
           <div className="flex flex-col gap-5 p-[30px] rounded-3xl border border-[#E5E5E5] bg-white">
+            {state?.error && (
+              <p className="text-red-500 font-semibold">{state.error}</p>
+            )}
             <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
               <div className="flex shrink-0">
                 <img src="/assets/icons/profile-circle.svg" alt="icon" />
@@ -61,6 +78,7 @@ export default function CheckoutForm() {
                 placeholder="Write your real complete name"
                 required
               />
+              <FieldError keyword="name" error={state?.error} />
             </div>
             <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
               <div className="flex shrink-0">
@@ -74,6 +92,7 @@ export default function CheckoutForm() {
                 placeholder="Write your active house address"
                 required
               />
+              <FieldError keyword="name" error={state?.error} />
             </div>
             <div className="flex items-center gap-[30px]">
               <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
@@ -88,6 +107,7 @@ export default function CheckoutForm() {
                   placeholder="City"
                   required
                 />
+                <FieldError keyword="name" error={state?.error} />
               </div>
               <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
                 <div className="flex shrink-0">
@@ -114,6 +134,7 @@ export default function CheckoutForm() {
                 rows={6}
                 placeholder="Additional notes for courier"
               ></textarea>
+              <FieldError keyword="name" error={state?.error} />
             </div>
             <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
               <div className="flex shrink-0">
@@ -127,6 +148,7 @@ export default function CheckoutForm() {
                 placeholder="Write your phone number or whatsapp"
                 required
               />
+              <FieldError keyword="name" error={state?.error} />
             </div>
           </div>
         </div>

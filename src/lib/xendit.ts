@@ -1,7 +1,7 @@
-import { Xendit } from "xendit-node"
+import Xendit from "xendit-node";
 
-const xenditClient = new Xendit({
-    secretKey: process.env.NEXT_PUBLIC_XENDIT_KEYS ?? '-'
-})
+const xendit = new Xendit({
+    secretKey: process.env.XENDIT_SECRET_KEY! as string,
+});
 
-export default xenditClient;
+export default xendit
