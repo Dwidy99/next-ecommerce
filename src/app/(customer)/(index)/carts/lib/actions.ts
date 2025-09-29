@@ -100,6 +100,24 @@ export async function storeOrder(
             });
         }
 
+        // createMany
+        await prisma.orderProduct.createMany({
+            data: queryCreateProductOrder,
+        });
+
+        await prisma.orderDetail.create({
+            data: {
+                address: parse.data.address,
+                city: parse.data.city,
+                name: parse.data.name,
+                phone: parse.data.phone,
+                postal_code: parse.data.postal_code,
+                order_id: order.id,
+                notes: parse.data.notes ? parse.data.notes : '',
+            }
+        })
+
+
 
     } catch (err) {
         console.log(err);
