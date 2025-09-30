@@ -1,6 +1,7 @@
 export interface ActionResult {
     error: string;
-    redirectUrl?: string; // ✅ tambahkan ini
+    redirectUrl?: string;
+    code?: string;
 }
 
 export type Tparams = {
@@ -20,3 +21,35 @@ export type TProduct = {
 };
 
 export type TCart = TProduct & { quantity: number }
+
+// types.ts
+
+export type TOrder = {
+    id: number;
+    code: string;
+    total: number;
+    status: "pending" | "success" | "failed" | "expired"; // tambahkan sesuai enum status kamu
+    created_at: string;
+    updated_at: string;
+
+    orderDetail?: {
+        address: string;
+        city: string;
+        postal_code: string;
+        name: string;
+        phone: string;
+        notes: string;
+    } | null;
+
+    orderProduct?: {
+        id: number;
+        quantity: number;
+        subtotal: number;
+        product: {
+            id: number;
+            name: string;
+            price: number;
+            image?: string | null;
+        };
+    }[];
+};

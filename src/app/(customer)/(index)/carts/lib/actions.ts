@@ -9,15 +9,12 @@ import xenditClient from '@/lib/xendit';
 import { prisma } from "lib/prisma";
 import { Prisma } from "@prisma/client";
 
-
 export async function storeOrder(
     _: unknown,
     formData: FormData,
     total: number,
     products: TCart[],
 ): Promise<ActionResult> {
-
-    console.log("✅ storeOrder is called");
 
     if (total < 100 || total > 20_000_000) {
         return {
@@ -26,10 +23,7 @@ export async function storeOrder(
     }
 
     const { session, user } = await getUser();
-
-    if (!session) {
-        return redirect("/")
-    }
+    if (!session) return redirect("/");
 
     const parse = schemaShippingAddress.safeParse({
         name: formData.get("name"),
@@ -41,69 +35,77 @@ export async function storeOrder(
     });
 
     if (!parse.success) {
-        return {
-            error: parse.error.issues[0].message,
-        };
+        return { error: parse.error.issues[0].message };
     }
 
-
-    let redirectPaymentUrl = "/"
+    let redirectPaymentUrl = "/";
+    let order: { id: number; code: string } | null = null; // ⬅️ deklarasi di luar
 
     try {
-        const order = await prisma.order.create({
+        // ⬅️ Tambahkan proteksi di sini sebelum membuat order baru
+        const existing = await prisma.order.findFirst({
+            where: {
+                user_id: user.id,
+                status: "pending",
+            },
+            orderBy: { created_at: "desc" },
+        });
+
+        if (existing) {
+            // Kamu bisa langsung return link pembayaran lama
+            return {
+                redirectUrl: process.env.NEXT_PUBLIC_REDIRECT_PAYMENT_URL ?? "/", // atau simpan url sebelumnya
+                code: existing.code,
+                error: "",
+            };
+        }
+
+        // ⬇️ Kalau tidak ada order pending baru buat order baru
+        order = await prisma.order.create({
             data: {
                 total: total,
                 status: "pending",
                 user_id: user.id,
-                code: generateRandomString(15)
-            }
-        })
+                code: generateRandomString(15),
+            },
+        });
 
-        console.log(order)
 
         const data: PaymentRequestParameters = {
             amount: total,
             paymentMethod: {
                 ewallet: {
                     channelProperties: {
-                        successReturnUrl: process.env.NEXT_PUBLIC_REDIRECT_URL
+                        successReturnUrl: `${process.env.NEXT_PUBLIC_REDIRECT_PAYMENT_URL}?code=${order.code}`,
                     },
-                    channelCode: "SHOPEEPAY"
+                    channelCode: "SHOPEEPAY",
                 },
                 reusability: "ONE_TIME_USE",
-                type: "EWALLET"
+                type: "EWALLET",
             },
             currency: "IDR",
-            referenceId: order.code
-        }
+            referenceId: order.code,
+        };
 
 
-        const response = await xenditClient.PaymentRequest.createPaymentRequest({ data });
-        console.log("response.actions", response);
+        const response: PaymentRequest = await xenditClient.PaymentRequest.createPaymentRequest({
+            data
+        })
 
-        redirectPaymentUrl = response.actions?.find(
-            (val) => val.urlType === "DEEPLINK"
-        )?.url ?? "/";
-        console.log(redirectPaymentUrl)
+        redirectPaymentUrl =
+            response.actions?.find((val) => val.urlType === "DEEPLINK")?.url ?? "/";
 
-        // ⛔ JANGAN langsung redirect di sini
-
-        // 🛠️ Lanjut insert product ke order
+        // 🛠️ Insert products
         const queryCreateProductOrder: Prisma.OrderProductCreateManyInput[] = [];
-
         for (const product of products) {
             queryCreateProductOrder.push({
                 order_id: order.id,
                 product_id: product.id,
-                quantity: product.quantity ?? 1, // jangan lupa quantity
-                subtotal: product.price, // jika schema butuh
+                quantity: product.quantity ?? 1,
+                subtotal: product.price,
             });
         }
-
-        // createMany
-        await prisma.orderProduct.createMany({
-            data: queryCreateProductOrder,
-        });
+        await prisma.orderProduct.createMany({ data: queryCreateProductOrder });
 
         await prisma.orderDetail.create({
             data: {
@@ -113,22 +115,19 @@ export async function storeOrder(
                 phone: parse.data.phone,
                 postal_code: parse.data.postal_code,
                 order_id: order.id,
-                notes: parse.data.notes ? parse.data.notes : '',
-            }
-        })
-
-
-
+                notes: parse.data.notes ? parse.data.notes : "",
+            },
+        });
     } catch (err) {
         console.log(err);
-
-        return {
-            error: "Failed to checkout"
-        }
+        return { error: "Failed to checkout" };
     }
-    // ✅ kirim link balik ke client
+
+    // ✅ return setelah semua selesai
     return {
         error: "",
         redirectUrl: redirectPaymentUrl,
+        code: order?.code ?? "",
     };
+
 }

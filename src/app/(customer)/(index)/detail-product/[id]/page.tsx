@@ -5,21 +5,29 @@ import Loading from "../../_components/loading";
 import ListProduct from "../../_components/list-product";
 import PriceInfo from "./_components/price-info";
 import { redirect } from "next/navigation";
-import { Tparams } from "@/types";
 import { getProductById } from "../lib/data";
 import { getUser } from "@/lib/auth";
 
 interface DetailProductProp {
-  params: Tparams;
+  params: {
+    id: string;
+  };
 }
 
 export default async function DetailProduct({ params }: DetailProductProp) {
+  const id = Number(params?.id);
+
+  if (isNaN(id)) {
+    redirect("/");
+  }
+
   const { session } = await getUser();
-  const product = await getProductById(Number.parseInt(params.id));
+  const product = await getProductById(id);
 
   if (!product) {
     redirect("/");
   }
+
   return (
     <>
       <header className="bg-[#EFF3FA] pt-[30px] h-[480px] -mb-[310px]">

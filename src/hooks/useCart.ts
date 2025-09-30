@@ -9,6 +9,7 @@ interface CartState {
     increaseQuantity: (id: number) => void;
     decreaseQuantity: (id: number) => void;
     removeProduct: (id: number) => void;
+    resetCart: () => void;
 }
 
 export const useCart = create<CartState>()(
@@ -59,10 +60,13 @@ export const useCart = create<CartState>()(
                     products: get().products.filter((item) => item.id !== id),
                 });
             },
+
+            // Reset cart
+            resetCart: () => set({ products: [] }),
         }),
         {
             name: "cart-product-belanja",
             storage: createJSONStorage(() => sessionStorage),
-        }
+        },
     )
 );

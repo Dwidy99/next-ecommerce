@@ -45,8 +45,9 @@ export default function CheckoutForm() {
   const [state, formAction] = useActionState(storeOrderParams, initialState);
 
   useEffect(() => {
-    if (state?.redirectUrl) {
-      window.location.href = state.redirectUrl; // ✅ buka link pembayaran Xendit
+    if (state?.redirectUrl && state?.code) {
+      // simpan code (kalau perlu)
+      window.location.href = state.redirectUrl; // ⬅️ arahkan user ke ShopeePay
     }
   }, [state?.redirectUrl]);
 
