@@ -4,17 +4,18 @@ import ListCategory from "./_components/list-category";
 import ListProduct from "./_components/list-product";
 import ListBrand from "./_components/list-brand";
 import Loading from "./_components/loading";
+import Link from "next/link";
 
 export default function LandingPage() {
   return (
     <>
-      <header className="bg-[#EFF3FA] pt-[30px] pb-[50px]">
+      <header className="bg-[#FFF9D9] pt-[30px] pb-[50px]">
         <Navbar />
         <div className="container max-w-[1130px] mx-auto flex items-center justify-between gap-1 mt-[50px]">
           <div className="flex flex-col gap-[30px]">
             <div className="flex items-center gap-[10px] p-[8px_16px] rounded-full bg-white w-fit">
               <div className="w-[22px] h-[22px] flex shrink-0">
-                <img src="assets/icons/crown.svg" alt="icon" />
+                <img src="/assets/icons/crown.svg" alt="icon" />
               </div>
               <p className="font-semibold text-sm">
                 Most Popular 100th Product in Belanja
@@ -30,30 +31,30 @@ export default function LandingPage() {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <a
-                href=""
-                className="p-[18px_24px] rounded-full font-semibold bg-[#0D5CD7] text-white"
+              <Link
+                href="/carts"
+                className="p-[18px_24px] rounded-full font-semibold bg-[#FFC736]"
               >
                 Add to Cart
-              </a>
+              </Link>
               <a
-                href=""
+                href="/catalogs"
                 className="p-[18px_24px] rounded-full font-semibold bg-white"
               >
-                View Details
+                View Catalogs
               </a>
             </div>
           </div>
           <div className="w-[588px] h-[360px] flex shrink-0 overflow-hidden relative">
             <img
-              src="assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png"
+              src="/assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png"
               className="object-contain"
               alt="icon"
             />
             <div className="absolute top-[60%] bg-white p-[14px_16px] rounded-3xl flex items-center gap-[10px]">
               <div className="w-12 h-12 flex shrink-0 rounded-full items-center justify-center bg-[#FFC736] overflow-hidden">
                 <img
-                  src="assets/icons/code-circle.svg"
+                  src="/assets/icons/code-circle.svg"
                   className="w-6 h-6"
                   alt="icon"
                 />
@@ -65,7 +66,7 @@ export default function LandingPage() {
             <div className="absolute right-0 top-[30%] bg-white p-[14px_16px] rounded-3xl flex flex-col items-center gap-[10px]">
               <div className="w-12 h-12 flex shrink-0 rounded-full items-center justify-center bg-[#FFC736] overflow-hidden">
                 <img
-                  src="assets/icons/star-outline.svg"
+                  src="/assets/icons/star-outline.svg"
                   className="w-6 h-6"
                   alt="icon"
                 />
@@ -80,7 +81,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-[10px]">
             <div className="w-[50px] h-[50px] flex shrink-0 rounded-full border-[5px] border-white overflow-hidden">
               <img
-                src="assets/photos/p1.png"
+                src="/assets/photos/p1.png"
                 className="w-full h-full object-cover"
                 alt="photo"
               />
@@ -95,7 +96,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-[10px]">
             <div className="w-[50px] h-[50px] flex shrink-0 rounded-full border-[5px] border-white overflow-hidden">
               <img
-                src="assets/photos/p2.png"
+                src="/assets/photos/p2.png"
                 className="w-full h-full object-cover"
                 alt="photo"
               />
@@ -110,7 +111,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-[10px]">
             <div className="w-[50px] h-[50px] flex shrink-0 rounded-full border-[5px] border-white overflow-hidden">
               <img
-                src="assets/photos/p3.png"
+                src="/assets/photos/p3.png"
                 className="w-full h-full object-cover"
                 alt="photo"
               />
@@ -125,7 +126,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-[10px]">
             <div className="w-[50px] h-[50px] flex shrink-0 rounded-full border-[5px] border-white overflow-hidden">
               <img
-                src="assets/photos/p4.png"
+                src="/assets/photos/p4.png"
                 className="w-full h-full object-cover"
                 alt="photo"
               />
@@ -186,7 +187,7 @@ export default function LandingPage() {
               <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
                 <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
                   <img
-                    src="assets/thumbnails/color_back_green__buxxfjccqjzm_large_2x-Photoroom 1.png"
+                    src="/assets/thumbnails/color_back_green__buxxfjccqjzm_large_2x-Photoroom 1.png"
                     className="w-full h-full object-contain"
                     alt="thumbnail"
                   />
@@ -198,7 +199,7 @@ export default function LandingPage() {
                     </p>
                     <p className="text-sm text-[#616369]">Desktops</p>
                   </div>
-                  <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+                  <p className="font-semibold text-[#12007a] leading-[22px]">
                     Rp 24.000.000
                   </p>
                 </div>
@@ -208,7 +209,7 @@ export default function LandingPage() {
               <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
                 <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
                   <img
-                    src="assets/thumbnails/iphone15pro-digitalmat-gallery-3-202309-Photoroom 1.png"
+                    src="/assets/thumbnails/iphone15pro-digitalmat-gallery-3-202309-Photoroom 1.png"
                     className="w-full h-full object-contain"
                     alt="thumbnail"
                   />
@@ -220,7 +221,7 @@ export default function LandingPage() {
                     </p>
                     <p className="text-sm text-[#616369]">Phones</p>
                   </div>
-                  <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+                  <p className="font-semibold text-[#12007a] leading-[22px]">
                     Rp 11.000.000
                   </p>
                 </div>
@@ -230,7 +231,7 @@ export default function LandingPage() {
               <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
                 <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
                   <img
-                    src="assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png"
+                    src="/assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png"
                     className="w-full h-full object-contain"
                     alt="thumbnail"
                   />
@@ -242,7 +243,7 @@ export default function LandingPage() {
                     </p>
                     <p className="text-sm text-[#616369]">Laptops</p>
                   </div>
-                  <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+                  <p className="font-semibold text-[#12007a] leading-[22px]">
                     Rp 24.000.000
                   </p>
                 </div>
@@ -252,7 +253,7 @@ export default function LandingPage() {
               <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
                 <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
                   <img
-                    src="assets/thumbnails/airpods-max-select-skyblue-202011-Photoroom 1.png"
+                    src="/assets/thumbnails/airpods-max-select-skyblue-202011-Photoroom 1.png"
                     className="w-full h-full object-contain"
                     alt="thumbnail"
                   />
@@ -262,7 +263,7 @@ export default function LandingPage() {
                     <p className="font-semibold leading-[22px]">Tuli Nyaman</p>
                     <p className="text-sm text-[#616369]">Headsets</p>
                   </div>
-                  <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+                  <p className="font-semibold text-[#12007a] leading-[22px]">
                     Rp 3.500.000.000
                   </p>
                 </div>
@@ -272,7 +273,7 @@ export default function LandingPage() {
               <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
                 <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
                   <img
-                    src="assets/thumbnails/imac24-digitalmat-gallery-1-202310-Photoroom 1.png"
+                    src="/assets/thumbnails/imac24-digitalmat-gallery-1-202310-Photoroom 1.png"
                     className="w-full h-full object-contain"
                     alt="thumbnail"
                   />
@@ -284,7 +285,7 @@ export default function LandingPage() {
                     </p>
                     <p className="text-sm text-[#616369]">Desktops</p>
                   </div>
-                  <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+                  <p className="font-semibold text-[#12007a] leading-[22px]">
                     Rp 89.000.000
                   </p>
                 </div>
@@ -294,7 +295,7 @@ export default function LandingPage() {
               <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
                 <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
                   <img
-                    src="assets/thumbnails/imac24-digitalmat-gallery-1-202310-Photoroom 1.png"
+                    src="/assets/thumbnails/imac24-digitalmat-gallery-1-202310-Photoroom 1.png"
                     className="w-full h-full object-contain"
                     alt="thumbnail"
                   />
@@ -306,7 +307,7 @@ export default function LandingPage() {
                     </p>
                     <p className="text-sm text-[#616369]">Desktops</p>
                   </div>
-                  <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+                  <p className="font-semibold text-[#12007a] leading-[22px]">
                     Rp 89.000.000
                   </p>
                 </div>
@@ -316,7 +317,7 @@ export default function LandingPage() {
               <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
                 <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
                   <img
-                    src="assets/thumbnails/airpods-max-select-skyblue-202011-Photoroom 1.png"
+                    src="/assets/thumbnails/airpods-max-select-skyblue-202011-Photoroom 1.png"
                     className="w-full h-full object-contain"
                     alt="thumbnail"
                   />
@@ -326,7 +327,7 @@ export default function LandingPage() {
                     <p className="font-semibold leading-[22px]">Tuli Nyaman</p>
                     <p className="text-sm text-[#616369]">Headsets</p>
                   </div>
-                  <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+                  <p className="font-semibold text-[#12007a] leading-[22px]">
                     Rp 3.500.000.000
                   </p>
                 </div>
@@ -336,7 +337,7 @@ export default function LandingPage() {
               <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
                 <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
                   <img
-                    src="assets/thumbnails/color_back_green__buxxfjccqjzm_large_2x-Photoroom 1.png"
+                    src="/assets/thumbnails/color_back_green__buxxfjccqjzm_large_2x-Photoroom 1.png"
                     className="w-full h-full object-contain"
                     alt="thumbnail"
                   />
@@ -348,7 +349,7 @@ export default function LandingPage() {
                     </p>
                     <p className="text-sm text-[#616369]">Desktops</p>
                   </div>
-                  <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+                  <p className="font-semibold text-[#12007a] leading-[22px]">
                     Rp 24.000.000
                   </p>
                 </div>
@@ -358,7 +359,7 @@ export default function LandingPage() {
               <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
                 <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
                   <img
-                    src="assets/thumbnails/iphone15pro-digitalmat-gallery-3-202309-Photoroom 1.png"
+                    src="/assets/thumbnails/iphone15pro-digitalmat-gallery-3-202309-Photoroom 1.png"
                     className="w-full h-full object-contain"
                     alt="thumbnail"
                   />
@@ -370,7 +371,7 @@ export default function LandingPage() {
                     </p>
                     <p className="text-sm text-[#616369]">Phones</p>
                   </div>
-                  <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+                  <p className="font-semibold text-[#12007a] leading-[22px]">
                     Rp 11.000.000
                   </p>
                 </div>
@@ -380,7 +381,7 @@ export default function LandingPage() {
               <div className="bg-white flex flex-col gap-[24px] p-5 rounded-[20px] ring-1 ring-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736] transition-all duration-300 w-full">
                 <div className="w-full h-[90px] flex shrink-0 items-center justify-center overflow-hidden">
                   <img
-                    src="assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png"
+                    src="/assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png"
                     className="w-full h-full object-contain"
                     alt="thumbnail"
                   />
@@ -392,7 +393,7 @@ export default function LandingPage() {
                     </p>
                     <p className="text-sm text-[#616369]">Laptops</p>
                   </div>
-                  <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+                  <p className="font-semibold text-[#12007a] leading-[22px]">
                     Rp 24.000.000
                   </p>
                 </div>

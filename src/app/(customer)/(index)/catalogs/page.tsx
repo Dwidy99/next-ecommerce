@@ -11,7 +11,7 @@ import ProductListing from "./_components/product-listing";
 export default function CatalogPage() {
   return (
     <>
-      <header className="bg-[#EFF3FA] pt-[30px] h-[351px] -mb-[181px]">
+      <header className="bg-[#FFC736] pt-[30px] h-[351px] -mb-[181px]">
         <Navbar />
       </header>
       <SearchBar />

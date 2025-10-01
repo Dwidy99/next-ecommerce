@@ -23,7 +23,7 @@ export default function CardProduct({ item }: CardProductProps) {
             <p className="font-semibold leading-[22px]">{item.name}</p>
             <p className="text-sm text-[#616369]">{item.category_name}</p>
           </div>
-          <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+          <p className="font-semibold text-[#12007a] leading-[22px]">
             {rupiahFormat(Number(item.price))}
           </p>
         </div>
