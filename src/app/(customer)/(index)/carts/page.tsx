@@ -1,7 +1,6 @@
-import React from "react";
+// src/app/(customer)/(index)/carts/page.tsx
 import Navbar from "../_components/navbar";
-import CartProduct from "./_components/cart-product";
-import CheckoutForm from "./_components/checkout-form";
+import CartClient from "./_components/cart-client";
 
 export default function CartsPage() {
   return (
@@ -10,31 +9,7 @@ export default function CartsPage() {
         <Navbar />
       </header>
 
-      <div
-        id="title"
-        className="container max-w-[1130px] mx-auto flex items-center justify-between"
-      >
-        <div className="flex flex-col gap-5">
-          <div className="flex gap-5 items-center">
-            <a className="page text-sm text-[#6A7789] last-of-type:text-black">
-              Shop
-            </a>
-            <span className="text-sm text-[#6A7789]">/</span>
-            <a className="page text-sm text-[#6A7789] last-of-type:text-black">
-              Browse
-            </a>
-            <span className="text-sm text-[#6A7789]">/</span>
-            <a className="page text-sm text-[#6A7789] last-of-type:text-black">
-              Details
-            </a>
-          </div>
-          <h1 className="font-bold text-4xl leading-9">My Shopping Cart</h1>
-        </div>
-      </div>
-
-      <CartProduct />
-
-      <CheckoutForm />
+      <CartClient />
     </>
   );
 }

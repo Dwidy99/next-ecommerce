@@ -8,14 +8,16 @@ export default async function Navbar() {
   return (
     <nav className="container max-w-[1130px] mx-auto flex items-center justify-between bg-[#0D5CD7] p-5 rounded-3xl">
       <div className="flex shrink-0">
-        <img src="/assets/logos/logo.svg" alt="icon" />
+        <Link href="/">
+          <img src="/assets/logos/logo.svg" alt="icon" />
+        </Link>
       </div>
       <ul className="flex items-center gap-[30px]">
         <li className="hover:font-bold hover:text-[#FFC736] transition-all duration-300 font-bold text-[#FFC736]">
-          <Link href="index.html">Shop</Link>
+          <Link href="/catalogs">Shop</Link>
         </li>
         <li className="hover:font-bold hover:text-[#FFC736] transition-all duration-300 text-white">
-          <Link href="">Categories</Link>
+          <Link href="/categories">Categories</Link>
         </li>
         <li className="hover:font-bold hover:text-[#FFC736] transition-all duration-300 text-white">
           <Link href="">Testimonials</Link>

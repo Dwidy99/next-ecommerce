@@ -153,6 +153,7 @@ export default function LandingPage() {
                 Most Picked <br /> Quality Products
               </>
             }
+            isShowDetail={true}
           />
         </Suspense>
         <Suspense fallback={<Loading />}>
@@ -165,6 +166,7 @@ export default function LandingPage() {
                 Most Releases <br /> From Official Stores
               </>
             }
+            isShowDetail={true}
           />
         </Suspense>
         <div id="new-release" className="flex flex-col gap-[30px]">
