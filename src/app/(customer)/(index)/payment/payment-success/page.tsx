@@ -62,7 +62,7 @@ export default function PaymentSuccessPage() {
         </p>
         <button
           onClick={() => router.push("/payment/purchase-history")}
-          className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-full"
+          className="mt-6 px-6 py-3 bg-[#110843] text-white rounded-full"
         >
           View Order
         </button>
@@ -76,7 +76,7 @@ export default function PaymentSuccessPage() {
       <p className="text-gray-500">Thank you! Your order has been received.</p>
       <button
         onClick={() => router.push("/payment/purchase-history")}
-        className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-full"
+        className="mt-6 px-6 py-3 bg-[#110843] text-white rounded-full"
       >
         View Order
       </button>

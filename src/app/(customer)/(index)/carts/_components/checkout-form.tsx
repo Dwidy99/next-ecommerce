@@ -64,9 +64,6 @@ export default function CheckoutForm() {
           </h2>
 
           <div className="flex flex-col gap-5 p-[30px] rounded-3xl border border-[#E5E5E5] bg-white">
-            {state?.error && (
-              <p className="text-red-500 font-semibold">{state.error}</p>
-            )}
             <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
               <div className="flex shrink-0">
                 <img src="/assets/icons/profile-circle.svg" alt="icon" />
@@ -79,8 +76,8 @@ export default function CheckoutForm() {
                 placeholder="Write your real complete name"
                 required
               />
-              <FieldError keyword="name" error={state?.error} />
             </div>
+            <FieldError keyword="name" error={state?.error} />
             <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
               <div className="flex shrink-0">
                 <img src="/assets/icons/house-2.svg" alt="icon" />
@@ -93,8 +90,8 @@ export default function CheckoutForm() {
                 placeholder="Write your active house address"
                 required
               />
-              <FieldError keyword="name" error={state?.error} />
             </div>
+            <FieldError keyword="address" error={state?.error} />
             <div className="flex items-center gap-[30px]">
               <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
                 <div className="flex shrink-0">
@@ -108,8 +105,8 @@ export default function CheckoutForm() {
                   placeholder="City"
                   required
                 />
-                <FieldError keyword="name" error={state?.error} />
               </div>
+              <FieldError keyword="city" error={state?.error} />
               <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
                 <div className="flex shrink-0">
                   <img src="/assets/icons/location.svg" alt="icon" />
@@ -123,6 +120,7 @@ export default function CheckoutForm() {
                   required
                 />
               </div>
+              <FieldError keyword="postal_code" error={state?.error} />
             </div>
             <div className="flex items-start gap-[10px] rounded-[20px] border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
               <div className="flex shrink-0">
@@ -135,8 +133,8 @@ export default function CheckoutForm() {
                 rows={6}
                 placeholder="Additional notes for courier"
               ></textarea>
-              <FieldError keyword="name" error={state?.error} />
             </div>
+            <FieldError keyword="notes" error={state?.error} />
             <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
               <div className="flex shrink-0">
                 <img src="/assets/icons/call.svg" alt="icon" />
@@ -149,8 +147,8 @@ export default function CheckoutForm() {
                 placeholder="Write your phone number or whatsapp"
                 required
               />
-              <FieldError keyword="name" error={state?.error} />
             </div>
+            <FieldError keyword="phone" error={state?.error} />
           </div>
         </div>
         <div className="flex flex-1 flex-col shrink-0 gap-4 h-fit">
