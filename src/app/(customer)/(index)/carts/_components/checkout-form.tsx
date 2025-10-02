@@ -64,6 +64,9 @@ export default function CheckoutForm() {
           </h2>
 
           <div className="flex flex-col gap-5 p-[30px] rounded-3xl border border-[#E5E5E5] bg-white">
+            {state?.error && (
+              <p className="text-red-500 font-semibold">{state.error}</p>
+            )}
             <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
               <div className="flex shrink-0">
                 <img src="/assets/icons/profile-circle.svg" alt="icon" />

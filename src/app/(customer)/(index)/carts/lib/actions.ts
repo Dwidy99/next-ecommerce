@@ -42,23 +42,6 @@ export async function storeOrder(
     let order: { id: number; code: string } | null = null; // ⬅️ deklarasi di luar
 
     try {
-        // ⬅️ Tambahkan proteksi di sini sebelum membuat order baru
-        const existing = await prisma.order.findFirst({
-            where: {
-                user_id: user.id,
-                status: "pending",
-            },
-            orderBy: { created_at: "desc" },
-        });
-
-        if (existing) {
-            // Kamu bisa langsung return link pembayaran lama
-            return {
-                redirectUrl: process.env.NEXT_PUBLIC_REDIRECT_PAYMENT_URL ?? "/", // atau simpan url sebelumnya
-                code: existing.code,
-                error: "",
-            };
-        }
 
         // ⬇️ Kalau tidak ada order pending baru buat order baru
         order = await prisma.order.create({
@@ -70,27 +53,30 @@ export async function storeOrder(
             },
         });
 
+        console.log('order:', order)
+
 
         const data: PaymentRequestParameters = {
             amount: total,
+            currency: "IDR",
+            referenceId: order.code,
             paymentMethod: {
+                type: "EWALLET",
+                reusability: "ONE_TIME_USE",
                 ewallet: {
+                    channelCode: "SHOPEEPAY",
                     channelProperties: {
                         successReturnUrl: `${process.env.NEXT_PUBLIC_REDIRECT_PAYMENT_URL}?code=${order.code}`,
                     },
-                    channelCode: "SHOPEEPAY",
                 },
-                reusability: "ONE_TIME_USE",
-                type: "EWALLET",
             },
-            currency: "IDR",
-            referenceId: order.code,
         };
-
+        console.log('data: ', data)
 
         const response: PaymentRequest = await xenditClient.PaymentRequest.createPaymentRequest({
             data
         })
+        console.log('response: ', response)
 
         redirectPaymentUrl =
             response.actions?.find((val) => val.urlType === "DEEPLINK")?.url ?? "/";

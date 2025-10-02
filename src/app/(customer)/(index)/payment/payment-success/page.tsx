@@ -25,9 +25,10 @@ export default function PaymentSuccessPage() {
         console.log("🔥 /api/order/status response:", data);
 
         if (data?.status === "success" || data?.status === "paid") {
-          useCart.getState().resetCart(); // ✅ Hapus cart saat payment sukses
+          useCart.getState().resetCart(); // ✅ Delete cart when payment success
           setFailed(false);
         } else {
+          useCart.getState().resetCart(); // ✅ Delete cart when payment failed
           setFailed(true);
         }
       } catch (err) {
