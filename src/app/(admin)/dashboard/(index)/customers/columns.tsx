@@ -19,7 +19,7 @@ export const columns: ColumnDef<TColumn>[] = [
     header: "Email",
   },
   {
-    accessorKey: "total_transaction",
+    accessorKey: "total_transactions",
     header: "Total transaction",
   },
 ];

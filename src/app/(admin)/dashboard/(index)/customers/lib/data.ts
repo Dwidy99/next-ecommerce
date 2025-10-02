@@ -15,6 +15,7 @@ export async function getCustomers() {
                 }
             }
         })
+        console.log('customers:', customers)
 
         const response: TColumn[] = customers.map((cust) => {
             return {

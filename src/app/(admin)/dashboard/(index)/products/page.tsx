@@ -9,7 +9,7 @@ import {
 import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import { DataTable } from "../categories/data-table";
+import { DataTable } from "../../../../../components/ui/data-table";
 import { columns } from "./columns";
 import { getProducts } from "./lib/data";
 

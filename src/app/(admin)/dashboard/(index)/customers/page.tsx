@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import React from "react";
-import { DataTable } from "../categories/data-table";
+import { DataTable } from "../../../../../components/ui/data-table";
 import { columns } from "./columns";
 import { getCustomers } from "./lib/data";
 

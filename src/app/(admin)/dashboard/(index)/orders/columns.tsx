@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { getImageUrl } from "@/lib/supabase";
 import { rupiahFormat } from "@/lib/utils";
 import { StatusOrder } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
@@ -21,28 +22,32 @@ export type TColumn = {
 
 export const columns: ColumnDef<TColumn>[] = [
   {
-    accessorKey: "orders",
+    accessorKey: "products",
     header: "Orders",
     cell: ({ row }) => {
       const order = row.original;
 
       return (
         <div className="flex flex-col gap-4 justify-start">
-          {order.products.map((item, i) => {
-            return (
-              <div
-                key={`${item.name + i}`}
-                className="inline-flex items-center gap-5"
-              >
-                <Image
-                  src={`${item.image + i}`}
-                  alt="Product"
-                  width={80}
-                  height={80}
-                />
-              </div>
-            );
-          })}
+          {order.products.map((item, i) => (
+            <div
+              key={`${item.name + i}`}
+              className="inline-flex items-center gap-5"
+            >
+              <Image
+                src={
+                  item.image.startsWith("https")
+                    ? item.image
+                    : getImageUrl(item.image, "products")
+                }
+                alt="Product"
+                width={80}
+                height={80}
+                className="rounded-md object-cover"
+              />
+              <p>{item.name}</p>
+            </div>
+          ))}
         </div>
       );
     },
@@ -62,7 +67,7 @@ export const columns: ColumnDef<TColumn>[] = [
     cell: ({ row }) => {
       return (
         <Badge
-          variant={row.original.status === "failed" ? "destructive" : "default"}
+          variant={row.original.status === "success" ? "default" : "warning"}
         >
           {row.original.status}
         </Badge>
