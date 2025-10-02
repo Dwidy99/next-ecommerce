@@ -18,8 +18,8 @@ export default function EmptyCartUI() {
         Looks like you haven’t added anything to your cart yet.
       </p>
       <button
-        onClick={() => router.push("/")}
-        className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+        onClick={() => router.push("/catalogs")}
+        className="px-6 py-3 bg-[#1a087c] text-white rounded-full hover:bg-[#4a3d96] transition"
       >
         Continue Shopping
       </button>

@@ -1,11 +1,19 @@
 "use client";
 import { useCart } from "@/hooks/useCart";
 import { rupiahFormat } from "@/lib/utils";
-import React from "react";
+import React, { useMemo } from "react";
 
 export default function CartProduct() {
   const { products, decreaseQuantity, increaseQuantity, removeProduct } =
     useCart();
+
+  const grandTotal = useMemo(() => {
+    return products.reduce(
+      (prev, curr) => prev + curr.price * curr.quantity,
+      0
+    );
+  }, [products]);
+
   return (
     <>
       <div
@@ -32,7 +40,7 @@ export default function CartProduct() {
             </div>
             <div className="w-[150px] flex flex-col gap-1">
               <p className="text-sm text-[#616369]">Price</p>
-              <p className="font-semibold text-[#0D5CD7] leading-[22px]">
+              <p className="font-semibold text-[#12007a] leading-[22px]">
                 {rupiahFormat(cart.price)}
               </p>
             </div>
@@ -45,7 +53,7 @@ export default function CartProduct() {
                 >
                   <img src="/assets/icons/minus-cirlce.svg" alt="minus" />
                 </button>
-                <p className="text-[#0D5CD7] font-semibold leading-[22px]">
+                <p className="text-[#12007a] font-semibold leading-[22px]">
                   {cart.quantity}
                 </p>
                 <button
@@ -58,8 +66,8 @@ export default function CartProduct() {
             </div>
             <div className="w-[150px] flex flex-col gap-1">
               <p className="text-sm text-[#616369]">Total</p>
-              <p className="font-semibold text-[#0D5CD7] leading-[22px]">
-                Rp 789.493.222
+              <p className="font-semibold text-[#12007a] leading-[22px]">
+                {rupiahFormat(grandTotal)}
               </p>
             </div>
             <button

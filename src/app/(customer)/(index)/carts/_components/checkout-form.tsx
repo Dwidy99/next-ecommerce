@@ -22,7 +22,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white"
+      className="p-[12px_24px] bg-[#12007a] rounded-full text-center font-semibold text-white"
     >
       {pending ? "Checkout with xendit..." : "Checkout Now"}
     </button>
@@ -174,54 +174,24 @@ export default function CheckoutForm() {
             </a>
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="flex shrink-0">
-                    <img src="/assets/icons/tick-circle.svg" alt="icon" />
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <div className="flex shrink-0">
+                      <img src="/assets/icons/tick-circle.svg" alt="icon" />
+                    </div>
+                    <p>Subtotal</p>
                   </div>
-                  <p>Sub Total</p>
+                  <span className="text-xs text-gray-500 italic pl-[28px]">
+                    (tax and shipping included)
+                  </span>
                 </div>
                 <p className="font-semibold">{rupiahFormat(grandTotal)}</p>
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="flex shrink-0">
-                    <img src="/assets/icons/tick-circle.svg" alt="icon" />
-                  </div>
-                  <p>Insurance 12%</p>
-                </div>
-                <p className="font-semibold">0</p>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="flex shrink-0">
-                    <img src="/assets/icons/tick-circle.svg" alt="icon" />
-                  </div>
-                  <p>Shipping (Flat)</p>
-                </div>
-                <p className="font-semibold">0</p>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="flex shrink-0">
-                    <img src="/assets/icons/tick-circle.svg" alt="icon" />
-                  </div>
-                  <p>Warranty Original</p>
-                </div>
-                <p className="font-semibold">0</p>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="flex shrink-0">
-                    <img src="/assets/icons/tick-circle.svg" alt="icon" />
-                  </div>
-                  <p>PPN 11%</p>
-                </div>
-                <p className="font-semibold">0</p>
-              </div>
             </div>
+
             <div className="flex flex-col gap-1">
               <p className="font-semibold">Grand Total</p>
-              <p className="font-bold text-[32px] leading-[48px] underline text-[#0D5CD7]">
+              <p className="font-bold text-[32px] leading-[48px] underline text-[#12007a]">
                 {rupiahFormat(grandTotal)}
               </p>
             </div>

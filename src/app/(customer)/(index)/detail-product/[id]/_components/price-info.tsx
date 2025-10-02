@@ -23,12 +23,12 @@ export default function PriceInfo({ item, isLogIn }: PriceInfoProp) {
 
     addProduct(newCart);
 
-    router.push("/");
+    router.push("/carts");
   };
   return (
     <>
       <div className="w-[302px] flex flex-col shrink-0 gap-5 h-fit">
-        <div className="w-full bg-white border border-[#E5E5E5] flex flex-col gap-[30px] p-[30px] rounded-3xl">
+        <div className="w-full bg-white border border-[#FFF9D9] flex flex-col gap-[30px] p-[30px] rounded-3xl">
           <div className="flex flex-col gap-1">
             <p className="font-semibold">Brand New</p>
             <p className="font-bold text-[32px] leading-[48px]">
@@ -72,14 +72,14 @@ export default function PriceInfo({ item, isLogIn }: PriceInfoProp) {
               type="button"
               onClick={checkout}
               disabled={!isLogIn}
-              className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white disabled:opacity-60"
+              className="p-[12px_24px] bg-[#12007a] rounded-full text-center font-semibold text-white disabled:opacity-60"
             >
               Add to Cart
             </button>
             {!isLogIn && (
               <p className="text-xs text-center text-gray-500 mt-1">
                 Please{" "}
-                <a href="/sign-in" className="text-[#0D5CD7] underline">
+                <a href="/sign-in" className="text-[#12007a] underline">
                   sign in
                 </a>{" "}
                 to purchase.

@@ -20,7 +20,7 @@ export default async function Navbar() {
           <Link href="/categories">Categories</Link>
         </li>
         <li className="hover:font-bold hover:text-[#FFC736] transition-all duration-300 text-white">
-          <Link href="/transactions">Transactions</Link>
+          <Link href="/payment/purchase-history">Payments</Link>
         </li>
       </ul>
       <div className="flex items-center gap-3">

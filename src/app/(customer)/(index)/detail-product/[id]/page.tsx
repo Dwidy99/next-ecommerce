@@ -18,19 +18,19 @@ export default async function DetailProduct({ params }: DetailProductProp) {
   const id = Number(params?.id);
 
   if (isNaN(id)) {
-    redirect("/");
+    redirect("/catalogs");
   }
 
   const { session } = await getUser();
   const product = await getProductById(id);
 
   if (!product) {
-    redirect("/");
+    redirect("/catalogs");
   }
 
   return (
     <>
-      <header className="bg-[#EFF3FA] pt-[30px] h-[480px] -mb-[310px]">
+      <header className="bg-[#FFF9D9] pt-[30px] h-[480px] -mb-[310px]">
         <Navbar />
       </header>
 

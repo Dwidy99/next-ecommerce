@@ -1,14 +1,26 @@
-// src/app/(customer)/(index)/carts/_components/cart-client.tsx
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useCart } from "@/hooks/useCart";
 import CartProduct from "./cart-product";
 import CheckoutForm from "./checkout-form";
 import EmptyCartUI from "./cart-empty";
+import Loading from "../../_components/loading";
 
 export default function CartClient() {
   const { products } = useCart();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // Supaya kita tahu kapan client-side hydrate selesai
+    setIsMounted(true);
+  }, []);
+
+  // Tampilkan loading dulu saat belum client-side mounted
+  if (!isMounted) {
+    return <Loading />;
+  }
+
   const isEmpty = products.length === 0;
 
   return (
