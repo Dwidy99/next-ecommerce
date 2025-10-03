@@ -98,6 +98,7 @@ enum StatusOrder {
   pending
   success
   failed
+  cancelled
 }
 
 model Order {

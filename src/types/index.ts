@@ -28,7 +28,7 @@ export type TOrder = {
     id: number;
     code: string;
     total: number;
-    status: "pending" | "success" | "failed" | "expired"; // tambahkan sesuai enum status kamu
+    status: "pending" | "success" | "failed" | "expired" | "cancelled";
     created_at: string;
     updated_at: string;
 

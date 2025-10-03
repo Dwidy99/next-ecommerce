@@ -7,6 +7,7 @@ import { useCart } from "@/hooks/useCart";
 export default function PaymentSuccessPage() {
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
+  const [dataStatus, setDataStatus] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
   const code = searchParams.get("code"); // ✅ AMBIL DARI URL, bukan localStorage
@@ -25,10 +26,14 @@ export default function PaymentSuccessPage() {
         console.log("🔥 /api/order/status response:", data);
 
         if (data?.status === "success" || data?.status === "paid") {
-          useCart.getState().resetCart(); // ✅ Delete cart when payment success
+          useCart.getState().resetCart();
           setFailed(false);
+        } else if (data?.status === "cancelled") {
+          setDataStatus(data?.status);
+          useCart.getState().resetCart();
+          setFailed(true);
         } else {
-          useCart.getState().resetCart(); // ✅ Delete cart when payment failed
+          useCart.getState().resetCart();
           setFailed(true);
         }
       } catch (err) {
@@ -56,10 +61,13 @@ export default function PaymentSuccessPage() {
   if (failed) {
     return (
       <main className="min-h-screen flex items-center justify-center flex-col">
-        <h1 className="text-3xl font-bold mb-4">Payment Failed</h1>
+        <h1 className="text-3xl font-bold mb-4">
+          {dataStatus === "cancelled" ? "Payment Cancelled" : "Payment Failed"}
+        </h1>
         <p className="text-gray-500">
-          We couldn’t verify your payment status. Please try again or contact
-          support.
+          {dataStatus === "cancelled"
+            ? "You have cancelled this payment."
+            : "We couldn’t verify your payment status. Please try again or contact support."}
         </p>
         <button
           onClick={() => router.push("/payment/purchase-history")}
