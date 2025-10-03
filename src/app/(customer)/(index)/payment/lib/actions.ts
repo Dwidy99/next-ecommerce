@@ -78,7 +78,7 @@ export async function cancelOrder(_: unknown, code: string): Promise<ActionResul
             },
         });
 
-        return { error: "", code: order.code, redirectUrl: `/payment/payment-success?code=${order.code}` };
+        return { error: "", code: order.code, redirectUrl: `/payment/success?code=${order.code}` };
     } catch (err) {
         console.error("cancelOrder error:", err);
         return { error: "Failed to cancel payment" };
