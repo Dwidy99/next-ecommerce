@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { User } from "lucide-react";
 
 export default async function Navbar() {
   const { session, user } = await getUser();
@@ -69,17 +70,32 @@ export default async function Navbar() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href="/profile">👤 Profile</Link>
+                <Link
+                  href="/profile"
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <User /> Profile
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/payment/purchase-history">💳 Orders</Link>
+                <Link
+                  href="/settings"
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  💳 Settings
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 asChild
                 className="text-red-600 hover:text-red-700"
               >
-                <Link href="/sign-out">🚪 Sign Out</Link>
+                <Link
+                  href="/sign-out"
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  🚪 Sign Out
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
