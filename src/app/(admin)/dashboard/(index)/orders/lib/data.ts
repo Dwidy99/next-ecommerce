@@ -1,4 +1,5 @@
-import { prisma } from "lib/prisma";
+
+import { prisma } from 'lib/prisma';
 import { TColumn } from '../columns';
 import { getImageUrl } from "@/lib/supabase";
 

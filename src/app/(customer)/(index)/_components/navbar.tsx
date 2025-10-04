@@ -1,17 +1,29 @@
 import { getUser } from "@/lib/auth";
 import Link from "next/link";
 import React from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 export default async function Navbar() {
   const { session, user } = await getUser();
 
   return (
     <nav className="container max-w-[1130px] mx-auto flex items-center justify-between bg-[#110843] p-5 rounded-2xl">
+      {/* --- Logo --- */}
       <div className="flex shrink-0">
         <Link href="/">
-          <img src="/assets/logos/logo.svg" alt="icon" />
+          <img src="/assets/logos/logo.svg" alt="icon" className="w-auto h-8" />
         </Link>
       </div>
+
+      {/* --- Menu --- */}
       <ul className="flex items-center gap-[30px]">
         <li className="hover:font-bold hover:text-[#FFC736] transition-all duration-300 text-white">
           <Link href="/catalogs">Shop</Link>
@@ -23,34 +35,65 @@ export default async function Navbar() {
           <Link href="/payment/purchase-history">Payments</Link>
         </li>
       </ul>
+
+      {/* --- Actions (Right side) --- */}
       <div className="flex items-center gap-3">
         <Link href="/carts">
-          <div className="w-12 h-12 flex shrink-0">
-            <img src="/assets/icons/cart.svg" alt="icon" />
+          <div className="w-10 h-10 flex shrink-0 hover:scale-105 transition-transform">
+            <img src="/assets/icons/cart.svg" alt="cart" />
           </div>
         </Link>
+
+        {/* --- If user logged in --- */}
         {session && user.role === "customer" ? (
-          <>
-            <p className="text-white">Hi, {user.name}</p>
-            <div className="w-[48px] h-[48px] hover:text-[#FFC736] flex shrink-0 rounded-full p-1 border border-[#E5E5E5] overflow-hidden">
-              <img
-                src="/assets/photos/p4.png"
-                className="w-full h-full object-cover rounded-full"
-                alt="photo"
-              />
-            </div>
-          </>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="p-0 w-12 h-12 rounded-full border border-[#E5E5E5] hover:ring-2 hover:ring-[#FFC736]/50 transition"
+              >
+                <img
+                  src="/assets/photos/p4.png"
+                  className="w-full h-full object-cover rounded-full"
+                  alt="photo"
+                />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              sideOffset={8}
+              className="w-48 rounded-xl border border-gray-200 shadow-md bg-white"
+            >
+              <DropdownMenuLabel className="font-semibold text-gray-800">
+                Hi, {user.name}
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/profile">👤 Profile</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/payment/purchase-history">💳 Orders</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                asChild
+                className="text-red-600 hover:text-red-700"
+              >
+                <Link href="/sign-out">🚪 Sign Out</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <>
             <Link
-              href="sign-in"
-              className="p-[12px_20px] bg-white rounded-full font-semibold"
+              href="/sign-in"
+              className="p-[12px_20px] bg-white rounded-full font-semibold hover:bg-[#FFC736] hover:text-[#110843] transition"
             >
               Sign In
             </Link>
             <Link
               href="/sign-up"
-              className="p-[12px_20px] bg-white rounded-full font-semibold"
+              className="p-[12px_20px] bg-[#FFC736] rounded-full font-semibold hover:bg-[#FFD863] transition"
             >
               Sign Up
             </Link>

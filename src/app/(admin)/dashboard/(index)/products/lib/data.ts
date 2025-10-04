@@ -1,3 +1,4 @@
+
 import { prisma } from "lib/prisma";
 import { TColumn } from "../columns";
 
@@ -5,12 +6,12 @@ export async function getProducts() {
     try {
         const products = await prisma.product.findMany({
             orderBy: { name: 'asc' },
-            select: { 
-                    id: true, 
-                    _count: {
-                        select: {
-                            orders: true
-                        }
+            select: {
+                id: true,
+                _count: {
+                    select: {
+                        orders: true
+                    }
                 },
                 name: true,
                 created_at: true,
@@ -46,13 +47,13 @@ export async function getProducts() {
             stock: product.stock,
             createdAt: product.created_at,
         }));
-        
+
         return response_products
     } catch (err) {
         console.error(err)
 
         return []
-    } 
+    }
     // finally {}
 }
 
@@ -63,6 +64,6 @@ export async function getProductById(id: number) {
     } catch (error) {
         console.error("Error fetching product:", error);
         return null;
-    } 
+    }
     // finally {console.log("getProductById() selesai dijalankan");}
 }

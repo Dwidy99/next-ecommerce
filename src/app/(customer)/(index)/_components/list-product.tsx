@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { getProducts } from "../lib/data";
 import CardProduct from "./card-product";
+import Link from "next/link";
 
 interface ListProductProps {
   title: ReactNode;
@@ -18,16 +19,16 @@ export default async function ListProduct({
       <div className="flex items-center justify-between">
         <h2 className="font-bold text-2xl leading-[34px]">{title}</h2>
         {isShowDetail && (
-          <a
-            href="catalog.html"
+          <Link
+            href={"/catalogs"}
             className="p-[12px_24px] border border-[#E5E5E5] rounded-full font-semibold"
           >
             Explore All
-          </a>
+          </Link>
         )}
       </div>
       <div className="grid grid-cols-5 gap-[30px]">
-        {products.map((product) => {
+        {products.map((product: any) => {
           return (
             <CardProduct
               key={`${product.name + product.id}`}

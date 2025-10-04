@@ -1,5 +1,6 @@
 import { getImageUrl } from "@/lib/supabase";
-import { prisma } from "lib/prisma";
+import { prisma } from "../../../../../lib/prisma";
+
 
 export async function getCategories() {
     try {

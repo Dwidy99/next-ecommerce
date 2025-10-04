@@ -4,7 +4,7 @@ import { RoleUser } from "@prisma/client";
 import { cache } from "react";
 import { cookies } from "next/headers";
 import { User } from "lucia";
-import { prisma } from "lib/prisma";
+import { prisma } from "../../lib/prisma";
 
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user)

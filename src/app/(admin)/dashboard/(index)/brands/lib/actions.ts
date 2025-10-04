@@ -3,19 +3,19 @@
 import { schemaBrand } from "@/lib/schema";
 import { checkFileExists, deleteFile, uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/types";
-import { prisma } from "lib/prisma";
+import { prisma } from "../../../../../../../lib/prisma";
 import { redirect } from "next/navigation";
 
 export async function postBrand(
-    _:unknown,
+    _: unknown,
     formData: FormData,
-): Promise<ActionResult>{
+): Promise<ActionResult> {
     const name = String(formData.get("name") ?? "");
     const image = formData.get("image") as File;
-    
+
     // Validasi input menggunakan Zod
     const validate = schemaBrand.safeParse({ name, image });
-    
+
     if (!validate.success) {
         // Zod v4: gunakan .issues untuk ambil array error
         const firstError = validate.error.issues?.[0]?.message ?? "Invalid input";
@@ -39,7 +39,7 @@ export async function postBrand(
         return {
             error: "Failed to insert data"
         }
-    } 
+    }
     //   finally {}
 
     return redirect("/dashboard/brands/");
@@ -54,9 +54,10 @@ export async function updateBrand(
     const name = formData.get("name");
     const logo = formData.get("image");
 
-    const validate = schemaBrand.pick({"name": true}).safeParse({name});
-    
-    if (!validate.success) {;
+    const validate = schemaBrand.pick({ "name": true }).safeParse({ name });
+
+    if (!validate.success) {
+        ;
 
         return {
             error: validate.error.issues[0].message ?? "Invalid input",
@@ -64,8 +65,8 @@ export async function updateBrand(
     }
 
     const brand = await prisma.brand.findFirst({
-        where: {id},
-        select: {logo: true}
+        where: { id },
+        select: { logo: true }
     })
 
     let fileName = brand?.logo;
@@ -76,7 +77,7 @@ export async function updateBrand(
     // ✅ Upload file baru jika file lama hilang atau ada file baru di form
     if ((logo instanceof File && logo.size > 0) || fileMissing) {
         if (logo instanceof File && logo.size > 0) {
-                if (fileName) {
+            if (fileName) {
                 await deleteFile(fileName); // ✅ hapus file lama
             }
             fileName = await uploadFile(logo, "brands");
@@ -100,37 +101,37 @@ export async function updateBrand(
         return {
             error: "Failed to update data"
         }
-    } 
+    }
     // finally {}
 
-    return redirect("/dashboard/brands/"); 
+    return redirect("/dashboard/brands/");
 }
 
 export async function deleteBrand(
-  _:unknown,
-  formData: FormData,
-): Promise<ActionResult>{
+    _: unknown,
+    formData: FormData,
+): Promise<ActionResult> {
     const id = Number(formData.get("id"));
 
     const brand = await prisma.brand.findFirst({
-        where: {id},
-        select: {logo: true}
+        where: { id },
+        select: { logo: true }
     })
 
-    if(!brand) {
+    if (!brand) {
         return {
             error: "Brand not found"
         }
     }
 
-  try {
-    deleteFile(brand.logo, "brands");
+    try {
+        deleteFile(brand.logo, "brands");
 
-    await prisma.brand.delete({ where: { id } });
-  } catch (err: any) {
-    console.error("Delete error:", err);
-    return { error: "Brand could not be deleted. It may be linked to other data." };
-  }
-  
-  redirect("/dashboard/brands");
+        await prisma.brand.delete({ where: { id } });
+    } catch (err: any) {
+        console.error("Delete error:", err);
+        return { error: "Brand could not be deleted. It may be linked to other data." };
+    }
+
+    redirect("/dashboard/brands");
 }

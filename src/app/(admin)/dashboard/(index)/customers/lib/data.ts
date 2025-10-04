@@ -1,4 +1,4 @@
-import { prisma } from "lib/prisma";
+import { prisma } from '../../../../../../../lib/prisma';
 import { TColumn } from '../columns';
 
 export async function getCustomers() {

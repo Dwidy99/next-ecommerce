@@ -24,15 +24,15 @@ export async function postLocation(
 
   try {
     await prisma.location.create({
-        data: {
-            name: validate.data.name
-        },
+      data: {
+        name: validate.data.name
+      },
     })
   } catch (err) {
     console.log(err);
     return redirect("/dashboard/locations/create")
-  } 
-//   finally {}
+  }
+  //   finally {}
 
   redirect("/dashboard/locations/");
 }
@@ -41,18 +41,18 @@ export async function updateLocation(
   _: unknown,
   formData: FormData,
   id: number | undefined
-): Promise<ActionResult>{
+): Promise<ActionResult> {
   const validate = schemaLocation.safeParse({
     name: formData.get("name"),
   })
 
-  if(!validate.success) {
+  if (!validate.success) {
     return {
       error: validate.error.issues?.[0].message ?? "Invalid Input"
     }
   }
 
-  if(id === undefined) {
+  if (id === undefined) {
     return {
       error: "Id is not found"
     }
@@ -78,9 +78,9 @@ export async function updateLocation(
 }
 
 export async function deleteLocation(
-  _:unknown,
+  _: unknown,
   formData: FormData,
-): Promise<ActionResult>{
+): Promise<ActionResult> {
   const id = Number(formData.get("id"));
 
   if (!id) {
@@ -93,6 +93,6 @@ export async function deleteLocation(
     console.error("Delete error:", err);
     return { error: "Location could not be deleted. It may be linked to other data." };
   }
-  
+
   redirect("/dashboard/locations");
 }

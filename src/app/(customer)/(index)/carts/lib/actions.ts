@@ -6,8 +6,8 @@ import { ActionResult, TCart } from "@/types";
 import { redirect } from "next/navigation";
 import { PaymentRequestParameters, PaymentRequest } from 'xendit-node/payment_request/models';
 import xenditClient from '@/lib/xendit';
-import { prisma } from "lib/prisma";
 import { Prisma } from "@prisma/client";
+import { prisma } from "lib/prisma";
 
 export async function storeOrder(
     _: unknown,

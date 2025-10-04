@@ -1,8 +1,8 @@
 // app/api/order/user/route.ts
 import { getUser } from "@/lib/auth";
-import { prisma } from "lib/prisma";
 
 import { NextResponse } from "next/server";
+import { prisma } from "../../../../../lib/prisma";
 
 export async function GET() {
     const { user } = await getUser();

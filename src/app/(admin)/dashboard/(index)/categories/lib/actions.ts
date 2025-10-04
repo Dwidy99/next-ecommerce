@@ -3,7 +3,7 @@
 import { ActionResult } from "@/types";
 import { redirect } from "next/navigation";
 import { schemaCategory } from "@/lib/schema";
-import { prisma } from "lib/prisma";
+import { prisma } from "../../../../../../../lib/prisma";
 
 export async function postCategory(
   _: unknown,
@@ -24,15 +24,15 @@ export async function postCategory(
 
   try {
     await prisma.category.create({
-        data: {
-            name: validate.data.name
-        },
+      data: {
+        name: validate.data.name
+      },
     })
   } catch (err) {
     console.log(err);
     return redirect("/dashboard/categories/create")
-  } 
-//   finally {}
+  }
+  //   finally {}
 
   redirect("/dashboard/categories/");
 }
@@ -41,18 +41,18 @@ export async function updateCategory(
   _: unknown,
   formData: FormData,
   id: number | undefined
-): Promise<ActionResult>{
+): Promise<ActionResult> {
   const validate = schemaCategory.safeParse({
     name: formData.get("name"),
   })
 
-  if(!validate.success) {
+  if (!validate.success) {
     return {
       error: validate.error.issues?.[0].message ?? "Invalid Input"
     }
   }
 
-  if(id === undefined) {
+  if (id === undefined) {
     return {
       error: "Id is not found"
     }
@@ -78,9 +78,9 @@ export async function updateCategory(
 }
 
 export async function deleteCategory(
-  _:unknown,
+  _: unknown,
   formData: FormData,
-): Promise<ActionResult>{
+): Promise<ActionResult> {
   const id = Number(formData.get("id"));
 
   if (!id) {
@@ -93,6 +93,6 @@ export async function deleteCategory(
     console.error("Delete error:", err);
     return { error: "Category could not be deleted. It may be linked to other data." };
   }
-  
+
   redirect("/dashboard/categories");
 }
