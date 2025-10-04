@@ -10,12 +10,13 @@ export default function SignOutButton() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const handleSignOut = () => {
-    startTransition(async () => {
+  const handleSignOut = async () => {
+    try {
       const res = await SignOut();
+      console.log("res:", res);
 
       if (res.error) {
-        toast.error("❌ Failed to sign out", {
+        toast.error("Sign out failed", {
           description: res.error,
         });
         return;
@@ -25,25 +26,40 @@ export default function SignOutButton() {
         description: "Redirecting to login page...",
       });
 
-      setTimeout(() => router.push("/sign-in"), 1500);
-    });
+      console.log("toast:", toast);
+
+      startTransition(() => {
+        setTimeout(() => router.push("/"), 1200);
+      });
+    } catch (error) {
+      console.error("SignOutButton error:", error);
+      toast.error("Unexpected error occurred", {
+        description: "Please try again later.",
+      });
+    }
   };
 
   return (
     <button
       onClick={handleSignOut}
       disabled={isPending}
-      className="flex items-center gap-2 text-red-600 hover:text-red-700 cursor-pointer w-full px-2 py-1"
+      className={`flex w-full items-center gap-2 px-3 py-2 rounded-md text-sm font-medium 
+        transition-all duration-200 
+        ${
+          isPending
+            ? "text-gray-400 cursor-not-allowed"
+            : "text-red-600 hover:text-red-700 hover:bg-red-50"
+        }`}
     >
       {isPending ? (
         <>
           <Loader2 className="w-4 h-4 animate-spin" />
-          Signing out...
+          <span>Signing out...</span>
         </>
       ) : (
         <>
           <LogOut className="w-4 h-4" />
-          Sign Out
+          <span>Sign Out</span>
         </>
       )}
     </button>

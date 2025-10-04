@@ -21,14 +21,7 @@ export default function CustomerLayout({
   return (
     <div className={poppins.className}>
       {children}
-      <Toaster
-        position="top-center"
-        richColors
-        toastOptions={{
-          className: "rounded-xl shadow-lg",
-          style: { background: "#110843", color: "white" },
-        }}
-      />
+      <Toaster richColors position="top-center" />
     </div>
   ); // jangan pakai <html> atau <body>
 }

@@ -7,13 +7,17 @@ const poppins = Poppins({
 });
 
 import "../../globalsLanding.css";
+import { Toaster } from "sonner";
 
 export default function AuthRootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
-      <body className={poppins.className}>{children}</body>
+      <body className={poppins.className}>
+        {children}
+        <Toaster richColors position="top-center" />
+      </body>
     </html>
   );
 }

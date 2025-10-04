@@ -109,7 +109,15 @@ export async function SignOut(): Promise<ActionResult> {
             return { error: "No active session found" };
         }
 
-        await lucia.invalidateSession(sessionId);
+        const { session } = await lucia.validateSession(sessionId);
+        if (!session) {
+            return { error: "Invalid or expired session" };
+        }
+
+        // await lucia.invalidateSession(sessionId);
+        // menutup semua session aktif (bukan hanya satu device)
+        await lucia.invalidateUserSessions(session.userId);
+
         const blankSessionCookie = lucia.createBlankSessionCookie();
         cookieStore.set(
             blankSessionCookie.name,
