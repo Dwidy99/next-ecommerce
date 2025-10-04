@@ -99,3 +99,27 @@ export async function SignUp(
     return redirect("sign-in");
 
 }
+
+export async function SignOut(): Promise<ActionResult> {
+    try {
+        const cookieStore = await cookies();
+        const sessionId = cookieStore.get(lucia.sessionCookieName)?.value;
+
+        if (!sessionId) {
+            return { error: "No active session found" };
+        }
+
+        await lucia.invalidateSession(sessionId);
+        const blankSessionCookie = lucia.createBlankSessionCookie();
+        cookieStore.set(
+            blankSessionCookie.name,
+            blankSessionCookie.value,
+            blankSessionCookie.attributes
+        );
+
+        return { error: "" };
+    } catch (err) {
+        console.error("SignOut error:", err);
+        return { error: "Failed to sign out" };
+    }
+}

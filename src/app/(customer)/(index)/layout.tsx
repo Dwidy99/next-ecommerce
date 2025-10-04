@@ -1,6 +1,7 @@
 // app/layout.tsx
 import { Poppins } from "next/font/google";
 import "@/app/globalsLanding.css";
+import { Toaster } from "sonner";
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -17,5 +18,17 @@ export default function CustomerLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className={poppins.className}>{children}</div>; // jangan pakai <html> atau <body>
+  return (
+    <div className={poppins.className}>
+      {children}
+      <Toaster
+        position="top-center"
+        richColors
+        toastOptions={{
+          className: "rounded-xl shadow-lg",
+          style: { background: "#110843", color: "white" },
+        }}
+      />
+    </div>
+  ); // jangan pakai <html> atau <body>
 }
