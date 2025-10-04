@@ -4,8 +4,8 @@ import { getUser } from "@/lib/auth";
 import xenditClient from "@/lib/xendit";
 import { PaymentRequestParameters } from "xendit-node/payment_request/models";
 import { ActionResult } from "@/types";
-import { prisma } from "lib/prisma";
 import { StatusOrder } from "@prisma/client";
+import { prisma } from "../../../../../../lib/prisma";
 
 export async function repayOrder(_: unknown, formData: FormData): Promise<ActionResult> {
     const { session, user } = await getUser();

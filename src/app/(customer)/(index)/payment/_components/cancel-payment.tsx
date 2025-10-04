@@ -4,6 +4,7 @@
 import React, { useActionState, useEffect } from "react";
 import { ActionResult } from "@/types";
 import { cancelOrder } from "../lib/actions";
+import { Button } from "@/components/ui/button";
 
 const initialState: ActionResult = { error: "" };
 
@@ -30,12 +31,12 @@ export default function CancelPayment({ code }: { code: string }) {
 
   return (
     <form action={formAction} onSubmit={handleSubmit}>
-      <button
+      <Button
         type="submit"
         className="px-4 py-2 bg-red-600 text-white rounded-lg font-semibold"
       >
         ❌ Cancel Payment
-      </button>
+      </Button>
       {state?.error && <p className="text-red-500 text-sm">{state.error}</p>}
     </form>
   );

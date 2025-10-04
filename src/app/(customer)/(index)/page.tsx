@@ -160,23 +160,14 @@ export default function LandingPage() {
         <Suspense fallback={<Loading />}>
           <ListBrand />
         </Suspense>
-        <Suspense fallback={<Loading />}>
-          <ListProduct
-            title={
-              <>
-                Most Releases <br /> From Official Stores
-              </>
-            }
-            isShowDetail={true}
-          />
-        </Suspense>
+
         <div id="new-release" className="flex flex-col gap-[30px]">
           <div className="flex items-center justify-between">
             <h2 className="font-bold text-2xl leading-[34px]">
               New Releases <br /> From Official Stores
             </h2>
             <a
-              href="catalog.html"
+              href={"/catalogs"}
               className="p-[12px_24px] border border-[#E5E5E5] rounded-full font-semibold"
             >
               Explore All
@@ -401,6 +392,16 @@ export default function LandingPage() {
             </a>
           </div>
         </div>
+        <Suspense fallback={<Loading />}>
+          <ListProduct
+            title={
+              <>
+                Most Releases <br /> From Official Stores
+              </>
+            }
+            isShowDetail={true}
+          />
+        </Suspense>
       </section>
     </>
   );

@@ -3,6 +3,7 @@
 import React, { useActionState, useEffect } from "react";
 import { ActionResult } from "@/types";
 import { repayOrder } from "../lib/actions";
+import { Button } from "@/components/ui/button";
 
 const initialState: ActionResult = { error: "" };
 
@@ -22,12 +23,12 @@ export default function RepayPayment({ code }: { code: string }) {
 
   return (
     <form action={formAction}>
-      <button
+      <Button
         type="submit"
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold"
+        className="px-4 py-2 bg-[#FFC736] text-white rounded-lg font-semibold"
       >
         🔄 Pay Again
-      </button>
+      </Button>
     </form>
   );
 }

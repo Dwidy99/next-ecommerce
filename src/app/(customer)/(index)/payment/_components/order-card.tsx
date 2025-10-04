@@ -10,7 +10,7 @@ export default function OrderCard({ order }: { order: TOrder }) {
     <div className="border border-gray-300 rounded-xl p-5 bg-white shadow">
       <div className="flex items-center justify-between mb-2">
         <div className="text-lg font-semibold">
-          Payment Code: <span className="text-blue-600">{order.code}</span>
+          Payment Code: <span className="text-[#12007a]">{order.code}</span>
         </div>
         <div
           className={`text-sm px-3 py-1 rounded-full font-medium ${
