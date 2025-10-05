@@ -9,8 +9,20 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "Your App Title",
-  description: "Your App Description",
+  title: "Shopverse",
+  description: "Next-gen shopping experience",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-32x32.png",
+    apple: "/apple-touch-icon.png",
+    other: [
+      {
+        rel: "mask-icon",
+        url: "/safari-pinned-tab.svg",
+        color: "#5bbad5",
+      },
+    ],
+  },
 };
 
 export default function CustomerLayout({

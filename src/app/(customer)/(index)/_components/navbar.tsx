@@ -9,7 +9,11 @@ export default async function Navbar() {
     <nav className="container max-w-[1130px] mx-auto flex items-center justify-between bg-[#110843] p-5 rounded-2xl shadow-md">
       {/* Logo */}
       <Link href="/">
-        <img src="/assets/logos/logo.svg" alt="logo" className="w-auto h-8" />
+        <img
+          src="/assets/logos/logos.svg"
+          alt="logo"
+          className="h-auto md:h-15 w-auto object-contain"
+        />
       </Link>
 
       {/* Menu */}
