@@ -22,7 +22,7 @@ export default function SignOutButton() {
         return;
       }
 
-      toast.success("✅ Signed out successfully", {
+      toast.success("Signed out successfully", {
         description: "Redirecting to login page...",
       });
 
