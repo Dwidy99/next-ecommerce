@@ -21,7 +21,7 @@ enum RoleUser {
 model User {
   id       Int      @id @default(autoincrement())
   name     String   @db.VarChar(255)
-  email    String   @db.VarChar(255)
+  email    String   @unique @db.VarChar(255)
   password String   @unique @db.VarChar(255)
   role     RoleUser @default(customer)
 
@@ -30,8 +30,18 @@ model User {
   orders  Order[]
   session Session[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
+  PasswordResetToken PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires   DateTime
+  createdAt DateTime @default(now())
 }
 
 model Session {

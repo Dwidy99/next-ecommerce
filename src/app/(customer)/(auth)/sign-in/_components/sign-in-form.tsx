@@ -97,7 +97,7 @@ export default function SignInForm() {
       {/* 🔗 Forgot Password */}
       <div className="text-sm text-right">
         <Link
-          href="#"
+          href="/forgot-password"
           className="text-[#616369] underline hover:text-[#110843] transition"
         >
           Forgot Password?

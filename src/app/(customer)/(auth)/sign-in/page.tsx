@@ -4,7 +4,7 @@ import SignInForm from "./_components/sign-in-form";
 
 export default function SignInPage() {
   return (
-    <div className="bg-[#EFF3FA] min-h-screen pt-[30px] pb-[50px] flex flex-col">
+    <div className="bg-[#EFF3FA] min-h-screen pb-[50px] flex flex-col">
       <header className="bg-[#FFF9D9] pt-[30px] h-[351px] -mb-[181px]">
         <Navbar />
       </header>
