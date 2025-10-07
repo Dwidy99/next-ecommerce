@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Settings, User } from "lucide-react";
+import { User } from "lucide-react";
 import SignOutButton from "../../(auth)/_components/sign-out-button";
 
 export default function NavbarClient({ user }: { user: any }) {
@@ -48,18 +48,10 @@ export default function NavbarClient({ user }: { user: any }) {
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link
-                href="/profile"
+                href="/user"
                 className="flex items-center gap-2 text-gray-700 hover:text-[#110843] cursor-pointer"
               >
                 <User className="w-4 h-4" /> Profile
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                href="/settings"
-                className="flex items-center gap-2 text-gray-700 hover:text-[#110843] cursor-pointer"
-              >
-                <Settings className="w-4 h-4" /> Settings
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />

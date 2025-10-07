@@ -8,6 +8,16 @@ export type Tparams = {
     id: string
 }
 
+export type TProfile = {
+    name: string;
+    email: string;
+    image: string | null;
+    created_at: Date;
+};
+
+// ✅ Union type for profile fetch result
+export type ProfileResult = TProfile | { error: string };
+
 export type Tedit = {
     params: Tparams
 }

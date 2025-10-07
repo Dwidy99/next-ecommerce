@@ -50,14 +50,14 @@ export async function SignIn(
     }
 
     const session = await lucia.createSession(existingUser.id, {})
-    const sessionCookie = await lucia.createSessionCookie(session.id)
+    const sessionCookie = lucia.createSessionCookie(session.id)
         ; (await cookies()).set(
             sessionCookie.name,
             sessionCookie.value,
             sessionCookie.attributes,
         )
 
-    return redirect('/')
+    redirect('/')
 }
 
 export async function SignUp(
@@ -84,17 +84,18 @@ export async function SignUp(
             data: {
                 name: parse.data.name,
                 email: parse.data.email,
-                password: parse.data.password,
-                role: 'customer',
-            }
-        })
-    } catch (err) {
-        console.log(err)
-        return {
-            error: 'Failed to sign in'
+                password: hashPassword,
+                role: "customer",
+            },
+        });
+    } catch (err: any) {
+        console.log(err);
+        if (err.code === "P2002") {
+            // Prisma unique constraint
+            return { error: "Email already registered" };
         }
+        return { error: "Failed to sign up" };
     }
-    // finally {}
 
     return redirect("sign-in");
 

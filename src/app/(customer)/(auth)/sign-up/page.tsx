@@ -1,24 +1,21 @@
 "use client";
 
-import { ActionResult } from "@/types";
-import React from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { SignUp } from "../sign-in/lib/actions";
 import Link from "next/link";
+import { ActionResult } from "@/types";
+import { SignUp } from "../sign-in/lib/actions";
 
-const initialState: ActionResult = {
-  error: "",
-};
+const initialState: ActionResult = { error: "" };
 
 function SubmitButton() {
   const { pending } = useFormStatus();
-
   return (
     <button
       type="submit"
-      className="p-[12px_24px] bg-[#0D5CD7] rounded-full text-center font-semibold text-white"
+      disabled={pending}
+      className="p-[12px_24px] bg-[#110843] text-white rounded-full font-semibold hover:bg-[#24105e] transition-all duration-200 disabled:bg-[#7c70b6] disabled:cursor-not-allowed"
     >
-      {pending ? "Loading..." : "Sign In to My Account"}
+      {pending ? "Creating account..." : "Create My Account"}
     </button>
   );
 }
@@ -27,83 +24,102 @@ export default function SignUpPage() {
   const [state, formAction] = useFormState(SignUp, initialState);
 
   return (
-    <div
-      id="signin"
-      className="bg-[#EFF3FA] min-h-screen pt-[30px] pb-[50px] flex flex-col"
-    >
+    <div className="bg-[#EFF3FA] min-h-screen pt-[30px] pb-[50px] flex flex-col">
       <div className="container max-w-[1130px] mx-auto flex flex-1 items-center justify-center py-5">
         <form
           action={formAction}
           className="w-[500px] bg-white p-[50px_30px] flex flex-col gap-5 rounded-3xl border border-[#E5E5E5]"
         >
-          <div className="flex justify-center">
-            <img src="assets/logos/logo-black.svg" alt="logo" />
+          {/* 🔹 Logo Centered */}
+          <div className="flex flex-col items-center text-center gap-2">
+            <img
+              src="/assets/logos/logos-black.svg"
+              alt="Logo"
+              className="max-h-12 w-auto object-contain"
+            />
+            <h1 className="font-bold text-2xl leading-[34px] text-[#110843] mt-2">
+              Sign Up
+            </h1>
+            <p className="text-sm text-gray-500">Create your account below</p>
           </div>
-          <h1 className="font-bold text-2xl leading-[34px]">Sign Up</h1>
-          {state.error !== "" && (
-            <div className="border border-red-300 text-red-500 p-3 rounded">
-              <h4 className="font-semibold">Error</h4>
-              <p className="text-sm">{state.error}</p>
-            </div>
+
+          {/* 🔸 Error Message */}
+          {state.error && (
+            <p className="text-red-500 text-sm bg-red-50 border border-red-200 p-2 rounded text-center">
+              {state.error}
+            </p>
           )}
-          <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
-            <div className="flex shrink-0">
-              <img src="assets/icons/profile-circle.svg" alt="icon" />
-            </div>
+
+          {/* 🧍 Full Name */}
+          <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-200">
+            <img
+              src="/assets/icons/profile-circle.svg"
+              alt="name"
+              className="w-5 h-5"
+            />
             <input
               type="text"
               id="name"
               name="name"
-              className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
+              required
               placeholder="Write your complete name"
+              className="appearance-none outline-none w-full placeholder:text-[#616369] font-semibold text-black bg-transparent"
             />
           </div>
-          <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
-            <div className="flex shrink-0">
-              <img src="assets/icons/sms.svg" alt="icon" />
-            </div>
+
+          {/* ✉️ Email */}
+          <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-200">
+            <img src="/assets/icons/sms.svg" alt="email" className="w-5 h-5" />
             <input
               type="email"
               id="email"
               name="email"
-              className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
+              required
               placeholder="Write your email address"
+              className="appearance-none outline-none w-full placeholder:text-[#616369] font-semibold text-black bg-transparent"
             />
           </div>
-          <div className="flex flex-col gap-[10px]">
-            <div className="flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
-              <div className="flex shrink-0">
-                <img src="assets/icons/lock.svg" alt="icon" />
-              </div>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                className="appearance-none outline-none w-full placeholder:text-[#616369] placeholder:font-normal font-semibold text-black"
-                placeholder="Write your password"
-              />
-              <button
-                type="button"
-                className="reveal-password flex shrink-0"
-                // onclick="togglePasswordVisibility('password', this)"
-              >
-                <img src="assets/icons/eye.svg" alt="icon" />
-              </button>
-            </div>
-            <a
-              href=""
-              className="text-sm text-[#616369] underline w-fit mr-0 ml-auto"
+
+          {/* 🔒 Password */}
+          <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-200">
+            <img
+              src="/assets/icons/lock.svg"
+              alt="password"
+              className="w-5 h-5"
+            />
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              placeholder="Write your password"
+              className="appearance-none outline-none w-full placeholder:text-[#616369] font-semibold text-black bg-transparent"
+            />
+            <button
+              type="button"
+              className="flex shrink-0 opacity-70 hover:opacity-100 transition"
             >
-              Forgot Password
-            </a>
+              <img src="/assets/icons/eye.svg" alt="show" className="w-5 h-5" />
+            </button>
           </div>
-          <div className="flex flex-col gap-3">
-            <SubmitButton />
+
+          {/* 🔘 Submit */}
+          <SubmitButton />
+
+          {/* 🧭 Secondary Actions */}
+          <div className="flex flex-col gap-3 text-center mt-2">
             <Link
-              href={"/sign-in"}
-              className="p-[12px_24px] bg-white rounded-full text-center font-semibold border border-[#E5E5E5]"
+              href="/sign-in"
+              className="p-[12px_24px] bg-white rounded-full border border-[#E5E5E5] font-semibold hover:bg-[#FFF2B3] hover:text-[#110843] transition"
             >
-              Sign In
+              Sign In Instead
+            </Link>
+
+            <Link
+              href="/catalogs"
+              className="text-[#110843] font-semibold underline underline-offset-4 hover:text-[#FFC736] transition"
+            >
+              Go to shop →
             </Link>
           </div>
         </form>

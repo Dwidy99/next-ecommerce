@@ -25,6 +25,8 @@ model User {
   password String   @unique @db.VarChar(255)
   role     RoleUser @default(customer)
 
+  image String? @db.VarChar(255)
+
   orders  Order[]
   session Session[]
 

@@ -24,7 +24,6 @@ export default function PurchaseHistoryPage() {
         // 🧭 Check 401 first (don’t setError yet)
         if (res.status === 401) {
           setUnauthorized(true);
-          console.log("OK:!");
           return;
         }
 
