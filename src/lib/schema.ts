@@ -24,12 +24,28 @@ export const schemaCategory = z.object({
     .min(4, { message: "Name should have at least 4 characters" }),
 });
 
+// export const schemaSignUp = schemaSignIn.extend({
+//   name: z
+//     .coerce.string()
+//     .refine(val => val.trim().length > 0, { message: "Name is required" })
+//     .min(4, { message: "Name should have at least 4 characters" }),
+// })
+
 export const schemaSignUp = schemaSignIn.extend({
   name: z
     .coerce.string()
-    .refine(val => val.trim().length > 0, { message: "Name is required" })
+    .refine((val) => val.trim().length > 0, { message: "Name is required" })
     .min(4, { message: "Name should have at least 4 characters" }),
+
+  confirmPassword: z
+    .string()
+    .min(1, { message: "Confirm password is required" }),
 })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"], // pesan error diarahkan ke field confirm
+  });
+
 
 export const schemaLocation = z.object({
   name: z

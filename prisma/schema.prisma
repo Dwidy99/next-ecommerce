@@ -1,9 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+// generator & datasource tetap
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,35 +8,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ========================== ENUMS ==========================
 enum RoleUser {
   superadmin
   customer
 }
 
+enum ProductStock {
+  ready
+  preorder
+}
+
+enum StatusOrder {
+  pending
+  success
+  failed
+  cancelled
+}
+
+enum TokenType {
+  PASSWORD_RESET
+  EMAIL_VERIFICATION
+}
+
+// ========================== MODELS ==========================
+
 model User {
   id       Int      @id @default(autoincrement())
   name     String   @db.VarChar(255)
   email    String   @unique @db.VarChar(255)
-  password String   @unique @db.VarChar(255)
+  password String   @db.VarChar(255)
   role     RoleUser @default(customer)
 
-  image String? @db.VarChar(255)
+  image         String?     @db.VarChar(255)
+  emailVerified DateTime?
+  userTokens    UserToken[]
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
 
+  // Relations
   orders  Order[]
   session Session[]
-
-  created_at         DateTime             @default(now())
-  updated_at         DateTime             @updatedAt
-  PasswordResetToken PasswordResetToken[]
 }
 
-model PasswordResetToken {
-  id        Int      @id @default(autoincrement())
-  token     String   @unique
-  userId    Int      @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model UserToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  type      TokenType // ✅ membedakan jenis token
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   expires   DateTime
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
+
+  @@unique([userId, type]) // supaya tiap user hanya punya 1 token aktif per jenis
 }
 
 model Session {
@@ -56,61 +75,47 @@ model Brand {
   name String @db.VarChar(255)
   logo String @db.VarChar(255)
 
-  products Product[]
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  products   Product[]
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
 }
 
 model Category {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(255)
 
+  products   Product[]
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
-  products   Product[]
 }
 
 model Location {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(255)
 
+  Product    Product[]
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
-  Product    Product[]
-}
-
-enum ProductStock {
-  ready
-  preorder
 }
 
 model Product {
-  id Int @id @default(autoincrement())
-
+  id          Int          @id @default(autoincrement())
   brand_id    Int
-  brand       Brand        @relation(fields: [brand_id], references: [id])
   category_id Int
-  category    Category     @relation(fields: [category_id], references: [id], onDelete: Cascade)
   location_id Int
-  location    Location     @relation(fields: [location_id], references: [id])
   name        String       @db.VarChar(255)
   description String       @db.Text
   price       BigInt       @db.BigInt
   stock       ProductStock
   images      String[]
 
-  orders OrderProduct[]
+  brand    Brand          @relation(fields: [brand_id], references: [id])
+  category Category       @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  location Location       @relation(fields: [location_id], references: [id])
+  orders   OrderProduct[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-}
-
-enum StatusOrder {
-  pending
-  success
-  failed
-  cancelled
 }
 
 model Order {
@@ -118,10 +123,10 @@ model Order {
 
   code    String      @unique @db.Text
   user_id Int
-  user    User?       @relation(fields: [user_id], references: [id])
   total   BigInt      @db.BigInt
   status  StatusOrder
 
+  user     User?          @relation(fields: [user_id], references: [id])
   detail   OrderDetail?
   products OrderProduct[]
 
@@ -147,15 +152,14 @@ model OrderDetail {
 }
 
 model OrderProduct {
-  id         Int     @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
   product_id Int
-  product    Product @relation(fields: [product_id], references: [id])
   order_id   Int
-  order      Order   @relation(fields: [order_id], references: [id])
+  subtotal   BigInt
+  quantity   Int    @db.Integer
 
-  subtotal BigInt
-  quantity Int    @db.Integer
-
+  product    Product  @relation(fields: [product_id], references: [id])
+  order      Order    @relation(fields: [order_id], references: [id])
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }

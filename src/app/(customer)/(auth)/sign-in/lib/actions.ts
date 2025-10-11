@@ -60,46 +60,49 @@ export async function SignIn(
     redirect('/')
 }
 
-export async function SignUp(
-    _: unknown,
-    formData: FormData
-): Promise<ActionResult> {
+// export async function SignUp(
+//     _: unknown,
+//     formData: FormData
+// ): Promise<ActionResult> {
 
-    const parse = schemaSignUp.safeParse({
-        name: formData.get("name"),
-        email: formData.get("email"),
-        password: formData.get("password"),
-    })
+//     const parse = schemaSignUp.safeParse({
+//         name: formData.get("name"),
+//         email: formData.get("email"),
+//         password: formData.get("password"),
+//     })
 
-    if (!parse.success) {
-        return {
-            error: parse.error.issues[0].message ?? "Invalid validation"
-        }
-    }
+//     if (!parse.success) {
+//         return {
+//             error: parse.error.issues[0].message ?? "Invalid validation"
+//         }
+//     }
 
-    const hashPassword = bcrypt.hashSync(parse.data.password, 12);
+//     const hashPassword = bcrypt.hashSync(parse.data.password, 12);
 
-    try {
-        await prisma.user.create({
-            data: {
-                name: parse.data.name,
-                email: parse.data.email,
-                password: hashPassword,
-                role: "customer",
-            },
-        });
-    } catch (err: any) {
-        console.log(err);
-        if (err.code === "P2002") {
-            // Prisma unique constraint
-            return { error: "Email already registered" };
-        }
-        return { error: "Failed to sign up" };
-    }
+//     try {
+//         const newUser = await prisma.user.create({
+//             data: {
+//                 name: parse.data.name,
+//                 email: parse.data.email,
+//                 password: hashPassword,
+//                 role: "customer",
+//             },
+//         });
 
-    return redirect("sign-in");
+//         const token = await createEmailVerificationToken(newUser.id);
+//         await sendVerificationEmail(newUser.email, token, newUser.name);
 
-}
+//         return redirect("/verify-email");
+//     } catch (err: any) {
+//         console.log(err);
+//         if (err.code === "P2002") {
+//             // Prisma unique constraint
+//             return { error: "Email already registered" };
+//         }
+//         return { error: "Failed to sign up" };
+//     }
+
+// }
 
 export async function SignOut(): Promise<ActionResult> {
     try {

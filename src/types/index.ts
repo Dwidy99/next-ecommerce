@@ -2,6 +2,7 @@ export interface ActionResult {
     error: string;
     redirectUrl?: string;
     code?: string;
+    message?: string; // ✅ optional use to notification success
 }
 
 export type Tparams = {

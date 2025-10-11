@@ -13,7 +13,7 @@ export const metadata = {
   description: "Next-gen shopping experience",
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/favicon-32x32.png",
+    shortcut: "/favicon-96x96.png",
     apple: "/apple-touch-icon.png",
     other: [
       {

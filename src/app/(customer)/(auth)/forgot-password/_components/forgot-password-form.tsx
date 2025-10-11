@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { ForgotPasswordAction } from "../lib/actions";
 import { ActionResult } from "@/types";
+import Link from "next/link";
 
 const initialState: ActionResult = { error: "" };
 
@@ -47,6 +48,13 @@ export default function ForgotPasswordForm() {
       >
         {isPending ? "Sending..." : "Send Reset Link"}
       </button>
+
+      <Link
+        href="/login"
+        className="inline-block text-center px-6 py-3 rounded-full bg-white border border-[#110843] text-[#110843] font-semibold hover:bg-[#f3f3f3] transition-all duration-200"
+      >
+        ← Back
+      </Link>
     </form>
   );
 }
