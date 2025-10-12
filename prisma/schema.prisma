@@ -81,8 +81,9 @@ model Brand {
 }
 
 model Category {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
+  id   Int     @id @default(autoincrement())
+  name String  @db.VarChar(255)
+  slug String? @unique
 
   products   Product[]
   created_at DateTime  @default(now())
@@ -99,11 +100,13 @@ model Location {
 }
 
 model Product {
-  id          Int          @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
+  name        String  @db.VarChar(255)
+  slug        String? @unique
   brand_id    Int
   category_id Int
   location_id Int
-  name        String       @db.VarChar(255)
+
   description String       @db.Text
   price       BigInt       @db.BigInt
   stock       ProductStock

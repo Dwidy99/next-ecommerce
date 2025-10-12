@@ -51,3 +51,12 @@ export function generateRandomString(length: number): string {
   }
   return result;
 }
+
+export function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/['"]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
+}

@@ -39,7 +39,8 @@
     "tailwindcss": "^4.1.13",
     "xendit-node": "^7.0.0",
     "zod": "^4.0.17",
-    "zustand": "^5.0.8"
+    "zustand": "^5.0.8",
+    "type": "module"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.13",
