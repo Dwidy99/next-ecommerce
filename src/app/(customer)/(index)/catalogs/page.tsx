@@ -1,12 +1,12 @@
 import React from "react";
 import Navbar from "../_components/navbar";
-import SearchBar from "./_components/search-bar";
 import FilterPrice from "./_components/filter-price";
 import FilterStock from "./_components/filter-stock";
 import FilterBrand from "./_components/filter-brand";
 import FilterLocation from "./_components/filter-location";
 import FilterCategory from "./_components/filter-category";
 import ProductListing from "./_components/product-listing";
+import SearchBar from "../_components/search-bar";
 
 export default function CatalogPage() {
   return (
