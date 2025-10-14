@@ -8,7 +8,7 @@ export default async function Navbar() {
 
   // 🔹 Ambil daftar kategori dari database
   const categories = await prisma.category.findMany({
-    select: { id: true, name: true },
+    select: { id: true, name: true, slug: true },
     orderBy: { name: "asc" },
   });
 
@@ -19,7 +19,7 @@ export default async function Navbar() {
         <img
           src="/assets/logos/logos.svg"
           alt="logo"
-          className="h-8 md:h-10 w-auto object-contain"
+          className="h-15 md:h-10 w-auto object-contain"
         />
       </Link>
 
@@ -52,7 +52,7 @@ export default async function Navbar() {
               categories.map((cat) => (
                 <li key={cat.id}>
                   <Link
-                    href={`/categories/${cat.name}`}
+                    href={`/categories/${cat.slug ?? cat.id}`}
                     className="
     block px-4 py-[6px] text-[15px] rounded-md
     hover:bg-[#FFF2B3] hover:text-[#110843]
