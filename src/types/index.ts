@@ -43,16 +43,18 @@ export type TOrder = {
     created_at: string;
     updated_at: string;
 
-    orderDetail?: {
+    // 🧩 Data detail pengiriman (alamat, penerima, dst)
+    detail?: {
+        name: string;
+        phone: string;
         address: string;
         city: string;
         postal_code: string;
-        name: string;
-        phone: string;
         notes: string;
     } | null;
 
-    orderProduct?: {
+    // 🧩 Data produk dalam order
+    products?: {
         id: number;
         quantity: number;
         subtotal: number;
@@ -60,7 +62,11 @@ export type TOrder = {
             id: number;
             name: string;
             price: number;
-            image?: string | null;
+            images?: string[]; // sesuai schema Prisma kamu
         };
     }[];
+
+    // 🧩 Tambahkan alias supaya backward compatible
+    orderDetail?: TOrder["detail"];
+    orderProduct?: TOrder["products"];
 };

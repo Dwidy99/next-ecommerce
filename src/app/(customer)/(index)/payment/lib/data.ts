@@ -23,7 +23,7 @@ export async function getPurchaseHistory() {
                         },
                     },
                 },
-            },
+            }
         });
 
         const safeOrders = orders.map((order) => ({

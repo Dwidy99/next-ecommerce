@@ -100,7 +100,7 @@ export default function PurchaseHistoryPage() {
 
   // ✅ Logged In and Has Orders
   return (
-    <main className="container max-w-[1130px] mx-auto py-20">
+    <main className="container max-w-[1130px] px-8 py-20">
       <h1 className="text-3xl font-bold mb-6">Purchase History</h1>
       <OrdersList orders={orders} />
       <div className="mt-10">
