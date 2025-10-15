@@ -152,7 +152,6 @@ export default function OrdersList({ orders = [] }: OrdersListProps) {
               ?.map(
                 (p) => `
                   <div class="item">
-                    <img src="${p.product.images?.[0] ?? "/assets/products/placeholder.png"}" alt="${p.product.name}" />
                     <div class="item-info">
                       <span class="item-name">${p.product.name}</span>
                       <span class="item-price">Rp ${rupiahFormat(Number(p.product.price))} × ${p.quantity}</span>
