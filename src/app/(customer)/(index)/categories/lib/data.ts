@@ -80,7 +80,6 @@ export async function getCategoryBySlug(slug: string) {
             ? getImageUrl(p.images[0], "products")
             : "/assets/placeholder.png",
     }));
-    console.log("✅ Produk kategori:", products)
 
 
     return { ...category, products };

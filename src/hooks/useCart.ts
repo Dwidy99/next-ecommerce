@@ -65,7 +65,7 @@ export const useCart = create<CartState>()(
             resetCart: () => set({ products: [] }),
         }),
         {
-            name: "cart-product-belanja",
+            name: "cart-product-shopverse",
             storage: createJSONStorage(() => sessionStorage),
         },
     )

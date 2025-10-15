@@ -20,7 +20,7 @@ export default function LandingPage() {
                 <img src="/assets/icons/crown.svg" alt="icon" />
               </div>
               <p className="font-semibold text-sm">
-                Most Popular 100th Product in Belanja
+                Most Popular 100th Product in Shopverse
               </p>
             </div>
             <div className="flex flex-col gap-[14px]">
