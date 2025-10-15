@@ -1,25 +1,24 @@
-// app/api/order/history/route.ts
 
-import { getUser } from "@/lib/auth";
-
+import { getPurchaseHistory } from "@/app/(customer)/(index)/payment/lib/data";
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../../lib/prisma";
 
 export async function GET() {
-    const { user } = await getUser();
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const { error, orders } = await getPurchaseHistory();
 
-    const orders = await prisma.order.findMany({
-        where: { user_id: user.id },
-        orderBy: { created_at: "desc" },
-    });
+    if (error === "Unauthorized") {
+        return NextResponse.json({ error }, { status: 401 });
+    }
 
-    // ✅ convert BigInt (total) to number
-    const safeOrders = orders.map((order) => ({
-        ...order,
-        total: Number(order.total), // <- ubah BigInt ke number
-        created_at: order.created_at.toISOString(), // optional: biar aman parsing tanggal
-    }));
+    if (error) {
+        return NextResponse.json({ error }, { status: 500 });
+    }
 
-    return NextResponse.json({ orders: safeOrders });
+    // ✅ Convert BigInt (safety double-check, just in case)
+    const serializedOrders = JSON.parse(
+        JSON.stringify(orders, (_, value) =>
+            typeof value === "bigint" ? Number(value) : value
+        )
+    );
+
+    return NextResponse.json({ orders: serializedOrders });
 }

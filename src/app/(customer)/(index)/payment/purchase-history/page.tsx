@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { TOrder } from "@/types";
 import OrdersList from "../_components/order-list";
 import { ArrowBigLeftDash, ShoppingCart } from "lucide-react";
+import Loading from "../../_components/loading";
 
 export default function PurchaseHistoryPage() {
   const [orders, setOrders] = useState<TOrder[]>([]);
@@ -16,28 +17,31 @@ export default function PurchaseHistoryPage() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const res = await fetch("/api/order/history", { cache: "no-store" });
+  // 🟡 Tambahkan console.log di dalam fungsi fetchOrders
+  const fetchOrders = async () => {
+    try {
+      const res = await fetch("/api/order/history", { cache: "no-store" });
+      const data = await res.json();
 
-        // 🧭 Check 401 first (don’t setError yet)
-        if (res.status === 401) {
-          setUnauthorized(true);
-          return;
-        }
+      // 🧾 Tambahkan ini untuk melihat hasil dari API
+      console.log("🧾 API Response:", data);
 
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Failed to fetch orders");
-
-        setOrders(data.orders);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+      if (res.status === 401) {
+        setUnauthorized(true);
+        return;
       }
-    };
 
+      if (!res.ok) throw new Error(data.error || "Failed to fetch orders");
+
+      setOrders(data.orders);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchOrders();
   }, []);
 
@@ -45,7 +49,7 @@ export default function PurchaseHistoryPage() {
   if (loading)
     return (
       <main className="min-h-[60vh] flex flex-col items-center justify-center">
-        <p className="text-gray-500 text-lg">Loading...</p>
+        <Loading />
       </main>
     );
 
