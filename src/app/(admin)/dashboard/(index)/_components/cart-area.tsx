@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
@@ -33,7 +32,6 @@ export function ChartArea({ data }: ChartAreaProps) {
         <CardDescription>Based on monthly transactions</CardDescription>
       </CardHeader>
 
-      {/* 🟢 Full margin & width */}
       <CardContent className="p-0">
         <ChartContainer
           config={chartConfig}
@@ -41,12 +39,7 @@ export function ChartArea({ data }: ChartAreaProps) {
         >
           <AreaChart
             data={data}
-            margin={{
-              top: 20,
-              right: 20,
-              left: 0,
-              bottom: 20,
-            }}
+            margin={{ top: 20, right: 20, left: 0, bottom: 20 }}
           >
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis

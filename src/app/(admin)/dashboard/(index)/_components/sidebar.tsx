@@ -1,4 +1,3 @@
-// sidebar.tsx
 "use client";
 
 import Link from "next/link";
@@ -13,8 +12,14 @@ import {
   ShoppingCart,
   Users2,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-export default function Sidebar({ collapsed }: { collapsed: boolean }) {
+interface SidebarProps {
+  collapsed: boolean;
+}
+
+export default function Sidebar({ collapsed }: SidebarProps) {
   const pathname = usePathname();
 
   const navItems = [
@@ -28,37 +33,49 @@ export default function Sidebar({ collapsed }: { collapsed: boolean }) {
   ];
 
   return (
-    <aside
-      className={`border-r bg-background flex flex-col transition-all duration-300 ${
-        collapsed ? "w-14" : "w-48"
-      }`}
-    >
-      <nav className="flex flex-col gap-2 px-2 py-6">
-        {navItems.map(({ href, icon: Icon, name }) => {
-          const isActive = pathname === href;
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                isActive
-                  ? "bg-muted text-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
-              }`}
-            >
-              <Icon className="h-5 w-5" />
-              {!collapsed && <span>{name}</span>}
-            </Link>
-          );
-        })}
-      </nav>
-      <div
-        className={`mt-auto px-2 pb-6 ${
-          collapsed ? "items-center flex justify-center" : ""
-        }`}
-      >
-        <FormLogout />
-      </div>
-    </aside>
+    <TooltipProvider delayDuration={0}>
+      <aside className="flex flex-col h-full">
+        <nav className="flex flex-col gap-2 px-3 py-6">
+          {navItems.map(({ href, icon: Icon, name }) => {
+            const isActive =
+              pathname === href ||
+              (href !== "/dashboard" && pathname.startsWith(href));
+
+            const linkClass = cn(
+              "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all duration-200",
+              isActive
+                ? "bg-muted text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
+            );
+
+            return (
+              <Tooltip key={href}>
+                <TooltipTrigger asChild>
+                  <Link href={href} className={linkClass}>
+                    <Icon className="h-5 w-5 shrink-0" />
+                    {!collapsed && <span className="truncate">{name}</span>}
+                  </Link>
+                </TooltipTrigger>
+                {collapsed && (
+                  <TooltipContent side="right" className="text-sm font-medium">
+                    {name}
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            );
+          })}
+        </nav>
+
+        {/* Logout */}
+        <div
+          className={cn(
+            "mt-auto px-2 pb-6 border-t border-muted/30",
+            collapsed ? "flex justify-center" : ""
+          )}
+        >
+          <FormLogout />
+        </div>
+      </aside>
+    </TooltipProvider>
   );
 }

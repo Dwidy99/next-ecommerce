@@ -1,6 +1,6 @@
 import { ChartArea } from "./_components/cart-area";
 import { SectionCards } from "./_components/section-card";
-import { getDashboardData } from "./dashboard/lib/data";
+import { getDashboardData } from "./lib/data";
 
 export default async function DashboardPage() {
   const { stats, chartData } = await getDashboardData();
@@ -10,7 +10,11 @@ export default async function DashboardPage() {
       <h1 className="text-2xl font-semibold tracking-tight">
         Dashboard Overview
       </h1>
+
+      {/* Statistik */}
       <SectionCards stats={stats} />
+
+      {/* Grafik */}
       <div className="grid gap-6">
         <ChartArea data={chartData} />
       </div>

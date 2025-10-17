@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-// 🟢 Tambahkan tipe props
 interface SectionCardsProps {
   stats: {
     totalOrders: number;
@@ -36,7 +35,7 @@ export function SectionCards({ stats }: SectionCardsProps) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {cards.map((card, i) => (
-        <Card key={i} className="relative overflow-hidden">
+        <Card key={i}>
           <CardHeader>
             <CardDescription>{card.title}</CardDescription>
             <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -53,7 +52,7 @@ export function SectionCards({ stats }: SectionCardsProps) {
             </CardAction>
           </CardHeader>
           <CardFooter className="flex-col items-start gap-1.5 text-sm">
-            <div className="line-clamp-1 flex gap-2 font-medium">
+            <div className="flex gap-2 font-medium">
               {card.trend === "up"
                 ? "Trending up this month"
                 : "Need improvement"}

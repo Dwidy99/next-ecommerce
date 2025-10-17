@@ -1,7 +1,5 @@
-// header.tsx
 "use client";
 
-import React from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,26 +8,25 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Input } from "@/components/ui/input";
-import { Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function Header({
-  onToggleSidebar,
-}: {
+interface HeaderProps {
   onToggleSidebar: () => void;
-}) {
-  const pathname = usePathname();
+}
 
-  const segments = pathname
-    .split("/")
-    .filter((s) => s !== "")
-    .slice(1); // ignore "/dashboard"
+export default function Header({ onToggleSidebar }: HeaderProps) {
+  const pathname = usePathname();
+  const segments = pathname.split("/").filter((s) => s !== "").slice(1);
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
-      <button onClick={onToggleSidebar} className="sm:hidden">
+    <header className="sticky top-0 z-30 flex h-14 items-center border-b bg-background px-4 sm:px-6">
+      <button
+        onClick={onToggleSidebar}
+        className="mr-3 text-muted-foreground hover:text-foreground lg:hidden"
+        aria-label="Toggle sidebar"
+      >
         <Menu className="h-5 w-5" />
       </button>
 
@@ -42,25 +39,25 @@ export default function Header({
           </BreadcrumbItem>
 
           {segments.map((segment, index) => {
-            const href = `/dashboard/${segments.slice(0, index + 1).join("/")}`;
+            const href = `/dashboard/${segments
+              .slice(0, index + 1)
+              .join("/")}`;
             const isLast = index === segments.length - 1;
             const label = segment
               .replace(/-/g, " ")
               .replace(/\b\w/g, (c) => c.toUpperCase());
 
             return (
-              <React.Fragment key={href}>
+              <BreadcrumbItem key={href}>
                 <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  {isLast ? (
-                    <BreadcrumbPage>{label}</BreadcrumbPage>
-                  ) : (
-                    <BreadcrumbLink asChild>
-                      <Link href={href}>{label}</Link>
-                    </BreadcrumbLink>
-                  )}
-                </BreadcrumbItem>
-              </React.Fragment>
+                {isLast ? (
+                  <BreadcrumbPage>{label}</BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink asChild>
+                    <Link href={href}>{label}</Link>
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
             );
           })}
         </BreadcrumbList>
