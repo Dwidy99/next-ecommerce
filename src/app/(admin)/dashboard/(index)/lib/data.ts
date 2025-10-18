@@ -1,7 +1,5 @@
-// src/app/(admin)/dashboard/(index)/lib/data.ts
-
+"use server"
 import { prisma } from "lib/prisma";
-
 
 export async function getDashboardData() {
     const [totalOrders, newUsers, totalRevenue, pendingPayments] =
@@ -31,6 +29,7 @@ export async function getDashboardData() {
         orders: Number(item.orders),
         revenue: Number(item.revenue),
     }));
+
 
     return {
         stats: {

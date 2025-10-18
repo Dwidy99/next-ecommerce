@@ -1,4 +1,4 @@
-import { ChartArea } from "./_components/cart-area";
+import { ChartArea } from "./_components/chart-area";
 import { SectionCards } from "./_components/section-card";
 import { getDashboardData } from "./lib/data";
 
