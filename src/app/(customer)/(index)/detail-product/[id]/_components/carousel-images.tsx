@@ -1,41 +1,43 @@
 "use client";
-import Flickity from "react-flickity-component";
+
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import { useEffect } from "react";
 
 interface CarouselImageProp {
   images: string[];
 }
 
 export default function CarouselImages({ images }: CarouselImageProp) {
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true, align: "start", skipSnaps: false },
+    [Autoplay({ delay: 3000 })]
+  );
+
+  useEffect(() => {
+    if (emblaApi) emblaApi.scrollTo(0);
+  }, [emblaApi]);
+
   return (
-    <>
-      <div
-        id="details-images"
-        className="main-carousel overflow-x-hidden mt-[30px]"
-      >
-        <Flickity
-          options={{
-            cellAlign: "left",
-            contain: true,
-            pageDots: false,
-            prevNextButtons: false,
-          }}
-        >
-          {images.map((item, i) => (
+    <section id="details-images" className="mt-10">
+      <div ref={emblaRef} className="overflow-hidden">
+        <div className="flex gap-4">
+          {images.map((src, i) => (
             <div
-              key={item + i}
-              className="image-card pr-5 first-of-type:pl-[calc((100vw-1130px-20px)/2)]"
+              key={src + i}
+              className="flex-shrink-0 w-[85%] sm:w-[60%] md:w-[48%] lg:w-[470px]"
             >
-              <div className="bg-white w-[470px] h-[350px] p-10 flex shrink-0 border border-[#E5E5E5] justify-center items-center rounded-[30px] overflow-hidden">
+              <div className="bg-white border border-[#E5E5E5] rounded-3xl flex justify-center items-center h-[240px] sm:h-[300px] md:h-[350px] p-6 sm:p-8 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
                 <img
-                  src={item}
-                  className="w-full h-full object-contain"
-                  alt="thumbnail"
+                  src={src}
+                  alt={`product-${i}`}
+                  className="object-contain w-full h-full"
                 />
               </div>
             </div>
           ))}
-        </Flickity>
+        </div>
       </div>
-    </>
+    </section>
   );
 }
