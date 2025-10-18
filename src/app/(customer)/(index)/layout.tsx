@@ -2,6 +2,7 @@
 import { Poppins } from "next/font/google";
 import "@/app/globalsLanding.css";
 import { Toaster } from "sonner";
+import { getUser } from "@/lib/auth";
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -25,7 +26,7 @@ export const metadata = {
   },
 };
 
-export default function CustomerLayout({
+export default async function CustomerLayout({
   children,
 }: {
   children: React.ReactNode;

@@ -1,0 +1,19 @@
+<svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="220" height="220" fill="none"/>
+  <circle cx="110" cy="110" r="105" fill="#FFF9D9"/>
+  
+  <!-- Cart base -->
+  <rect x="60" y="100" width="100" height="55" rx="8" fill="#FFC736" stroke="#110843" stroke-width="3"/>
+  
+  <!-- Handle -->
+  <path d="M65 100 C70 70, 150 70, 155 100" stroke="#110843" stroke-width="3" fill="none"/>
+  
+  <!-- Wheels -->
+  <circle cx="80" cy="165" r="8" fill="#110843"/>
+  <circle cx="140" cy="165" r="8" fill="#110843"/>
+  
+  <!-- Stars -->
+  <path d="M35 65 L40 75 L30 75 Z" fill="#FFC736"/>
+  <circle cx="180" cy="60" r="6" fill="#FFC736"/>
+  <circle cx="190" cy="50" r="3" fill="#110843"/>
+</svg>

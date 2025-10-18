@@ -1,4 +1,3 @@
-// src/app/(customer)/(index)/profile/page.tsx
 import { getProfile } from "./lib/data";
 import FormProfile from "./_components/form-profile";
 import Navbar from "../_components/navbar";
@@ -8,9 +7,11 @@ export default async function ProfilePage() {
 
   if ("error" in res) {
     return (
-      <main className="container max-w-[1130px] mx-auto py-20 text-center">
-        <h1 className="text-2xl font-semibold mb-4">Unauthorized</h1>
-        <p className="text-gray-600">
+      <main className="max-w-5xl mx-auto px-4 py-20 text-center">
+        <h1 className="text-2xl md:text-3xl font-semibold mb-4">
+          Unauthorized
+        </h1>
+        <p className="text-gray-600 text-sm md:text-base">
           {res.error} — please{" "}
           <a href="/sign-in" className="text-[#110843] font-semibold underline">
             sign in
@@ -23,10 +24,12 @@ export default async function ProfilePage() {
 
   return (
     <>
-      <header className="bg-[#FFF9D9] pt-[30px] h-[351px] -mb-[181px]">
+      <header className="bg-[#FFF9D9] pt-6 md:pt-10 h-[280px] md:h-[320px] relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFF9D9] to-transparent" />
         <Navbar />
       </header>
-      <main className="container max-w-[1130px] mx-auto py-20">
+
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 md:px-10 -mt-24 md:-mt-28 pb-20">
         <FormProfile initialProfile={res} />
       </main>
     </>

@@ -20,16 +20,13 @@ export default function FormProfile({ initialProfile }: FormProfileProps) {
   const [isPending, startTransition] = useTransition();
   const [profile, setProfile] = useState(initialProfile);
 
-  if (!profile) {
-    redirect("/catalogs");
-  }
+  if (!profile) redirect("/catalogs");
 
-  // 🧠 Handle input changes
+  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
 
-  // 💾 Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -48,13 +45,15 @@ export default function FormProfile({ initialProfile }: FormProfileProps) {
   };
 
   return (
-    <main className="w-full">
-      <h1 className="text-3xl font-bold mb-10 text-center">My Profile</h1>
+    <main className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+      <h1 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[#110843]">
+        My Profile
+      </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-        {/* ✅ LEFT SIDE — User Information */}
-        <section className="bg-white shadow-sm border border-gray-200 p-8 rounded-2xl flex flex-col items-center text-center">
-          <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-[#FFC736] mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
+        {/* LEFT SIDE — Info */}
+        <section className="flex flex-col items-center text-center bg-gray-50 p-6 md:p-8 rounded-xl border border-gray-200">
+          <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-[#FFC736] mb-4">
             {profile.image ? (
               <Image
                 src={profile.image}
@@ -69,33 +68,31 @@ export default function FormProfile({ initialProfile }: FormProfileProps) {
             )}
           </div>
 
-          <h2 className="text-xl font-semibold text-[#110843]">
+          <h2 className="text-lg md:text-xl font-semibold text-[#110843]">
             {profile.name || "Unnamed User"}
           </h2>
-          <p className="text-gray-500 text-sm mb-4">
+          <p className="text-gray-500 text-sm mb-4 break-all">
             {profile.email || "No email available"}
           </p>
 
-          <div className="flex flex-col gap-2 text-sm text-gray-600">
-            <p>
-              <span className="font-medium text-[#110843]">Member Since:</span>{" "}
-              {profile.created_at
-                ? new Date(profile.created_at).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })
-                : "—"}
-            </p>
+          <div className="text-xs md:text-sm text-gray-600">
+            <span className="font-medium text-[#110843]">Member Since:</span>{" "}
+            {profile.created_at
+              ? new Date(profile.created_at).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              : "—"}
           </div>
         </section>
 
-        {/* ✏️ RIGHT SIDE — Form Edit */}
+        {/* RIGHT SIDE — Form */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow-sm border border-gray-200 p-8 rounded-2xl flex flex-col gap-6"
+          className="flex flex-col gap-6 bg-white rounded-xl border border-gray-200 p-6 md:p-8"
         >
-          {/* 🖼️ Avatar Upload */}
+          {/* Upload */}
           <div className="flex flex-col items-center gap-3">
             <label className="text-sm text-gray-600 cursor-pointer hover:text-[#110843]">
               <input
@@ -110,7 +107,7 @@ export default function FormProfile({ initialProfile }: FormProfileProps) {
             </label>
           </div>
 
-          {/* 🧍‍♂️ Name */}
+          {/* Name */}
           <div className="flex flex-col gap-2">
             <label htmlFor="name" className="font-medium text-sm">
               Full Name
@@ -121,12 +118,12 @@ export default function FormProfile({ initialProfile }: FormProfileProps) {
               name="name"
               value={profile.name}
               onChange={handleChange}
-              className="border border-gray-300 rounded-md p-3 outline-none focus:ring-2 focus:ring-[#FFC736]"
+              className="border border-gray-300 rounded-md p-3 outline-none focus:ring-2 focus:ring-[#FFC736] transition-all"
               required
             />
           </div>
 
-          {/* 📧 Email (read-only) */}
+          {/* Email */}
           <div className="flex flex-col gap-2">
             <label htmlFor="email" className="font-medium text-sm">
               Email
@@ -141,6 +138,7 @@ export default function FormProfile({ initialProfile }: FormProfileProps) {
             />
           </div>
 
+          {/* Submit */}
           <Button
             type="submit"
             disabled={isPending}
