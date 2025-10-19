@@ -11,11 +11,38 @@ import ProductsCarouselWrapper from "./_components/products-carousel-wrapper";
 export default function LandingPage() {
   return (
     <>
+      <div className="lg:hidden md:hidden w-full bg-white border-b border-gray-100 shadow-sm py-3 px-4 sticky top-0 z-40">
+        <div className="max-w-screen-xl mx-auto flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/assets/logos/logos-black.svg"
+              alt="Shopverse logo"
+              width={120}
+              height={32}
+              className="w-auto h-8 object-contain"
+              priority
+            />
+          </Link>
+
+          {/* 🔹 Tambahkan tombol cart kecil di mobile */}
+          <Link href="/carts" className="flex items-center">
+            <Image
+              src="/assets/icons/cart.svg"
+              alt="cart"
+              width={26}
+              height={26}
+              className="object-contain"
+            />
+          </Link>
+        </div>
+      </div>
+
       {/* 🟡 Header / Hero Section */}
-      <header className="bg-[#FFF9D9] pt-8 pb-16">
+      <header className="bg-[#FFF9D9] pt-8 pb-16 px-4 sm:px-8 lg:px-16">
+        {/* image beserta url ke halaman home */}
         <Navbar />
 
-        <div className="container max-w-screen-xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between gap-10 mt-12 px-4">
+        <div className="max-w-screen-xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between gap-10 mt-12 px-2 sm:px-4">
           {/* Hero Text */}
           <div className="flex flex-col gap-8 text-center lg:text-left">
             <div className="flex items-center gap-2 p-2.5 px-4 rounded-full bg-white mx-auto lg:mx-0 w-fit">
@@ -33,7 +60,7 @@ export default function LandingPage() {
             </div>
 
             <div className="space-y-4">
-              <h1 className="font-bold text-4xl sm:text-5xl lg:text-[55px] leading-tight">
+              <h1 className="font-bold text-3xl sm:text-5xl lg:text-[55px] leading-tight">
                 Working Faster 10x
               </h1>
               <p className="text-base sm:text-lg leading-relaxed text-[#6A7789] max-w-md mx-auto lg:mx-0">
@@ -65,7 +92,7 @@ export default function LandingPage() {
               alt="Product banner"
               width={580}
               height={360}
-              className="object-contain drop-shadow-lg"
+              className="object-contain drop-shadow-lg w-full max-w-[400px] sm:max-w-[500px] lg:max-w-none"
               priority
             />
 
@@ -105,13 +132,13 @@ export default function LandingPage() {
         <div className="container max-w-screen-xl mx-auto mt-12 px-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 text-center">
           {[
             { img: "p1.png", name: "Jemmie Pemilia", text: "Awesome product!" },
-            { img: "p2.png", name: "Angga Risky", text: "Money saver 25%" },
+            { img: "p2.png", name: "Steve Wosniac", text: "Money saver 25%" },
             {
               img: "p3.png",
               name: "Petina Malaka",
               text: "I love the warranty",
             },
-            { img: "p4.png", name: "Udin Sarifun", text: "Big deals ever!" },
+            { img: "p4.png", name: "Torvalt Knee", text: "Big deals ever!" },
           ].map((user) => (
             <div
               key={user.name}
@@ -140,7 +167,7 @@ export default function LandingPage() {
       {/* 🟢 Main Content */}
       <main
         id="content"
-        className="container max-w-screen-xl mx-auto px-4 flex flex-col gap-16 py-16"
+        className="container max-w-screen-xl mx-auto px-16 flex flex-col gap-16 py-16"
       >
         <Suspense fallback={<Loading />}>
           <ListCategory />

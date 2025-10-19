@@ -2,7 +2,6 @@
 import { Poppins } from "next/font/google";
 import "@/app/globalsLanding.css";
 import { Toaster } from "sonner";
-import { getUser } from "@/lib/auth";
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700", "800"],
