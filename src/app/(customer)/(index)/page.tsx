@@ -167,7 +167,7 @@ export default function LandingPage() {
       {/* 🟢 Main Content */}
       <main
         id="content"
-        className="container max-w-screen-xl mx-auto px-16 flex flex-col gap-16 py-16"
+        className="container max-w-screen-xl mx-auto lg:px-16 md:px-16 flex flex-col gap-16 py-16"
       >
         <Suspense fallback={<Loading />}>
           <ListCategory />
