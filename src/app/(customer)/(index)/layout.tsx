@@ -2,6 +2,7 @@
 import { Poppins } from "next/font/google";
 import "@/app/globalsLanding.css";
 import { Toaster } from "sonner";
+import Footer from "./_components/footer";
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -33,6 +34,7 @@ export default async function CustomerLayout({
   return (
     <div className={poppins.className}>
       {children}
+      <Footer />
       <Toaster richColors position="top-center" />
     </div>
   ); // jangan pakai <html> atau <body>

@@ -7,6 +7,7 @@ import ListProduct from "./_components/list-product";
 import ListBrand from "./_components/list-brand";
 import Loading from "./_components/loading";
 import ProductsCarouselWrapper from "./_components/products-carousel-wrapper";
+import Footer from "./_components/footer";
 
 export default function LandingPage() {
   return (
