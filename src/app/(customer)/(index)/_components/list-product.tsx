@@ -15,34 +15,49 @@ export default async function ListProduct({
   const products = await getProducts();
 
   return (
-    <div id="picked" className="flex flex-col gap-[30px]">
-      <div className="flex items-center justify-between">
-        <h2 className="font-bold text-2xl leading-[34px]">{title}</h2>
+    <section id="picked" className="flex flex-col gap-6 sm:gap-8">
+      {/* 🔹 Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+        <h2 className="font-bold text-xl sm:text-2xl lg:text-3xl leading-snug sm:leading-[34px] text-center sm:text-left">
+          {title}
+        </h2>
+
         {isShowDetail && (
-          <Link
-            href={"/catalogs"}
-            className="p-[12px_24px] border border-[#E5E5E5] rounded-full font-semibold"
-          >
-            Explore All
-          </Link>
+          <div className="flex justify-center sm:justify-end">
+            <Link
+              href="/catalogs"
+              className="px-5 py-2 sm:px-6 sm:py-3 border border-gray-200 rounded-full font-semibold text-sm sm:text-base hover:bg-[#FFF6D9] transition-all"
+            >
+              Explore All
+            </Link>
+          </div>
         )}
       </div>
-      <div className="grid grid-cols-5 gap-[30px]">
-        {products.map((product: any) => {
-          return (
-            <CardProduct
-              key={`${product.name + product.id}`}
-              item={{
-                category_name: product.category.name,
-                id: product.id,
-                image_url: product.image_url,
-                name: product.name,
-                price: Number(product.price),
-              }}
-            />
-          );
-        })}
+
+      {/* 🔹 Product Grid */}
+      <div
+        className="
+          grid
+          grid-cols-2
+          sm:grid-cols-3
+          lg:grid-cols-4
+          xl:grid-cols-5
+          gap-4 sm:gap-6 lg:gap-8
+        "
+      >
+        {products.map((product: any) => (
+          <CardProduct
+            key={`${product.name}-${product.id}`}
+            item={{
+              id: product.id,
+              name: product.name,
+              image_url: product.image_url,
+              price: Number(product.price),
+              category_name: product.category.name,
+            }}
+          />
+        ))}
       </div>
-    </div>
+    </section>
   );
 }
