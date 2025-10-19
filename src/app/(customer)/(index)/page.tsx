@@ -12,32 +12,6 @@ import Footer from "./_components/footer";
 export default function LandingPage() {
   return (
     <>
-      <div className="lg:hidden md:hidden w-full bg-white border-b border-gray-100 shadow-sm py-3 px-4 sticky top-0 z-40">
-        <div className="max-w-screen-xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/assets/logos/logos-black.svg"
-              alt="Shopverse logo"
-              width={120}
-              height={32}
-              className="w-auto h-8 object-contain"
-              priority
-            />
-          </Link>
-
-          {/* 🔹 Tambahkan tombol cart kecil di mobile */}
-          <Link href="/carts" className="flex items-center">
-            <Image
-              src="/assets/icons/cart.svg"
-              alt="cart"
-              width={26}
-              height={26}
-              className="object-contain"
-            />
-          </Link>
-        </div>
-      </div>
-
       {/* 🟡 Header / Hero Section */}
       <header className="bg-[#FFF9D9] pt-8 pb-16 px-4 sm:px-8 lg:px-16">
         {/* image beserta url ke halaman home */}
