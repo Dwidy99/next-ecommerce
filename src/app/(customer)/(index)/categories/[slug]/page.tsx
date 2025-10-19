@@ -31,18 +31,17 @@ export async function generateMetadata({ params }: CategoryPageProps) {
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
   const category = await getCategoryBySlug(slug);
-  console.log("✅ Produk kategori:", category);
 
   if (!category) {
     return (
-      <div className="container max-w-[1130px] mx-auto px-5 py-20 text-center">
-        <h1 className="text-2xl font-semibold text-[#110843] mb-3">
+      <main className="container max-w-[1130px] mx-auto px-6 py-20 text-center">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-[#110843] mb-3">
           Category not found
         </h1>
-        <p className="text-gray-500">
+        <p className="text-gray-500 text-sm sm:text-base">
           The category you’re looking for doesn’t exist.
         </p>
-      </div>
+      </main>
     );
   }
 
@@ -59,28 +58,28 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <>
-      {/* 🟡 Header */}
-      <header className="bg-[#FFC736] pt-[30px] h-[351px] -mb-[181px]">
+      {/* 🔹 Header */}
+      <header className="bg-[#FFF9D9] pt-8 pb-6 md:pb-10">
         <Navbar />
       </header>
 
-      <section className="container max-w-[1130px] mx-auto px-5 mt-[50px] pb-[100px]">
-        <div className="bg-white p-[30px] rounded-[30px] border border-[#E5E5E5]">
-          <h2 className="font-bold text-2xl leading-[34px] mb-6">
+      <main className="container max-w-[1130px] mx-auto px-4 sm:px-6 md:px-8 mt-10 pb-24">
+        <div className="bg-white rounded-3xl border border-[#E5E5E5] shadow-sm hover:shadow-md transition-all duration-300 p-5 sm:p-8 md:p-10">
+          <h2 className="font-bold text-2xl sm:text-3xl text-[#110843] mb-8 text-center sm:text-left">
             {category.name} Products
           </h2>
 
           {products.length === 0 ? (
             <NoData />
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
               {products.map((item) => (
                 <CardProduct key={item.id} item={item as any} />
               ))}
             </div>
           )}
         </div>
-      </section>
+      </main>
     </>
   );
 }

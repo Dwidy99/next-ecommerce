@@ -11,30 +11,25 @@ export default function CartClient() {
   const { products } = useCart();
   const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    // Supaya kita tahu kapan client-side hydrate selesai
-    setIsMounted(true);
-  }, []);
+  useEffect(() => setIsMounted(true), []);
 
-  // Tampilkan loading dulu saat belum client-side mounted
-  if (!isMounted) {
-    return <Loading />;
-  }
+  if (!isMounted) return <Loading />;
 
   const isEmpty = products.length === 0;
 
   return (
-    <main className="container max-w-[1130px] mx-auto">
-      <div id="title" className="flex items-center justify-between mb-10 mt-10">
-        <div className="flex flex-col gap-5">
-          <div className="flex gap-5 items-center">
-            <span className="text-sm text-[#6A7789]">Shop</span>
-            <span className="text-sm text-[#6A7789]">/</span>
-            <span className="text-sm text-[#6A7789]">Browse</span>
-            <span className="text-sm text-[#6A7789]">/</span>
-            <span className="text-sm text-[#6A7789]">Details</span>
+    <main className="container max-w-[1130px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div
+        id="title"
+        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 mt-10"
+      >
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap gap-2 items-center text-sm text-[#6A7789]">
+            <span>Shop</span>/<span>Browse</span>/<span>Details</span>
           </div>
-          <h1 className="font-bold text-4xl leading-9">My Shopping Cart</h1>
+          <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl leading-tight">
+            My Shopping Cart
+          </h1>
         </div>
       </div>
 
