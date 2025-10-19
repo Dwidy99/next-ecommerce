@@ -63,7 +63,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <Navbar />
       </header>
 
-      <main className="container max-w-[1130px] mx-auto px-4 sm:px-6 md:px-8 mt-10 pb-24">
+      <main className="container max-w-[1130px] mx-auto px-6 sm:px-8 md:px-8 mt-10 pb-24">
         <div className="bg-white rounded-3xl border border-[#E5E5E5] shadow-sm hover:shadow-md transition-all duration-300 p-5 sm:p-8 md:p-10">
           <h2 className="font-bold text-2xl sm:text-3xl text-[#110843] mb-8 text-center sm:text-left">
             {category.name} Products
