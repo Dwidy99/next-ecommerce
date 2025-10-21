@@ -13,7 +13,6 @@ export default function SignOutButton() {
   const handleSignOut = async () => {
     try {
       const res = await SignOut();
-      console.log("res:", res);
 
       if (res.error) {
         toast.error("Sign out failed", {
@@ -25,8 +24,6 @@ export default function SignOutButton() {
       toast.success("Signed out successfully", {
         description: "Redirecting to login page...",
       });
-
-      console.log("toast:", toast);
 
       startTransition(() => {
         setTimeout(() => router.push("/"), 1200);

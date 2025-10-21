@@ -1,33 +1,50 @@
 import { ProductStock } from "@prisma/client";
-import { create } from 'zustand'
+import { create } from "zustand";
 
 export type TFilter = {
-    search?: string,
-    minPrice?: number,
-    maxPrice?: number,
-    stock?: ProductStock[] | null,
-    brands?: number[] | null,
-    locations?: number[] | null,
-    categories?: number[] | null,
-}
+    search?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    stock?: ProductStock[];   // tidak perlu null, cukup optional array
+    brands?: number[];
+    locations?: number[];
+    categories?: number[];
+};
+
 export interface FilterState {
     filter: TFilter;
-    setFilter: (filter: TFilter | ((prev: TFilter) => TFilter)) => void;
+    setFilter: (update: Partial<TFilter> | ((prev: TFilter) => Partial<TFilter>)) => void;
+    resetFilter: () => void;
 }
 
 export const useFilter = create<FilterState>()((set, get) => ({
     filter: {
         search: "",
-        minPrice: 0,
-        maxPrice: 0,
-        stock: null,
-        brands: null,
-        locations: null,
-        categories: null,
+        minPrice: undefined,
+        maxPrice: undefined,
+        stock: [],
+        brands: [],
+        locations: [],
+        categories: [],
     },
+
     setFilter: (input) => {
         const current = get().filter;
-        const next = typeof input === "function" ? input(current) : input;
-        set({ filter: { ...current, ...next } });
+        const update = typeof input === "function" ? input(current) : input;
+        set({ filter: { ...current, ...update } });
+    },
+
+    resetFilter: () => {
+        set({
+            filter: {
+                search: "",
+                minPrice: undefined,
+                maxPrice: undefined,
+                stock: [],
+                brands: [],
+                locations: [],
+                categories: [],
+            },
+        });
     },
 }));

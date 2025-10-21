@@ -7,13 +7,12 @@ import ListProduct from "./_components/list-product";
 import ListBrand from "./_components/list-brand";
 import Loading from "./_components/loading";
 import ProductsCarouselWrapper from "./_components/products-carousel-wrapper";
-import Footer from "./_components/footer";
 
 export default function LandingPage() {
   return (
     <>
       {/* 🟡 Header / Hero Section */}
-      <header className="bg-[#FFF9D9] pt-8 pb-16 px-4 sm:px-8 lg:px-16">
+      <header className="bg-[#FFC736] pt-8 sm:pt-1 pb-16 px-4 sm:px-8 lg:px-16">
         {/* image beserta url ke halaman home */}
         <Navbar />
 

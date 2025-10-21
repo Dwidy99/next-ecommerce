@@ -23,7 +23,6 @@ async function main() {
         }
     }
 
-    console.log("✅ All existing rows have slugs now!");
 }
 
 main().finally(() => prisma.$disconnect());

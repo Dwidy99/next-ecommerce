@@ -5,8 +5,7 @@ import FilterCheckboxItem from "./filter-checkbox-item";
 export default async function FilterLocation() {
   const locations = await getLocations();
   return (
-    <div className="flex flex-col gap-[14px]">
-      <p className="font-semibold leading-[22px]">Location</p>
+    <div className="flex p-4 flex-col gap-[14px]">
       {locations.map((location) => (
         // <label
         //   key={`${location.name + location.id}`}
@@ -22,9 +21,10 @@ export default async function FilterLocation() {
         //   <span>{location.name}</span>
         // </label>
         <FilterCheckboxItem
-          key={location.id + location.name}
+          key={location.id}
           id={location.id.toString()}
           value={location.name}
+          type="location"
         />
       ))}
     </div>

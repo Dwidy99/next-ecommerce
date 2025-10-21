@@ -1,44 +1,58 @@
-import React from "react";
 import Navbar from "../_components/navbar";
-import FilterPrice from "./_components/filter-price";
-import FilterStock from "./_components/filter-stock";
-import FilterBrand from "./_components/filter-brand";
-import FilterLocation from "./_components/filter-location";
-import FilterCategory from "./_components/filter-category";
-import ProductListing from "./_components/product-listing";
 import SearchBar from "../_components/search-bar";
+import FilterBrand from "./_components/filter/filter-brand";
+import FilterCategory from "./_components/filter/filter-category";
+import FilterGroup from "./_components/filter/filter-group";
+import FilterLocation from "./_components/filter/filter-location";
+import FilterPrice from "./_components/filter/filter-price";
+import FilterStock from "./_components/filter/filter-stock";
+
+import ProductListing from "./_components/product-listing";
+
+import ResponsiveLayout from "./_components/responsive-layout";
 
 export default function CatalogPage() {
   return (
     <>
-      <header className="bg-[#FFC736] pt-[30px] h-[351px] -mb-[181px]">
+      <header className="bg-[#FFC736] sm:h-[351px] h-[175px] -mb-[181px] md:pt-8 pb-16 px-4 sm:px-8 lg:px-16">
         <Navbar />
       </header>
+
       <SearchBar />
-      <div
-        id="catalog"
-        className="container max-w-[1130px] mx-auto flex gap-[30px] mt-[50px] pb-[100px]"
-      >
-        <form
-          action=""
-          className="flex flex-1 flex-col bg-white p-[30px] gap-5 h-fit border border-[#E5E5E5] rounded-[30px]"
-        >
-          <h2 className="font-bold text-2xl leading-[34px]">Filters</h2>
-          <FilterPrice />
-          <hr className="border-[#E5E5E5]" />
-          <FilterStock />
-          <hr className="border-[#E5E5E5]" />
-          <FilterBrand />
-          <hr className="border-[#E5E5E5]" />
-          <FilterLocation />
-          <hr className="border-[#E5E5E5]" />
-          <FilterCategory />
-        </form>
-        <div className="w-[780px] flex flex-col bg-white p-[30px] gap-[30px] h-fit border border-[#E5E5E5] rounded-[30px]">
-          <h2 className="font-bold text-2xl leading-[34px]">Products</h2>
-          <ProductListing />
-        </div>
-      </div>
+
+      <ResponsiveLayout
+        filters={
+          <>
+            <h2 className="font-bold text-xl md:text-2xl mb-4">Filters</h2>
+
+            <FilterGroup title="Price Range">
+              <FilterPrice />
+            </FilterGroup>
+
+            <FilterGroup title="Stock Availability">
+              <FilterStock />
+            </FilterGroup>
+
+            <FilterGroup title="Brands">
+              <FilterBrand />
+            </FilterGroup>
+
+            <FilterGroup title="Locations">
+              <FilterLocation />
+            </FilterGroup>
+
+            <FilterGroup title="Categories">
+              <FilterCategory />
+            </FilterGroup>
+          </>
+        }
+        products={
+          <>
+            <h2 className="font-bold text-xl md:text-2xl mb-4">Products</h2>
+            <ProductListing />
+          </>
+        }
+      />
     </>
   );
 }

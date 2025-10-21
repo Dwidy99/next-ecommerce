@@ -5,8 +5,7 @@ import FilterCheckboxItem from "./filter-checkbox-item";
 export default async function FilterBrand() {
   const brands = await getBrands();
   return (
-    <div className="flex flex-col gap-[14px]">
-      <p className="font-semibold leading-[22px]">Brands</p>
+    <div className="flex flex-col p-4 gap-[14px]">
       {brands.map((brand) => (
         //   <label
         //     key={`${brand.name + brand.id}`}
@@ -22,9 +21,10 @@ export default async function FilterBrand() {
         //     <span>{brand.name}</span>
         //   </label>
         <FilterCheckboxItem
-          key={brand.id + brand.name}
+          key={brand.id}
           id={brand.id.toString()}
           value={brand.name}
+          type="brand"
         />
       ))}
     </div>
