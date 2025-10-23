@@ -33,7 +33,7 @@ export default function NavbarClient({
   return (
     <>
       {/* 🟣 DESKTOP / TABLET NAVBAR */}
-      <nav className="hidden md:block rounded-xl bg-[#110843] text-white shadow-md relative z-50">
+      <nav className="hidden md:block rounded-xl md:my-16 bg-[#110843] text-white shadow-md relative z-50">
         <div className="max-w-[1200px] mx-auto px-6 lg:px-8 py-3 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
@@ -52,7 +52,7 @@ export default function NavbarClient({
 
             <li className="relative group cursor-pointer">
               <span className="hover:text-[#FFC736]">Categories</span>
-              <ul className="absolute left-0 top-[100%] mt-2 hidden group-hover:flex flex-col bg-white text-[#110843] rounded-lg shadow-md border border-gray-100 min-w-[160px] py-2 z-50">
+              <ul className="absolute left-0 top-[100%] hidden group-hover:flex flex-col bg-white text-[#110843] rounded-lg shadow-md border border-gray-100 min-w-[160px] py-2 z-50">
                 {categories.length > 0 ? (
                   categories.map((cat) => (
                     <li key={cat.id}>

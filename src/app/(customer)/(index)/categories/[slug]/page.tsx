@@ -54,15 +54,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     name: p.name,
     price: Number(p.price),
     image_url:
-      typeof p.image_url === "string" && p.image_url.startsWith("http")
-        ? p.image_url
+      typeof p.images === "string" && p.images
+        ? p.images
         : "/assets/products/placeholder.svg",
-    category_name: p.category_name,
+    category_name: p.category.name,
   }));
 
   return (
     <>
-      <header className="bg-[#FFF9D9] pt-8 pb-6 md:pb-10">
+      <header className="bg-[#FFF9D9] py-8 sm:py-1 px-4 sm:px-8 lg:px-16">
         <Navbar />
       </header>
 

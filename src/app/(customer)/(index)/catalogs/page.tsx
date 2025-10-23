@@ -24,7 +24,7 @@ export async function generateMetadata() {
 export default function CatalogPage() {
   return (
     <>
-      <header className="bg-[#FFC736] sm:h-[351px] h-[175px] -mb-[181px] md:pt-8 pb-16 px-4 sm:px-8 lg:px-16">
+      <header className="bg-[#FFC736] sm:h-[351px] h-[175px] -mb-[181px] md:py-8 px-4 sm:px-8 lg:px-16">
         <Navbar />
       </header>
 
