@@ -166,3 +166,31 @@ model OrderProduct {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
+
+enum Language {
+  ID
+  EN
+}
+
+model Configuration {
+  id          Int      @id @default(autoincrement())
+  language    Language
+  webname     String
+  short_name  String?
+  tagline     String?
+  description String?
+  website     String?
+  email       String?
+  address     String?
+  logo        String?
+  icon        String?
+  keywords    String?
+  metatext    String?
+  facebook    String?
+  twitter     String?
+  instagram   String?
+  google_map  String?
+  date        DateTime @default(now()) @updatedAt
+
+  @@map("configuration")
+}
