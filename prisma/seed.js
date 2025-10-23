@@ -203,29 +203,26 @@ async function main() {
   }
 
   // 6️⃣ Configuration (Site Meta)
-  const existingConfig = await prisma.configuration.findFirst();
-  if (!existingConfig) {
-    await prisma.configuration.create({
-      data: {
-        language: "EN",
-        webname: "Next Commerce",
-        short_name: "NextCommerce",
-        tagline: "Shop the Future",
-        description:
-          "Next Commerce is a modern e-commerce platform built with Next.js and Prisma.",
-        website: "https://nextcommerce.example.com",
-        email: "support@nextcommerce.com",
-        logo: "/uploads/logo.png",
-        icon: "/uploads/favicon.ico",
-        keywords: "ecommerce, online shopping, nextcommerce",
-        metatext:
-          "Discover the latest trends in tech, fashion, and home essentials with Next Commerce.",
-      },
-    });
-    console.log("✅ Default configuration created");
-  } else {
-    console.log("ℹ️ Configuration already exists");
-  }
+  await prisma.configuration.deleteMany(); // paksa clear
+
+  await prisma.configuration.create({
+    data: {
+      language: "ID",
+      webname: "Next Commerce",
+      short_name: "NextCommerce",
+      tagline: "Shop the Future",
+      description:
+        "Next Commerce is a modern e-commerce platform built with Next.js and Prisma.",
+      website: "https://nextcommerce.example.com",
+      email: "support@nextcommerce.com",
+      logo: "/uploads/logo.png",
+      icon: "/uploads/favicon.ico",
+      keywords: "ecommerce, online shopping, nextcommerce",
+      metatext:
+        "Discover the latest trends in tech, fashion, and home essentials with Next Commerce.",
+    },
+  });
+  console.log("✅ Default configuration created");
 }
 
 main()
