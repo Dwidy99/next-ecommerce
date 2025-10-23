@@ -24,7 +24,7 @@ export default async function ProfilePage() {
 
   return (
     <>
-      <header className="bg-[#FFF9D9] pt-6 md:pt-10 h-[280px] md:h-[320px] relative">
+      <header className="bg-[#FFF9D9] py-8 sm:py-1 px-4 sm:px-8 lg:px-16 h-[280px] md:h-[320px] relative">
         <div className="absolute inset-0 bg-gradient-to-b from-[#FFF9D9] to-transparent" />
         <Navbar />
       </header>
