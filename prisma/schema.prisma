@@ -7,6 +7,147 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            Int         @id @default(autoincrement())
+  name          String      @db.VarChar(255)
+  email         String      @unique @db.VarChar(255)
+  password      String      @db.VarChar(255)
+  role          RoleUser    @default(customer)
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+  image         String?     @db.VarChar(255)
+  emailVerified DateTime?
+  orders        Order[]
+  session       Session[]
+  userTokens    UserToken[]
+}
+
+model UserToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  type      TokenType
+  userId    Int
+  expires   DateTime
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type])
+}
+
+model Session {
+  id        String   @id
+  userId    Int
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Brand {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  logo       String    @db.VarChar(255)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  products   Product[]
+}
+
+model Category {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  slug       String?   @unique
+  products   Product[]
+}
+
+model Location {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  Product    Product[]
+}
+
+model Product {
+  id          Int            @id @default(autoincrement())
+  brand_id    Int
+  category_id Int
+  location_id Int
+  name        String         @db.VarChar(255)
+  description String
+  price       BigInt
+  stock       ProductStock
+  images      String[]
+  created_at  DateTime       @default(now())
+  updated_at  DateTime       @updatedAt
+  slug        String?        @unique
+  orders      OrderProduct[]
+  brand       Brand          @relation(fields: [brand_id], references: [id])
+  category    Category       @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  location    Location       @relation(fields: [location_id], references: [id])
+}
+
+model Order {
+  id         Int            @id @default(autoincrement())
+  code       String         @unique
+  created_at DateTime       @default(now())
+  updated_at DateTime       @updatedAt
+  status     StatusOrder
+  total      BigInt
+  user_id    Int
+  user       User           @relation(fields: [user_id], references: [id])
+  detail     OrderDetail?
+  products   OrderProduct[]
+}
+
+model OrderDetail {
+  id          Int      @id @default(autoincrement())
+  order_id    Int      @unique
+  name        String   @db.VarChar(255)
+  phone       String   @db.VarChar(255)
+  address     String   @db.VarChar(255)
+  city        String   @db.VarChar(255)
+  postal_code String   @db.VarChar(255)
+  notes       String   @db.VarChar(255)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  order       Order    @relation(fields: [order_id], references: [id])
+}
+
+model OrderProduct {
+  id         Int      @id @default(autoincrement())
+  product_id Int
+  order_id   Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  quantity   Int
+  subtotal   BigInt
+  order      Order    @relation(fields: [order_id], references: [id])
+  product    Product  @relation(fields: [product_id], references: [id])
+}
+
+model Configuration {
+  tagline     String?
+  website     String?
+  email       String?
+  logo        String?
+  icon        String?
+  keywords    String?
+  metatext    String?
+  facebook    String?
+  twitter     String?
+  instagram   String?
+  google_map  String?
+  address     String?
+  date        DateTime @default(now()) @updatedAt
+  description String?
+  id          Int      @id @default(autoincrement())
+  language    Language
+  short_name  String?
+  webname     String
+
+  @@map("configuration")
+}
+
 enum RoleUser {
   superadmin
   customer
@@ -32,162 +173,4 @@ enum TokenType {
 enum Language {
   ID
   EN
-}
-
-// ========================== MODELS ==========================
-
-model User {
-  id       Int      @id @default(autoincrement())
-  name     String   @db.VarChar(255)
-  email    String   @unique @db.VarChar(255)
-  password String   @db.VarChar(255)
-  role     RoleUser @default(customer)
-
-  image         String?     @db.VarChar(255)
-  emailVerified DateTime?
-  userTokens    UserToken[]
-  created_at    DateTime    @default(now())
-  updated_at    DateTime    @updatedAt
-
-  orders  Order[]
-  session Session[]
-}
-
-model UserToken {
-  id        Int       @id @default(autoincrement())
-  token     String    @unique
-  type      TokenType
-  userId    Int
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expires   DateTime
-  createdAt DateTime  @default(now())
-
-  @@unique([userId, type])
-}
-
-model Session {
-  id        String   @id
-  userId    Int
-  expiresAt DateTime
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
-}
-
-model Brand {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
-  logo String @db.VarChar(255)
-
-  products   Product[]
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-}
-
-model Category {
-  id   Int     @id @default(autoincrement())
-  name String  @db.VarChar(255)
-  slug String? @unique
-
-  products   Product[]
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-}
-
-model Location {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
-
-  Product    Product[]
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-}
-
-model Product {
-  id          Int     @id @default(autoincrement())
-  name        String  @db.VarChar(255)
-  slug        String? @unique
-  brand_id    Int
-  category_id Int
-  location_id Int
-
-  description String       @db.Text
-  price       BigInt       @db.BigInt
-  stock       ProductStock
-  images      String[]
-
-  brand    Brand          @relation(fields: [brand_id], references: [id])
-  category Category       @relation(fields: [category_id], references: [id], onDelete: Cascade)
-  location Location       @relation(fields: [location_id], references: [id])
-  orders   OrderProduct[]
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
-model Order {
-  id Int @id @default(autoincrement())
-
-  code    String      @unique @db.Text
-  user_id Int
-  total   BigInt      @db.BigInt
-  status  StatusOrder
-
-  user     User?          @relation(fields: [user_id], references: [id])
-  detail   OrderDetail?
-  products OrderProduct[]
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
-model OrderDetail {
-  id Int @id @default(autoincrement())
-
-  order_id Int   @unique
-  order    Order @relation(fields: [order_id], references: [id])
-
-  name        String @db.VarChar(255)
-  phone       String @db.VarChar(255)
-  address     String @db.VarChar(255)
-  city        String @db.VarChar(255)
-  postal_code String @db.VarChar(255)
-  notes       String @db.VarChar(255)
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
-model OrderProduct {
-  id         Int    @id @default(autoincrement())
-  product_id Int
-  order_id   Int
-  subtotal   BigInt
-  quantity   Int    @db.Integer
-
-  product    Product  @relation(fields: [product_id], references: [id])
-  order      Order    @relation(fields: [order_id], references: [id])
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
-model Configuration {
-  id          Int      @id @default(autoincrement())
-  language    Language
-  webname     String
-  short_name  String?
-  tagline     String?
-  description String?
-  website     String?
-  email       String?
-  address     String?
-  logo        String?
-  icon        String?
-  keywords    String?
-  metatext    String?
-  facebook    String?
-  twitter     String?
-  instagram   String?
-  google_map  String?
-  date        DateTime @default(now()) @updatedAt
-
-  @@map("configuration")
 }
