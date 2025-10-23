@@ -1,4 +1,3 @@
-import { getImageUrl } from "@/lib/supabase"
 import { prisma } from "lib/prisma"
 
 export async function fetchCategoriesWithProducts() {
@@ -43,46 +42,34 @@ export async function fetchCategoriesWithProducts() {
     }
 }
 
-// 🔹 Ambil semua slug untuk static params
-export async function getAllCategorySlugs() {
-    const categories = await prisma.category.findMany({
-        select: { slug: true },
-    })
-    return categories.map((c) => ({ slug: c.slug }))
-}
-
 // 🔹 Ambil 1 kategori berdasarkan slug (beserta produk)
 export async function getCategoryBySlug(slug: string) {
-    const category = await prisma.category.findUnique({
+    return await prisma.category.findUnique({
         where: { slug },
-        include: {
+        select: {
+            id: true,
+            name: true,
+            slug: true,
+            created_at: true,
+            updated_at: true,
             products: {
                 select: {
                     id: true,
                     name: true,
                     price: true,
-                    category: { select: { name: true } },
                     images: true,
+                    category: true,
                 },
             },
         },
-    });
+    })
+}
 
-    if (!category) return null;
-
-    // 🔧 Konversi nama file jadi URL publik Supabase
-    const products = category.products.map((p) => ({
-        id: p.id,
-        name: p.name,
-        price: Number(p.price),
-        category_name: p.category.name,
-        image_url: p.images?.[0]
-            ? getImageUrl(p.images[0], "products")
-            : "/assets/placeholder.png",
-    }));
-
-
-    return { ...category, products };
+export async function getAllCategorySlugs() {
+    const categories = await prisma.category.findMany({
+        select: { slug: true },
+    })
+    return categories.map((c) => ({ slug: c.slug }))
 }
 
 // 🔹 Ambil nama kategori untuk metadata

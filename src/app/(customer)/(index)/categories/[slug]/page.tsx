@@ -2,11 +2,8 @@ import React from "react";
 import Navbar from "../../_components/navbar";
 import CardProduct from "../../_components/card-product";
 import NoData from "../../_components/no-data";
-import {
-  getAllCategorySlugs,
-  getCategoryBySlug,
-  getCategoryMeta,
-} from "../lib/data";
+import { getAllCategorySlugs, getCategoryBySlug } from "../lib/data";
+import { generatePageSEO } from "@/lib/seo/seo-utils";
 
 export async function generateStaticParams() {
   return getAllCategorySlugs();
@@ -15,22 +12,29 @@ export async function generateStaticParams() {
 export const dynamic = "force-dynamic";
 
 interface CategoryPageProps {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }
 
 export async function generateMetadata({ params }: CategoryPageProps) {
-  const { slug } = await params;
-  const category = await getCategoryMeta(slug);
+  const category = await getCategoryBySlug(params.slug);
 
-  return {
-    title: category ? `${category.name} - Shopverse` : "Category not found",
-    description: `Explore products in ${category?.name ?? "this category"}`,
-  };
+  if (!category) {
+    return await generatePageSEO({
+      title: "Category Not Found",
+      description: "This category does not exist.",
+      url: `/categories/${params.slug}`,
+    });
+  }
+
+  return await generatePageSEO({
+    title: category.name ?? "Category",
+    keywords: [category.name ?? "", "category", "products"],
+    url: `/categories/${category.slug}`,
+  });
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { slug } = await params;
-  const category = await getCategoryBySlug(slug);
+  const category = await getCategoryBySlug(params.slug);
 
   if (!category) {
     return (
@@ -45,20 +49,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     );
   }
 
-  const products = category.products.map((p) => ({
+  const products = (category.products ?? []).map((p) => ({
     id: p.id,
     name: p.name,
     price: Number(p.price),
     image_url:
       typeof p.image_url === "string" && p.image_url.startsWith("http")
         ? p.image_url
-        : "/assets/products/placeholder.png",
+        : "/assets/products/placeholder.svg",
     category_name: p.category_name,
   }));
 
   return (
     <>
-      {/* 🔹 Header */}
       <header className="bg-[#FFF9D9] pt-8 pb-6 md:pb-10">
         <Navbar />
       </header>

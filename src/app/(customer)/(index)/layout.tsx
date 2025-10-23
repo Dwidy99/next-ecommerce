@@ -5,28 +5,23 @@ import { Toaster } from "sonner";
 import Footer from "./_components/footer";
 import Link from "next/link";
 import Image from "next/image";
+import { getSiteConfig } from "@/lib/seo/config";
+import { defaultMetadata } from "@/lib/seo/default-metadata";
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700", "800"],
   subsets: ["latin-ext"],
 });
 
-export const metadata = {
-  title: "Shopverse",
-  description: "Next-gen shopping experience",
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-96x96.png",
-    apple: "/apple-touch-icon.png",
-    other: [
-      {
-        rel: "mask-icon",
-        url: "/safari-pinned-tab.svg",
-        color: "#5bbad5",
-      },
-    ],
-  },
-};
+export async function generateMetadata() {
+  const config = await getSiteConfig("ID");
+  return {
+    ...defaultMetadata,
+    title: config.title,
+    description: config.description,
+    icons: { icon: config.icon },
+  };
+}
 
 export default async function CustomerLayout({
   children,

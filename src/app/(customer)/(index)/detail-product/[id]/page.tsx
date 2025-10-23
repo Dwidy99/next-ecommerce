@@ -7,9 +7,22 @@ import PriceInfo from "./_components/price-info";
 import { redirect } from "next/navigation";
 import { getProductById } from "../lib/data";
 import { getUser } from "@/lib/auth";
+import { generatePageSEO } from "@/lib/seo/seo-utils";
 
 interface DetailProductProp {
   params: { id: string };
+}
+
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const product = await getProductById(params.id);
+
+  return await generatePageSEO({
+    title: product.name,
+    description: product.description,
+    keywords: [product.name, product.category.name],
+    image: product.images?.[0]?.url,
+    url: `/detail-product/${product.id}`,
+  });
 }
 
 export default async function DetailProduct({ params }: DetailProductProp) {

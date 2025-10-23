@@ -1,3 +1,4 @@
+import { generatePageSEO } from "@/lib/seo/seo-utils";
 import Navbar from "../_components/navbar";
 import SearchBar from "../_components/search-bar";
 import FilterBrand from "./_components/filter/filter-brand";
@@ -10,6 +11,15 @@ import FilterStock from "./_components/filter/filter-stock";
 import ProductListing from "./_components/product-listing";
 
 import ResponsiveLayout from "./_components/responsive-layout";
+
+export async function generateMetadata() {
+  return await generatePageSEO({
+    title: "All Product",
+    description: "Jelajahi seluruh produk berkualitas terbaik dari kami.",
+    keywords: ["products", "shop", "catalog"],
+    url: "/catalogs",
+  });
+}
 
 export default function CatalogPage() {
   return (
