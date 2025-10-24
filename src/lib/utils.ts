@@ -53,10 +53,14 @@ export function generateRandomString(length: number): string {
 }
 
 export function slugify(text: string): string {
+  if (!text) return "";
   return text
+    .toString()
     .toLowerCase()
     .trim()
     .replace(/['"]/g, "")
     .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/--+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }

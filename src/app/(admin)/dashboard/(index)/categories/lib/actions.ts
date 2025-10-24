@@ -4,6 +4,17 @@ import { ActionResult } from "@/types";
 import { redirect } from "next/navigation";
 import { schemaCategory } from "@/lib/schema";
 import { prisma } from "../../../../../../../lib/prisma";
+import { slugify } from "@/lib/utils";
+import { Prisma } from "@prisma/client";
+
+function handlePrismaError(err: unknown): string {
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    if (err.code === "P2002") {
+      return "Category name or slug already exists.";
+    }
+  }
+  return "Failed to create category.";
+}
 
 export async function postCategory(
   _: unknown,
@@ -12,29 +23,27 @@ export async function postCategory(
   const name = String(formData.get("name") ?? "");
 
   const validate = schemaCategory.safeParse({ name });
-
   if (!validate.success) {
-    // Zod v4: gunakan .issues untuk ambil array error
-    const firstError = validate.error.issues?.[0]?.message ?? "Invalid input";
-
-    return {
-      error: firstError,
-    };
+    // tampilkan pesan Zod (bukan Prisma)
+    return { error: validate.error.issues[0]?.message ?? "Invalid input" };
   }
+
+  const slug = slugify(validate.data.name);
 
   try {
     await prisma.category.create({
       data: {
-        name: validate.data.name
+        name: validate.data.name,
+        slug,
       },
-    })
+    });
   } catch (err) {
-    console.log(err);
-    return redirect("/dashboard/categories/create")
+    console.error("Prisma error:", err);
+    const message = handlePrismaError(err);
+    return { error: message };
   }
-  //   finally {}
 
-  redirect("/dashboard/categories/");
+  redirect("/dashboard/categories");
 }
 
 export async function updateCategory(
@@ -44,37 +53,33 @@ export async function updateCategory(
 ): Promise<ActionResult> {
   const validate = schemaCategory.safeParse({
     name: formData.get("name"),
-  })
+  });
 
   if (!validate.success) {
-    return {
-      error: validate.error.issues?.[0].message ?? "Invalid Input"
-    }
+    return { error: validate.error.issues?.[0].message ?? "Invalid Input" };
   }
 
   if (id === undefined) {
-    return {
-      error: "Id is not found"
-    }
+    return { error: "Id is not found" };
   }
 
   try {
+    const slug = slugify(validate.data.name);
+
     await prisma.category.update({
-      where: {
-        id: id
-      },
+      where: { id },
       data: {
-        name: validate.data.name
-      }
-    })
+        name: validate.data.name,
+        slug, // 👈 update slug juga
+      },
+    });
+
   } catch (err) {
-    console.log(err);
-    return {
-      error: "Failed to update data"
-    }
+    console.error(err);
+    return { error: "Failed to update data" };
   }
 
-  return redirect("/dashboard/categories");
+  redirect("/dashboard/categories");
 }
 
 export async function deleteCategory(
