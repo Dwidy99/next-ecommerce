@@ -70,7 +70,7 @@ export default function FormSignIn() {
                 id="password"
                 name="password"
                 type="password"
-                value="qwerty123"
+                value="qwerty12"
               />
             </div>
           </div>

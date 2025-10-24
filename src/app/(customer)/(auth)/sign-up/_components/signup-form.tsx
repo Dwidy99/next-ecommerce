@@ -9,14 +9,18 @@ import { SignUp } from "../lib/actions";
 
 const initialState: ActionResult = { error: "", message: "" };
 
-// ✅ Tombol submit
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <button
       type="submit"
       disabled={pending}
-      className="p-[12px_24px] bg-[#110843] text-white rounded-full font-semibold hover:bg-[#3a2086] transition-all duration-200 disabled:bg-[#7c70b6] disabled:cursor-not-allowed"
+      className="
+        w-full py-3 px-6
+        bg-[#110843] text-white font-semibold rounded-full
+        hover:bg-[#3a2086] transition-all duration-200
+        disabled:bg-[#7c70b6] disabled:cursor-not-allowed
+      "
     >
       {pending ? "Creating account..." : "Create My Account"}
     </button>
@@ -57,17 +61,25 @@ export default function SignUpForm() {
     <form
       action={formAction}
       onSubmit={handleSubmit}
-      className="w-[500px] bg-white p-[50px_30px] flex flex-col gap-5 rounded-3xl border border-[#E5E5E5]"
+      className="
+        bg-white border border-[#E5E5E5] rounded-3xl shadow-sm
+        flex flex-col gap-5 px-6 py-8 sm:px-10 sm:py-10
+        transition-all
+      "
     >
       {/* 🔹 Header */}
       <div className="flex flex-col gap-2 items-center text-center">
         <img
           src="/assets/logos/logos-black.svg"
           alt="Logo"
-          className="max-h-12 w-auto object-contain"
+          className="max-h-10 sm:max-h-12 w-auto object-contain"
         />
-        <h1 className="font-bold text-2xl text-[#110843] mt-2">Sign Up</h1>
-        <p className="text-sm text-gray-500">Create your account below</p>
+        <h1 className="font-bold text-2xl sm:text-3xl text-[#110843] mt-2">
+          Sign Up
+        </h1>
+        <p className="text-sm sm:text-base text-gray-500">
+          Create your account below
+        </p>
       </div>
 
       {/* 🔸 Error Message */}
@@ -92,7 +104,7 @@ export default function SignUpForm() {
           name="name"
           required
           placeholder="Write your full name"
-          className="appearance-none outline-none w-full placeholder:text-[#616369] font-semibold text-black bg-transparent"
+          className="appearance-none outline-none w-full bg-transparent font-semibold placeholder:text-[#616369] text-sm sm:text-base"
         />
       </div>
 
@@ -104,7 +116,7 @@ export default function SignUpForm() {
           name="email"
           required
           placeholder="Write your email address"
-          className="appearance-none outline-none w-full placeholder:text-[#616369] font-semibold text-black bg-transparent"
+          className="appearance-none outline-none w-full bg-transparent font-semibold placeholder:text-[#616369] text-sm sm:text-base"
         />
       </div>
 
@@ -116,12 +128,12 @@ export default function SignUpForm() {
           name="password"
           required
           placeholder="Write your password"
-          className="appearance-none outline-none w-full placeholder:text-[#616369] font-semibold text-black bg-transparent"
+          className="appearance-none outline-none w-full bg-transparent font-semibold placeholder:text-[#616369] text-sm sm:text-base"
         />
         <button
           type="button"
           onClick={togglePassword}
-          className="flex shrink-0 text-gray-500 hover:text-[#110843] transition"
+          className="text-gray-500 hover:text-[#110843] transition"
         >
           {showPassword ? (
             <EyeOff size={20} strokeWidth={1.8} />
@@ -139,12 +151,12 @@ export default function SignUpForm() {
           name="confirmPassword"
           required
           placeholder="Confirm your password"
-          className="appearance-none outline-none w-full placeholder:text-[#616369] font-semibold text-black bg-transparent"
+          className="appearance-none outline-none w-full bg-transparent font-semibold placeholder:text-[#616369] text-sm sm:text-base"
         />
         <button
           type="button"
           onClick={toggleConfirm}
-          className="flex shrink-0 text-gray-500 hover:text-[#110843] transition"
+          className="text-gray-500 hover:text-[#110843] transition"
         >
           {showConfirm ? (
             <EyeOff size={20} strokeWidth={1.8} />

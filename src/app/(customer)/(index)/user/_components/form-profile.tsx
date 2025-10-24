@@ -37,7 +37,7 @@ export default function FormProfile({ initialProfile }: FormProfileProps) {
       if (res.error) {
         toast.error("Failed to update profile", { description: res.error });
       } else {
-        toast.success("✅ Profile updated successfully!");
+        toast.success("Profile updated successfully!");
       }
 
       redirect("/user");

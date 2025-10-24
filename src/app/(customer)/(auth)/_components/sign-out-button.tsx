@@ -26,7 +26,7 @@ export default function SignOutButton() {
       });
 
       startTransition(() => {
-        setTimeout(() => router.push("/"), 1200);
+        setTimeout(() => router.push("/sign-in"), 1200);
       });
     } catch (error) {
       console.error("SignOutButton error:", error);

@@ -1,23 +1,27 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 import Link from "next/link";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { ActionResult } from "@/types";
 import { SignIn } from "../lib/actions";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 
 const initialState: ActionResult = { error: "" };
 
-// ✅ Tombol khusus agar useFormStatus() bisa mendeteksi pending
+// ✅ Submit button that reacts to pending state
 function SubmitButton() {
   const { pending } = useFormStatus();
-
   return (
     <button
       type="submit"
       disabled={pending}
-      className="p-[12px_24px] bg-[#110843] text-white rounded-full font-semibold hover:bg-[#3a2086] transition-all duration-200 disabled:bg-[#7c70b6] disabled:cursor-not-allowed"
+      className="
+        w-full py-3 px-6
+        bg-[#110843] text-white font-semibold rounded-full
+        hover:bg-[#3a2086] transition-all duration-200
+        disabled:bg-[#7c70b6] disabled:cursor-not-allowed
+      "
     >
       {pending ? "Signing in..." : "Sign In to My Account"}
     </button>
@@ -25,7 +29,7 @@ function SubmitButton() {
 }
 
 export default function SignInForm() {
-  const [state, formAction] = useFormState(SignIn, initialState);
+  const [state, formAction] = useActionState(SignIn, initialState);
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePassword = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,17 +40,25 @@ export default function SignInForm() {
   return (
     <form
       action={formAction}
-      className="w-[500px] bg-white p-[50px_30px] flex flex-col gap-5 rounded-3xl border border-[#E5E5E5]"
+      className="
+        bg-white border border-[#E5E5E5] rounded-3xl shadow-sm
+        flex flex-col gap-5 px-6 py-8 sm:px-10 sm:py-10
+        transition-all
+      "
     >
       {/* 🔹 Header */}
       <div className="flex flex-col gap-2 items-center text-center">
         <img
           src="/assets/logos/logos-black.svg"
           alt="Logo"
-          className="max-h-12 w-auto object-contain"
+          className="max-h-10 sm:max-h-12 w-auto object-contain"
         />
-        <h1 className="font-bold text-2xl text-[#110843] mt-2">Sign In</h1>
-        <p className="text-sm text-gray-500">Access your account below</p>
+        <h1 className="font-bold text-2xl sm:text-3xl text-[#110843] mt-2">
+          Sign In
+        </h1>
+        <p className="text-sm sm:text-base text-gray-500">
+          Access your account below
+        </p>
       </div>
 
       {/* 🔸 Error Message */}
@@ -56,35 +68,34 @@ export default function SignInForm() {
         </p>
       )}
 
-      {/* 📨 Email Input */}
-      <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-200">
+      {/* 📨 Email */}
+      <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition">
         <Mail size={18} className="text-gray-600" />
         <input
           type="email"
           name="email"
           required
-          defaultValue="guest@gmail.com"
+          value="guest@gmail.com"
           placeholder="Write your email address"
-          className="appearance-none outline-none w-full placeholder:text-[#616369] font-semibold text-black bg-transparent"
+          className="appearance-none outline-none w-full bg-transparent placeholder:text-[#616369] font-semibold text-black text-sm sm:text-base"
         />
       </div>
 
-      {/* 🔒 Password Input */}
-      <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-200">
+      {/* 🔒 Password */}
+      <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition">
         <Lock size={18} className="text-gray-600" />
         <input
           type={showPassword ? "text" : "password"}
-          id="password"
           name="password"
           required
-          defaultValue="qwerty12"
+          value="qwerty12"
           placeholder="Write your password"
-          className="appearance-none outline-none w-full placeholder:text-[#616369] font-semibold text-black bg-transparent"
+          className="appearance-none outline-none w-full bg-transparent placeholder:text-[#616369] font-semibold text-black text-sm sm:text-base"
         />
         <button
           type="button"
           onClick={togglePassword}
-          className="flex shrink-0 text-gray-500 hover:text-[#110843] hover:cursor-pointer transition"
+          className="flex shrink-0 text-gray-500 hover:text-[#110843] transition"
         >
           {showPassword ? (
             <EyeOff size={20} strokeWidth={1.8} />
@@ -104,7 +115,7 @@ export default function SignInForm() {
         </Link>
       </div>
 
-      {/* 🔘 Submit (now inside dedicated component) */}
+      {/* 🔘 Submit */}
       <SubmitButton />
 
       {/* 🧭 Secondary Actions */}
