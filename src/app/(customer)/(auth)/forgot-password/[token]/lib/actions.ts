@@ -18,7 +18,7 @@ export async function ResetPasswordAction(
     if (password !== confirm) return { error: "Passwords do not match" };
 
     // 🔍 Cari token
-    const record = await prisma.passwordResetToken.findUnique({
+    const record = await prisma.userToken.findUnique({
         where: { token },
         include: { user: true },
     });
@@ -36,7 +36,7 @@ export async function ResetPasswordAction(
     });
 
     // 🧹 Hapus token setelah digunakan
-    await prisma.passwordResetToken.delete({
+    await prisma.userToken.delete({
         where: { id: record.id },
     });
 

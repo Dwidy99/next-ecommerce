@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { SectionCards } from "../_components/section-card";
 import { getDashboardData } from "./lib/data";
-import { ChartArea } from "../_components/cart-area";
+import { ChartArea } from "../_components/chart-area";
 
 export default function DashboardPage() {
   // 🟢 Tambahkan type

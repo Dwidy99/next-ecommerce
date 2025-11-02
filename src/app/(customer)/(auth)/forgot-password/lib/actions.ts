@@ -18,10 +18,23 @@ export async function ForgotPasswordAction(
     const token = crypto.randomBytes(32).toString("hex");
     const expires = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
 
-    await prisma.passwordResetToken.upsert({
-        where: { userId: user.id },
-        update: { token, expires },
-        create: { userId: user.id, token, expires },
+    await prisma.userToken.upsert({
+        where: {
+            userId_type: {
+                userId: user.id,
+                type: "PASSWORD_RESET", // wajib: karena ada unique compound
+            },
+        },
+        update: {
+            token,
+            expires,
+        },
+        create: {
+            userId: user.id,
+            token,
+            expires,
+            type: "PASSWORD_RESET", // wajib juga di create
+        },
     });
 
     await sendResetPasswordEmail(user.email, token, user.name);

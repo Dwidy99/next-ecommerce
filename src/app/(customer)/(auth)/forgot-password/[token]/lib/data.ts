@@ -4,7 +4,7 @@
 import { prisma } from "lib/prisma";
 
 export async function verifyResetToken(token: string) {
-    const record = await prisma.passwordResetToken.findUnique({
+    const record = await prisma.userToken.findUnique({
         where: { token },
         include: { user: true },
     });

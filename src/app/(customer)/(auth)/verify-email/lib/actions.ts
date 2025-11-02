@@ -1,18 +1,16 @@
 "use server";
 
 import { sendVerificationEmail } from "@/lib/mailer";
-import {
-    createEmailVerificationToken,
-} from "./data";
+import { createEmailVerificationToken } from "./data";
 import { prisma } from "lib/prisma";
 import { TokenType } from "@prisma/client";
 import { ActionResult } from "@/types";
 
 /**
- * 🔹 Buat token + kirim email verifikasi
+ * 🔹 Utility — Kirim email verifikasi langsung via user data
+ * (dipakai di server, bukan dari form)
  */
-
-export async function sendEmailVerification(
+export async function sendEmailVerificationDirect(
     userId: number,
     email: string,
     name?: string
@@ -21,7 +19,29 @@ export async function sendEmailVerification(
     await sendVerificationEmail(email, token, name);
 }
 
+/**
+ * 🔹 Server Action — Untuk form (useFormState)
+ */
+export async function sendEmailVerification(
+    _: unknown,
+    formData: FormData
+): Promise<ActionResult> {
+    const email = String(formData.get("email") ?? "").trim();
 
+    if (!email) return { error: "Email is required" };
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) return { error: "No account found with this email" };
+
+    // Gunakan versi direct di sini
+    await sendEmailVerificationDirect(user.id, user.email, user.name);
+
+    return { error: "", message: "Verification link sent successfully." };
+}
+
+/**
+ * 🔹 Verifikasi token
+ */
 export async function verifyEmailToken(token: string) {
     const record = await prisma.userToken.findUnique({
         where: { token },
@@ -41,10 +61,8 @@ export async function verifyEmailToken(token: string) {
     return true;
 }
 
-
-
 /**
- * 🔹 Kirim ulang verifikasi email
+ * 🔹 Kirim ulang verifikasi email (manual trigger)
  */
 export async function resendEmailVerification(
     _: unknown,
@@ -56,6 +74,7 @@ export async function resendEmailVerification(
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return { error: "User not found" };
 
-    await sendEmailVerification(user.id, user.email, user.name);
+    // ✅ Pakai versi direct, bukan server action
+    await sendEmailVerificationDirect(user.id, user.email, user.name);
     return { error: "", message: "Verification link sent successfully." };
 }

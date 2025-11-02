@@ -1,18 +1,15 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
-import { sendEmailVerificationAction } from "../../sign-up/lib/actions";
 import { ActionResult } from "@/types";
 import { Mail } from "lucide-react";
 import Link from "next/link";
+import { sendEmailVerification } from "../lib/actions";
 
 const initialState: ActionResult = { error: "", message: "" };
 
 export default function VerifyEmailForm() {
-  const [state, formAction] = useFormState(
-    sendEmailVerificationAction,
-    initialState
-  );
+  const [state, formAction] = useFormState(sendEmailVerification, initialState);
   const { pending } = useFormStatus();
 
   return (
@@ -20,7 +17,6 @@ export default function VerifyEmailForm() {
       action={formAction}
       className="w-[400px] bg-white p-8 rounded-3xl border border-[#E5E5E5] flex flex-col gap-5 text-center shadow-sm"
     >
-      {/* 🔹 Logo & Title */}
       <img
         src="/assets/logos/logos-black.svg"
         alt="Logo"
@@ -31,21 +27,18 @@ export default function VerifyEmailForm() {
         Enter your email to receive a new verification link.
       </p>
 
-      {/* 🔸 Error Message */}
       {state.error && (
         <p className="text-red-500 text-sm bg-red-50 border border-red-200 p-2 rounded">
           {state.error}
         </p>
       )}
 
-      {/* 🟢 Success Message */}
       {state.message && (
         <p className="text-green-600 text-sm bg-green-50 border border-green-200 p-2 rounded">
           {state.message}
         </p>
       )}
 
-      {/* ✉️ Input Field */}
       <div className="flex items-center gap-3 border border-[#E5E5E5] rounded-full px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition">
         <Mail size={18} className="text-gray-500" />
         <input
@@ -57,7 +50,6 @@ export default function VerifyEmailForm() {
         />
       </div>
 
-      {/* 🔘 Submit Button */}
       <button
         type="submit"
         disabled={pending}
@@ -66,7 +58,6 @@ export default function VerifyEmailForm() {
         {pending ? "Sending..." : "Send Verification Email"}
       </button>
 
-      {/* 🔗 Navigation Links */}
       <div className="flex flex-col gap-2 mt-2 text-sm">
         <Link
           href="/sign-in"

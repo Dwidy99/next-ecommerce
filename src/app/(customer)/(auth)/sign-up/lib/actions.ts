@@ -5,7 +5,7 @@ import { ActionResult } from "@/types";
 import { schemaSignUp } from "@/lib/schema";
 import { prisma } from "lib/prisma";
 import { redirect } from "next/navigation";
-import { sendEmailVerification } from "../../verify-email/lib/actions";
+import { sendEmailVerificationDirect } from "../../verify-email/lib/actions"; // ✅ gunakan direct version
 
 export async function SignUp(
     _: unknown,
@@ -24,17 +24,21 @@ export async function SignUp(
 
     const { name, email, password } = parsed.data;
 
+    // 🔹 Cek existing user
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) return { error: "Email already registered." };
 
+    // 🔹 Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    // 🔹 Simpan user baru
     const newUser = await prisma.user.create({
         data: { name, email, password: hashedPassword, role: "customer" },
     });
 
-    await sendEmailVerification(newUser.id, newUser.email, newUser.name);
+    // 🔹 Kirim email verifikasi pakai versi Direct
+    await sendEmailVerificationDirect(newUser.id, newUser.email, newUser.name);
 
-    // ✅ Panggil redirect di luar try...catch
+    // ✅ Redirect ke halaman konfirmasi
     redirect("/verify-email/sent");
 }

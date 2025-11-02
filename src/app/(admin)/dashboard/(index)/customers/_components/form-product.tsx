@@ -24,9 +24,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import UploadImages from "./upload-images";
-import { storeProduct, updateProduct } from "../lib/actions";
 import { Product } from "@prisma/client";
 import { validateFiles } from "@/lib/utils";
+import { storeProduct, updateProduct } from "../../products/lib/actions";
 
 const initialState: ActionResult = {
   error: "",
