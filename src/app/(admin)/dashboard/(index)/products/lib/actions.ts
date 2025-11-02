@@ -1,18 +1,36 @@
 'use server';
 import { schemaProduct, schemaProductEdit } from "@/lib/schema";
 import { checkFileExists, deleteFile, uploadFile } from "@/lib/supabase";
+import { slugify } from "@/lib/utils";
 import { ActionResult } from "@/types";
-import { ProductStock } from "@prisma/client";
+import { Prisma, ProductStock } from "@prisma/client";
 import { prisma } from "lib/prisma";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+// 🧩 Prisma error handler reusable
+function handlePrismaError(err: unknown): string {
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    switch (err.code) {
+      case "P2002":
+        return "Product name or slug already exists.";
+      case "P2025":
+        return "Product not found.";
+      default:
+        return "Database error occurred.";
+    }
+  }
+  return "Unexpected error occurred.";
+}
+
+// ============================
+// CREATE PRODUCT
+// ============================
 export async function storeProduct(
   _: unknown,
   formData: FormData
 ): Promise<ActionResult> {
-
   const parse = schemaProduct.safeParse({
     name: formData.get("name"),
     price: formData.get("price"),
@@ -22,55 +40,54 @@ export async function storeProduct(
     location_id: formData.get("location_id"),
     stock: formData.get("stock"),
     images: formData.getAll("images"),
-  })
+  });
 
   if (!parse.success) {
-    return {
-      error: parse.error.issues[0].message ?? "Invalid parse from data!"
-    }
+    const messages = parse.error.issues.map((i) => i.message);
+    return { error: messages.join("\n") };
   }
 
   const uploaded_images = parse.data.images as File[];
-  const filenames = [];
+  const filenames: string[] = [];
 
   for (const image of uploaded_images) {
-    const filename = await uploadFile(image, 'products');
+    const filename = await uploadFile(image, "products");
     filenames.push(filename);
   }
+
+  const slug = slugify(parse.data.name);
 
   try {
     await prisma.product.create({
       data: {
         name: parse.data.name,
+        slug,
         description: parse.data.description,
-        category_id: Number.parseInt(parse.data.category_id),
-        location_id: Number.parseInt(parse.data.location_id),
-        brand_id: Number.parseInt(parse.data.brand_id),
+        category_id: Number(parse.data.category_id),
+        location_id: Number(parse.data.location_id),
+        brand_id: Number(parse.data.brand_id),
         price: Number(parse.data.price),
         stock: parse.data.stock as ProductStock,
         images: filenames,
-      }
-    })
-
-  } catch (err: any) {
+      },
+    });
+  } catch (err) {
     console.error("Insert error:", err);
-    return {
-      error: err.message ?? "Failed to insert data product"
-    };
+    return { error: handlePrismaError(err) };
   }
-  // finally{}
-  // ✅ Revalidate halaman list produk
-  revalidatePath("/dashboard/products");
 
-  redirect("/dashboard/products/");
+  revalidatePath("/dashboard/products");
+  redirect("/dashboard/products");
 }
 
+// ============================
+// UPDATE PRODUCT
+// ============================
 export async function updateProduct(
   _: unknown,
   formData: FormData,
   id: number
 ): Promise<ActionResult> {
-  // ✅ Validasi input form
   const parse = schemaProductEdit.safeParse({
     id,
     name: formData.get("name")?.toString() ?? "",
@@ -82,55 +99,40 @@ export async function updateProduct(
     location_id: formData.get("location_id")?.toString() ?? "",
   });
 
-  const messages = parse.error?.issues.map((issue, index) => `${index + 1}. ${issue.message}`);
-
   if (!parse.success) {
-    return {
-      error: messages?.join("\n") ?? "" // atau gunakan <br /> jika ingin HTML
-    };
+    const messages = parse.error.issues.map((i) => i.message);
+    return { error: messages.join("\n") };
   }
 
-
-  // 🔍 Ambil data produk lama
-  const product = await prisma.product.findFirst({ where: { id } });
-
-  if (!product) {
-    return { error: "Product not found" };
-  }
+  const product = await prisma.product.findUnique({ where: { id } });
+  if (!product) return { error: "Product not found" };
 
   const uploaded_images = formData.getAll("images") as File[];
-
-  // 💡 Deteksi file valid (bukan File kosong)
   const valid_uploaded_images = uploaded_images.filter(
     (file) => file instanceof File && file.size > 0
   );
 
   let filenames = product.images;
 
+  // 🧹 jika user upload gambar baru → hapus lama & upload baru
   if (valid_uploaded_images.length > 0) {
-    // ✅ Validasi gambar baru hanya jika user benar-benar upload
     const parseImage = schemaProduct.pick({ images: true }).safeParse({
       images: valid_uploaded_images,
     });
 
     if (!parseImage.success) {
-      const messages = parseImage.error.issues.map(
-        (issue, index) => `${index + 1}. ${issue.message}`
-      );
-      return {
-        error: messages.join("\n"),
-      };
+      const messages = parseImage.error.issues.map((i) => i.message);
+      return { error: messages.join("\n") };
     }
 
-    // 🧹 Hapus gambar lama
+    // hapus gambar lama
     for (const filename of product.images) {
-      const exists = await checkFileExists(filename, "products");
-      if (exists) {
+      if (await checkFileExists(filename, "products")) {
         await deleteFile(filename, "products");
       }
     }
 
-    // 📤 Upload gambar baru
+    // upload baru
     filenames = [];
     for (const image of valid_uploaded_images) {
       const filename = await uploadFile(image, "products");
@@ -138,16 +140,18 @@ export async function updateProduct(
     }
   }
 
-  // 📝 Update data produk
+  const slug = slugify(parse.data.name);
+
   try {
     await prisma.product.update({
       where: { id },
       data: {
         name: parse.data.name,
+        slug,
         description: parse.data.description,
-        category_id: Number.parseInt(parse.data.category_id),
-        location_id: Number.parseInt(parse.data.location_id),
-        brand_id: Number.parseInt(parse.data.brand_id),
+        category_id: Number(parse.data.category_id),
+        location_id: Number(parse.data.location_id),
+        brand_id: Number(parse.data.brand_id),
         price: Number(parse.data.price),
         stock: parse.data.stock as ProductStock,
         images: filenames,
@@ -155,14 +159,11 @@ export async function updateProduct(
     });
   } catch (err) {
     console.error("Update error:", err);
-    return { error: "Failed to update data" };
+    return { error: handlePrismaError(err) };
   }
 
-  // 🔄 Revalidate halaman list produk
   revalidatePath("/dashboard/products");
-
-  // 🚀 Redirect ke halaman list
-  return redirect("/dashboard/products");
+  redirect("/dashboard/products");
 }
 
 
