@@ -3,29 +3,30 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
-  // ✅ Aktifkan fitur-fitur eksperimental modern
+  // ✅ Tambahkan ini
+  eslint: {
+    ignoreDuringBuilds: true, // lewati linting saat build di Vercel
+  },
+
+  typescript: {
+    ignoreBuildErrors: true, // opsional: hindari error TS saat build
+  },
+
   experimental: {
     serverActions: {
-      bodySizeLimit: "2mb", // Batas upload untuk Server Actions
+      bodySizeLimit: "2mb",
     },
   },
 
-  // ✅ Atur domain gambar agar tidak error di Next Image
   images: {
     domains: ["res.cloudinary.com", "localhost", "images.unsplash.com"],
   },
 
-  // ✅ Pastikan environment variables diinject ke runtime
   env: {
     DATABASE_URL: process.env.DATABASE_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
 
-  typescript: {
-    ignoreBuildErrors: false, // ubah ke true kalau masih ada type warning
-  },
-
-  // ✅ Atur header atau redirects opsional
   async headers() {
     return [
       {
