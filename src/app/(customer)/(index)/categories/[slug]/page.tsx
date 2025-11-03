@@ -2,12 +2,10 @@ import React from "react";
 import Navbar from "../../_components/navbar";
 import CardProduct from "../../_components/card-product";
 import NoData from "../../_components/no-data";
-import { getAllCategorySlugs, getCategoryBySlug } from "../lib/data";
+import { getCategoryBySlug } from "../lib/data";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
 
-export async function generateStaticParams() {
-  return getAllCategorySlugs();
-}
+export const dynamicParams = true;
 
 export const dynamic = "force-dynamic";
 
@@ -16,20 +14,10 @@ interface CategoryPageProps {
 }
 
 export async function generateMetadata({ params }: CategoryPageProps) {
-  const category = await getCategoryBySlug(params.slug);
-
-  if (!category) {
-    return await generatePageSEO({
-      title: "Category Not Found",
-      description: "This category does not exist.",
-      url: `/categories/${params.slug}`,
-    });
-  }
-
   return await generatePageSEO({
-    title: category.name ?? "Category",
-    keywords: [category.name ?? "", "category", "products"],
-    url: `/categories/${category.slug}`,
+    title: `Category: ${params.slug}`,
+    description: "Dynamic category page",
+    url: `/categories/${params.slug}`,
   });
 }
 
