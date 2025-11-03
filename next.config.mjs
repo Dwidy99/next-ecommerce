@@ -8,6 +8,7 @@ const nextConfig = {
   experimental: {
     serverActions: { bodySizeLimit: "2mb" },
   },
+  optimizeCss: false,
 
   images: {
     domains: ["res.cloudinary.com", "localhost", "images.unsplash.com"],
