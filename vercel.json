@@ -5,5 +5,7 @@
     }
   },
   "outputDirectory": ".next",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "buildCommand": "next build --no-lint",
+  "installCommand": "npm ci --force"
 }

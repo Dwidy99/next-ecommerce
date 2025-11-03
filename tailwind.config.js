@@ -1,9 +1,12 @@
+import { fontFamily } from "tailwindcss/defaultTheme";
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
+  darkMode: ["class"],
   content: [
-    "./src/app/**/*.{js,ts,jsx,tsx}",
-    "./src/components/**/*.{js,ts,jsx,tsx}",
-    "./src/layouts/**/*.{js,ts,jsx,tsx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -12,16 +15,13 @@ module.exports = {
         foreground: "var(--foreground)",
         border: "var(--border)",
         ring: "var(--ring)",
-        primary: "var(--primary)",
-        "primary-foreground": "var(--primary-foreground)",
-        secondary: "var(--secondary)",
-        "secondary-foreground": "var(--secondary-foreground)",
-        accent: "var(--accent)",
-        "accent-foreground": "var(--accent-foreground)",
-        muted: "var(--muted)",
-        "muted-foreground": "var(--muted-foreground)",
+        card: "var(--card)",
+      },
+      fontFamily: {
+        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        mono: ["var(--font-geist-mono)", ...fontFamily.mono],
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [],
 };
