@@ -4,7 +4,6 @@
       "NODE_VERSION": "22"
     }
   },
-  "buildCommand": "next build --no-lint",
   "outputDirectory": ".next",
   "framework": "nextjs"
 }

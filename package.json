@@ -7,7 +7,7 @@
     "db:seed": "prisma db seed",
     "postinstall": "prisma generate",
     "dev": "prisma generate && next dev",
-    "build": "cross-env NODE_OPTIONS='--trace-warnings' next build",
+    "build": "cross-env NODE_OPTIONS='--trace-warnings' next build --no-lint",
     "start": "next start",
     "lint": "next lint"
   },
