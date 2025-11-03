@@ -1,21 +1,12 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
 
-  // ✅ Tambahkan ini
-  eslint: {
-    ignoreDuringBuilds: true, // lewati linting saat build di Vercel
-  },
-
-  typescript: {
-    ignoreBuildErrors: true, // opsional: hindari error TS saat build
-  },
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
 
   experimental: {
-    serverActions: {
-      bodySizeLimit: "2mb",
-    },
+    serverActions: { bodySizeLimit: "2mb" },
   },
 
   images: {
