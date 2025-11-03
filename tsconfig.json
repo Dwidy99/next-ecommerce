@@ -32,7 +32,7 @@
   },
   "include": [
     "next-env.d.ts",
-    "next.config.ts",
+    "next.config.mjs",
     "prisma/prisma.config.js",
     "prisma/seed.cjs",
     "scripts/manual-seed.js",
