@@ -15,7 +15,9 @@ const nextConfig = {
 
   env: {
     DATABASE_URL: process.env.DATABASE_URL,
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_KEY: process.env.NEXT_PUBLIC_SUPABASE_KEY,
+    NEXT_PUBLIC_XENDIT_KEYS: process.env.NEXT_PUBLIC_XENDIT_KEYS,
   },
 
   async headers() {
