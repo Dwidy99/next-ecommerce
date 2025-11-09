@@ -2,22 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
-    --background: oklch(0.141 0.005 285.823);
-    --foreground: oklch(0.985 0 0);
-    --border: oklch(1 0 0 / 10%);
-    --ring: oklch(0.527 0.154 150.069);
-    --primary: oklch(0.696 0.17 162.48);
-    --primary-foreground: oklch(0.393 0.095 152.535);
-    --secondary: oklch(0.274 0.006 286.033);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.274 0.006 286.033);
-    --muted-foreground: oklch(0.705 0.015 286.067);
-    --accent: oklch(0.274 0.006 286.033);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
+    /* 🌤 Light Theme (Bright background, dark readable text) */
+    --background: oklch(0.97 0.01 100); /* bright neutral white */
+    --foreground: oklch(0.15 0.03 280); /* dark grayish text */
+    --border: oklch(0.8 0.02 280 / 40%); /* light gray border */
+    --ring: oklch(0.58 0.12 180); /* teal-ish focus ring */
+    --primary: oklch(0.65 0.15 160); /* main brand color, greenish-blue */
+    --primary-foreground: oklch(0.98 0.01 100); /* white text for buttons */
+    --secondary: oklch(0.9 0.02 270); /* light neutral section bg */
+    --secondary-foreground: oklch(0.2 0.03 270); /* readable on light bg */
+    --muted: oklch(0.93 0.01 270); /* soft gray bg */
+    --muted-foreground: oklch(0.45 0.02 270); /* muted text */
+    --accent: oklch(0.8 0.05 200); /* subtle accent */
+    --accent-foreground: oklch(0.2 0.03 270); /* readable dark text */
+    --destructive: oklch(0.6 0.2 25); /* soft red for alerts */
   }
 
   body {
@@ -27,5 +27,4 @@
   * {
     @apply border-border outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)/50];
   }
-
 }
