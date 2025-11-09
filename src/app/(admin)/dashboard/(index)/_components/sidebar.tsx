@@ -11,9 +11,15 @@ import {
   Package,
   ShoppingCart,
   Users2,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -22,6 +28,7 @@ interface SidebarProps {
 export default function Sidebar({ collapsed }: SidebarProps) {
   const pathname = usePathname();
 
+  // 📌 Semua menu (tanpa filter role)
   const navItems = [
     { href: "/dashboard", icon: Home, name: "Dashboard" },
     { href: "/dashboard/categories", icon: Archive, name: "Categories" },
@@ -30,11 +37,17 @@ export default function Sidebar({ collapsed }: SidebarProps) {
     { href: "/dashboard/products", icon: Package, name: "Products" },
     { href: "/dashboard/orders", icon: ShoppingCart, name: "Orders" },
     { href: "/dashboard/customers", icon: Users2, name: "Customers" },
+    {
+      href: "/dashboard/configurations",
+      icon: Settings,
+      name: "Configurations",
+    },
   ];
 
   return (
     <TooltipProvider delayDuration={0}>
       <aside className="flex flex-col h-full">
+        {/* Navigasi */}
         <nav className="flex flex-col gap-2 px-3 py-6">
           {navItems.map(({ href, icon: Icon, name }) => {
             const isActive =
@@ -66,7 +79,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
           })}
         </nav>
 
-        {/* Logout */}
+        {/* Tombol Logout */}
         <div
           className={cn(
             "mt-auto px-2 pb-6 border-t border-muted/30",

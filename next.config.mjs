@@ -2,18 +2,37 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  eslint: { ignoreDuringBuilds: true },
-  typescript: { ignoreBuildErrors: true },
+  // ✅ Masih boleh, tapi gunakan hanya jika perlu
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 
+  // ✅ Server Actions (masih experimental, aman digunakan)
   experimental: {
-    serverActions: { bodySizeLimit: "2mb" },
+    serverActions: {
+      bodySizeLimit: "2mb",
+    },
   },
-  optimizeCss: false,
 
+  // ✅ Ganti images.domains → remotePatterns
   images: {
-    domains: ["res.cloudinary.com", "localhost", "images.unsplash.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
   },
 
+  // ✅ Environment variables tetap
   env: {
     DATABASE_URL: process.env.DATABASE_URL,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -21,6 +40,7 @@ const nextConfig = {
     NEXT_PUBLIC_XENDIT_KEYS: process.env.NEXT_PUBLIC_XENDIT_KEYS,
   },
 
+  // ✅ Security headers
   async headers() {
     return [
       {

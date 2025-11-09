@@ -2,22 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+/* --------------------------- */
+/* 🎨 Custom Base Styles       */
+/* --------------------------- */
 @layer base {
   :root {
-    /* 🌤 Light Theme (Bright background, dark readable text) */
-    --background: oklch(0.97 0.01 100); /* bright neutral white */
-    --foreground: oklch(0.15 0.03 280); /* dark grayish text */
-    --border: oklch(0.8 0.02 280 / 40%); /* light gray border */
-    --ring: oklch(0.58 0.12 180); /* teal-ish focus ring */
-    --primary: oklch(0.65 0.15 160); /* main brand color, greenish-blue */
-    --primary-foreground: oklch(0.98 0.01 100); /* white text for buttons */
-    --secondary: oklch(0.9 0.02 270); /* light neutral section bg */
-    --secondary-foreground: oklch(0.2 0.03 270); /* readable on light bg */
-    --muted: oklch(0.93 0.01 270); /* soft gray bg */
-    --muted-foreground: oklch(0.45 0.02 270); /* muted text */
-    --accent: oklch(0.8 0.05 200); /* subtle accent */
-    --accent-foreground: oklch(0.2 0.03 270); /* readable dark text */
-    --destructive: oklch(0.6 0.2 25); /* soft red for alerts */
+    /* Fallback HEX */
+    --background: #fafafa;
+    --foreground: #111827;
+    --border: #d1d5db;
+    --ring: #0ea5e9;
+    --primary: #06b6d4;
+    --primary-foreground: #ffffff;
+    --secondary: #f3f4f6;
+    --secondary-foreground: #111827;
+    --muted: #f9fafb;
+    --muted-foreground: #6b7280;
+    --accent: #e0f2fe;
+    --accent-foreground: #111827;
+    --destructive: #ef4444;
+  }
+
+  @supports (color: oklch(0.5 0.1 200)) {
+    :root {
+      --background: oklch(0.97 0.01 100);
+      --foreground: oklch(0.15 0.03 280);
+      --border: oklch(0.8 0.02 280 / 40%);
+      --ring: oklch(0.58 0.12 180);
+      --primary: oklch(0.65 0.15 160);
+      --primary-foreground: oklch(0.98 0.01 100);
+      --secondary: oklch(0.9 0.02 270);
+      --secondary-foreground: oklch(0.2 0.03 270);
+      --muted: oklch(0.93 0.01 270);
+      --muted-foreground: oklch(0.45 0.02 270);
+      --accent: oklch(0.8 0.05 200);
+      --accent-foreground: oklch(0.2 0.03 270);
+      --destructive: oklch(0.6 0.2 25);
+    }
   }
 
   body {
