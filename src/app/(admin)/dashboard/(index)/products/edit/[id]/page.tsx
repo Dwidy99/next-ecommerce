@@ -33,8 +33,9 @@ export default async function EditPage({ params }: { params: { id: string } }) {
   }
 
   const imageBaseUrl =
-    "https://IluYgECDAfPHfEFq.supabase.co/storage/v1/object/public/e-commerce/public/products/";
-  const defaultImages = product.images?.map((img) => imageBaseUrl + img) ?? [];
+    "https://hflpwvrqggxhoadtwvte.supabase.co/storage/v1/object/public/e-commerce/";
+  const defaultImages =
+    product.images?.map((img) => `${imageBaseUrl}${img}`) ?? [];
 
   return (
     <FormProduct type="EDIT" data={product} defaultImages={defaultImages}>
