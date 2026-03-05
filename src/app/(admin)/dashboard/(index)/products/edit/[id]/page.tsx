@@ -33,7 +33,7 @@ export default async function EditPage({ params }: { params: { id: string } }) {
   }
 
   const imageBaseUrl =
-    "https://ypguddizaarcqalpozre.supabase.co/storage/v1/object/public/e-commerce/public/products/";
+    "https://IluYgECDAfPHfEFq.supabase.co/storage/v1/object/public/e-commerce/public/products/";
   const defaultImages = product.images?.map((img) => imageBaseUrl + img) ?? [];
 
   return (
