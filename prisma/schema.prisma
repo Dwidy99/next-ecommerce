@@ -1,163 +1,469 @@
+// ============================================================
+// Prisma Schema Documentation
+// ------------------------------------------------------------
+// Project : E-Commerce Backend
+// ORM     : Prisma ORM
+// Database: PostgreSQL
+// Framework Integration: Node.js / Next.js
+//
+// This schema defines database models, relations, enums,
+// and constraints used for the application.
+//
+// References:
+// - Prisma Official Documentation
+//   https://www.prisma.io/docs
+// - PostgreSQL Documentation
+//   https://www.postgresql.org/docs/
+// - Next.js ecosystem best practices
+//
+// Code: by Dwi Y
+// ============================================================
+
+// ------------------------------------------------------------
+// GENERATOR CONFIGURATION
+// ------------------------------------------------------------
+// Source: Prisma Official Documentation
+// https://www.prisma.io/docs/concepts/components/prisma-client
+//
+// The generator block tells Prisma which client to generate.
+// "prisma-client-js" is the standard client used for Node.js
+// and Next.js environments.
+//
+// This generates a type-safe database client automatically
+// based on the schema models defined below.
+//
+// Code: by Dwi Y
 generator client {
   provider = "prisma-client-js"
 }
 
+// ------------------------------------------------------------
+// DATABASE CONNECTION CONFIGURATION
+// ------------------------------------------------------------
+// Source: Prisma Official Documentation
+// https://www.prisma.io/docs/concepts/database-connectors
+//
+// Defines the database provider and connection string.
+//
+// provider = "postgresql"
+// Uses PostgreSQL as the primary relational database.
+//
+// url = env("DATABASE_URL")
+// Uses environment variables for secure connection management.
+// This is considered a security best practice.
+//
+// Code: by Dwi Y
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+// ============================================================
+// USER MODEL
+// ============================================================
+// Source:
+// Prisma Official Documentation — Data Modeling
+// https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
+//
+// Represents the main user entity of the system.
+//
+// Includes authentication fields, user roles,
+// verification states, and relations to orders and sessions.
+//
+// Best practice: authentication data separated using tokens.
+//
+// Code: by Dwi Y
 model User {
-  id            Int         @id @default(autoincrement())
-  name          String      @db.VarChar(255)
-  email         String      @unique @db.VarChar(255)
-  password      String      @db.VarChar(255)
-  role          RoleUser    @default(customer)
-  created_at    DateTime    @default(now())
-  updated_at    DateTime    @updatedAt
-  image         String?     @db.VarChar(255)
+  // Primary Key (Auto Increment)
+  // Source: Prisma official modeling guideline
+  id Int @id @default(autoincrement())
+
+  // User full name
+  // Stored using VARCHAR for efficient string storage
+  name String @db.VarChar(255)
+
+  // Unique email used for login
+  // Source: industry standard authentication practice
+  email String @unique @db.VarChar(255)
+
+  // Hashed password
+  // NOTE: Password should always be stored hashed (bcrypt/argon2)
+  password String @db.VarChar(255)
+
+  // User role enum
+  // Default role = customer
+  role RoleUser @default(customer)
+
+  // Timestamp when user created
+  created_at DateTime @default(now())
+
+  // Automatically updated timestamp
+  // Source: Prisma @updatedAt attribute
+  updated_at DateTime @updatedAt
+
+  // Optional user profile image
+  image String? @db.VarChar(255)
+
+  // Email verification timestamp
+  // Null means email not verified yet
   emailVerified DateTime?
-  orders        Order[]
-  session       Session[]
-  userTokens    UserToken[]
+
+  // Relation: user orders
+  orders Order[]
+
+  // Relation: login sessions
+  session Session[]
+
+  // Relation: user tokens (reset password, verification)
+  userTokens UserToken[]
 }
 
+// ============================================================
+// USER TOKEN MODEL
+// ============================================================
+// Purpose:
+// Manage authentication tokens such as:
+//
+// - Password reset
+// - Email verification
+//
+// Best Practice Source:
+// OWASP Authentication Design
+//
+// Code: by Dwi Y
 model UserToken {
-  id        Int       @id @default(autoincrement())
-  token     String    @unique
-  type      TokenType
-  userId    Int
-  expires   DateTime
-  createdAt DateTime  @default(now())
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Primary Key
+  id Int @id @default(autoincrement())
 
+  // Unique token string
+  // Used for secure authentication workflows
+  token String @unique
+
+  // Token type enum
+  type TokenType
+
+  // Foreign key reference to user
+  userId Int
+
+  // Token expiration time
+  expires DateTime
+
+  // Creation timestamp
+  createdAt DateTime @default(now())
+
+  // Relation to User
+  // onDelete: Cascade ensures tokens deleted when user deleted
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Composite unique constraint
+  // Prevents duplicate token types per user
   @@unique([userId, type])
 }
 
+// ============================================================
+// SESSION MODEL
+// ============================================================
+// Purpose:
+// Manage user login sessions.
+//
+// Common pattern used with authentication libraries like:
+// - NextAuth
+// - Custom JWT sessions
+//
+// Source:
+// Authentication best practice
+//
+// Code: by Dwi Y
 model Session {
-  id        String   @id
-  userId    Int
+  // Session ID (string for flexibility)
+  id String @id
+
+  // Foreign key to user
+  userId Int
+
+  // Session expiration
   expiresAt DateTime
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relation to user
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// ============================================================
+// BRAND MODEL
+// ============================================================
+// Represents product brand or manufacturer.
+//
+// Example:
+// Apple, Samsung, Nike
+//
+// Code: by Dwi Y
 model Brand {
-  id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(255)
-  logo       String    @db.VarChar(255)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  products   Product[]
-}
+  id Int @id @default(autoincrement())
 
-model Category {
-  id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(255)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  slug       String?   @unique
-  products   Product[]
-}
+  name String @db.VarChar(255)
 
-model Location {
-  id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(255)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  Product    Product[]
-}
+  logo String @db.VarChar(255)
 
-model Product {
-  id          Int            @id @default(autoincrement())
-  brand_id    Int
-  category_id Int
-  location_id Int
-  name        String         @db.VarChar(255)
-  description String
-  price       BigInt
-  stock       ProductStock
-  images      String[]
-  created_at  DateTime       @default(now())
-  updated_at  DateTime       @updatedAt
-  slug        String?        @unique
-  orders      OrderProduct[]
-  brand       Brand          @relation(fields: [brand_id], references: [id])
-  category    Category       @relation(fields: [category_id], references: [id], onDelete: Cascade)
-  location    Location       @relation(fields: [location_id], references: [id])
-}
-
-model Order {
-  id         Int            @id @default(autoincrement())
-  code       String         @unique
-  created_at DateTime       @default(now())
-  updated_at DateTime       @updatedAt
-  status     StatusOrder
-  total      BigInt
-  user_id    Int
-  user       User           @relation(fields: [user_id], references: [id])
-  detail     OrderDetail?
-  products   OrderProduct[]
-}
-
-model OrderDetail {
-  id          Int      @id @default(autoincrement())
-  order_id    Int      @unique
-  name        String   @db.VarChar(255)
-  phone       String   @db.VarChar(255)
-  address     String   @db.VarChar(255)
-  city        String   @db.VarChar(255)
-  postal_code String   @db.VarChar(255)
-  notes       String   @db.VarChar(255)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  order       Order    @relation(fields: [order_id], references: [id])
-}
-
-model OrderProduct {
-  id         Int      @id @default(autoincrement())
-  product_id Int
-  order_id   Int
   created_at DateTime @default(now())
+
   updated_at DateTime @updatedAt
-  quantity   Int
-  subtotal   BigInt
-  order      Order    @relation(fields: [order_id], references: [id])
-  product    Product  @relation(fields: [product_id], references: [id])
+
+  // Relation: brand has many products
+  products Product[]
 }
 
+// ============================================================
+// CATEGORY MODEL
+// ============================================================
+// Used for grouping products.
+//
+// Example:
+// Electronics
+// Fashion
+// Accessories
+//
+// Code: by Dwi Y
+model Category {
+  id Int @id @default(autoincrement())
+
+  name String @db.VarChar(255)
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+
+  // SEO friendly slug
+  slug String? @unique
+
+  products Product[]
+}
+
+// ============================================================
+// LOCATION MODEL
+// ============================================================
+// Represents warehouse or store location.
+//
+// Useful for inventory distribution.
+//
+// Code: by Dwi Y
+model Location {
+  id Int @id @default(autoincrement())
+
+  name String @db.VarChar(255)
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+
+  Product Product[]
+}
+
+// ============================================================
+// PRODUCT MODEL
+// ============================================================
+// Central product entity of the e-commerce system.
+//
+// Includes inventory, pricing, relations,
+// and media assets.
+//
+// Code: by Dwi Y
+model Product {
+  id Int @id @default(autoincrement())
+
+  // Foreign key to brand
+  brand_id Int
+
+  // Foreign key to category
+  category_id Int
+
+  // Foreign key to location
+  location_id Int
+
+  // Product name
+  name String @db.VarChar(255)
+
+  // Full product description
+  description String
+
+  // Product price (BigInt recommended for money)
+  price BigInt
+
+  // Stock type enum
+  stock ProductStock
+
+  // Product images array
+  images String[]
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+
+  // SEO slug
+  slug String? @unique
+
+  // Order relations
+  orders OrderProduct[]
+
+  // Relations
+  brand Brand @relation(fields: [brand_id], references: [id])
+
+  category Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  location Location @relation(fields: [location_id], references: [id])
+}
+
+// ============================================================
+// ORDER MODEL
+// ============================================================
+// Represents a purchase order.
+//
+// Code: by Dwi Y
+model Order {
+  id Int @id @default(autoincrement())
+
+  // Unique order code
+  code String @unique
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+
+  // Order status enum
+  status StatusOrder
+
+  // Order total price
+  total BigInt
+
+  // User reference
+  user_id Int
+
+  user User @relation(fields: [user_id], references: [id])
+
+  // Shipping / billing details
+  detail OrderDetail?
+
+  // Products purchased
+  products OrderProduct[]
+}
+
+// ============================================================
+// ORDER DETAIL MODEL
+// ============================================================
+// Stores shipping information.
+//
+// Code: by Dwi Y
+model OrderDetail {
+  id Int @id @default(autoincrement())
+
+  order_id Int @unique
+
+  name String @db.VarChar(255)
+
+  phone String @db.VarChar(255)
+
+  address String @db.VarChar(255)
+
+  city String @db.VarChar(255)
+
+  postal_code String @db.VarChar(255)
+
+  notes String @db.VarChar(255)
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+
+  order Order @relation(fields: [order_id], references: [id])
+}
+
+// ============================================================
+// ORDER PRODUCT MODEL
+// ============================================================
+// Pivot table for many-to-many relation
+// between orders and products.
+//
+// Code: by Dwi Y
+model OrderProduct {
+  id Int @id @default(autoincrement())
+
+  product_id Int
+
+  order_id Int
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+
+  quantity Int
+
+  subtotal BigInt
+
+  order Order @relation(fields: [order_id], references: [id])
+
+  product Product @relation(fields: [product_id], references: [id])
+}
+
+// ============================================================
+// CONFIGURATION MODEL
+// ============================================================
+// Used to store global website settings.
+//
+// Example:
+// SEO
+// Social Media
+// Website Metadata
+//
+// Code: by Dwi Y
 model Configuration {
-  tagline     String?
-  website     String?
-  email       String?
-  logo        String?
-  icon        String?
-  keywords    String?
-  metatext    String?
-  facebook    String?
-  twitter     String?
-  instagram   String?
-  google_map  String?
-  address     String?
-  date        DateTime @default(now()) @updatedAt
+  tagline    String?
+  website    String?
+  email      String?
+  logo       String?
+  icon       String?
+  keywords   String?
+  metatext   String?
+  facebook   String?
+  twitter    String?
+  instagram  String?
+  google_map String?
+  address    String?
+
+  date DateTime @default(now()) @updatedAt
+
   description String?
-  id          Int      @id @default(autoincrement())
-  language    Language
-  short_name  String?
-  webname     String
+
+  id Int @id @default(autoincrement())
+
+  language Language
+
+  short_name String?
+
+  webname String
 
   @@map("configuration")
 }
 
+// ============================================================
+// ENUM DEFINITIONS
+// ============================================================
+// Source: Prisma Enum Documentation
+// https://www.prisma.io/docs/concepts/components/prisma-schema/data-model#enums
+//
+// Code: by Dwi Y
+
+// User role types
 enum RoleUser {
   superadmin
   customer
 }
 
+// Product stock type
 enum ProductStock {
   ready
   preorder
 }
 
+// Order status types
 enum StatusOrder {
   pending
   success
@@ -165,11 +471,13 @@ enum StatusOrder {
   cancelled
 }
 
+// Token types used for authentication
 enum TokenType {
   PASSWORD_RESET
   EMAIL_VERIFICATION
 }
 
+// Website language options
 enum Language {
   ID
   EN
