@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Category } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Trash } from "lucide-react";
+import { Edit } from "lucide-react";
 import Link from "next/link";
 import FormDelete from "./_components/form-delete";
 
@@ -20,7 +20,7 @@ export const columns: ColumnDef<Category>[] = [
 
       return (
         <div className="space-x-4 inline-flex">
-          <Button size="sm" asChild>
+          <Button size="xs" variant="outline" asChild>
             <Link href={`/dashboard/categories/edit/${category.id}`}>
               <Edit className="w-4 h-4 mr-2" /> Edit
             </Link>

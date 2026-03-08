@@ -3,13 +3,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getImageUrl } from "@/lib/supabase";
-import { dateFormat, rupiahFormat } from "@/lib/utils";
 import { ProductStock } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import FormDelete from "./_components/delete-product";
+import { rupiahFormat, dateFormat } from "@/lib/utils";
 
 export type TColumn = {
   id: number;
