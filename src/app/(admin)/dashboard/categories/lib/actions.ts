@@ -6,6 +6,7 @@ import { schemaCategory } from "@/lib/schema";
 import { prisma } from "../../../../../../lib/prisma";
 import { slugify } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 function handlePrismaError(err: unknown): string {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -82,22 +83,16 @@ export async function updateCategory(
   redirect("/dashboard/categories");
 }
 
-export async function deleteCategory(
-  _: unknown,
-  formData: FormData,
-): Promise<ActionResult> {
+export async function deleteCategory(formData: FormData) {
   const id = Number(formData.get("id"));
 
-  if (!id) {
-    return { error: "Invalid category ID" };
-  }
+  console.log("DELETE CATEGORY:", id);
 
-  try {
-    await prisma.category.delete({ where: { id } });
-  } catch (err: any) {
-    console.error("Delete error:", err);
-    return { error: "Category could not be deleted. It may be linked to other data." };
-  }
+  await prisma.category.delete({
+    where: { id },
+  });
+
+  revalidatePath("/dashboard/categories");
 
   redirect("/dashboard/categories");
 }
