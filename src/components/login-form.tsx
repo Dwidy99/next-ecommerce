@@ -1,70 +1,90 @@
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+"use client";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+import { useActionState, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { SignIn } from "@/app/(admin)/dashboard/sign-in/lib/actions";
+import { ActionResult } from "@/types";
+
+const initialState: ActionResult = { error: "" };
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                />
-              </div>
-              <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-                <Input id="password" type="password" required />
-              </div>
-              <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
-                  Login
-                </Button>
-                <Button variant="outline" className="w-full">
-                  Login with Google
-                </Button>
-              </div>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
-                Sign up
-              </a>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+    <button
+      type="submit"
+      disabled={pending}
+      className="
+        w-full py-3 px-6
+        bg-[#110843] text-white font-semibold rounded-xl
+        hover:bg-[#3a2086] transition
+        disabled:opacity-60
+      "
+    >
+      {pending ? "Signing in..." : "Sign In"}
+    </button>
+  );
+}
+
+export default function SignInForm() {
+  const [state, formAction] = useActionState(SignIn, initialState);
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <div className="min-h-screen admin-auth-bg admin-auth-glow flex items-center justify-center p-6">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border p-8 flex flex-col gap-6">
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <h1 className="text-2xl font-bold text-[#110843]">Admin Sign In</h1>
+          <p className="text-gray-500 text-sm">Login to access the dashboard</p>
+        </div>
+
+        <form action={formAction} className="flex flex-col gap-4">
+          {/* Error */}
+          {state.error && (
+            <p className="text-red-500 text-sm text-center bg-red-50 border border-red-200 p-2 rounded">
+              {state.error}
+            </p>
+          )}
+
+          {/* Email */}
+          <div className="flex items-center gap-3 border rounded-lg px-4 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition">
+            <Mail size={18} className="text-gray-500" />
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="admin@email.com"
+              className="w-full outline-none bg-transparent text-sm"
+            />
+          </div>
+
+          {/* Password */}
+          <div className="flex items-center gap-3 border rounded-lg px-4 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition">
+            <Lock size={18} className="text-gray-500" />
+
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              required
+              placeholder="Password"
+              className="w-full outline-none bg-transparent text-sm"
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-gray-500 hover:text-[#110843]"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          {/* Submit */}
+          <SubmitButton />
+        </form>
+      </div>
     </div>
   );
 }

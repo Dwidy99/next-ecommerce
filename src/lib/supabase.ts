@@ -1,25 +1,35 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from "@supabase/supabase-js"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY ?? ""
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-// Create a single supabase client for interacting with your database
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("Missing Supabase environment variables")
+}
+
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-export const getImageUrl = (name: string, path: 'brands' | 'products' | 'users') => {
-  const { data } = supabase
-    .storage
-    .from('e-commerce')
-    .getPublicUrl(`public/${path}/${name}`)
+export const getImageUrl = (
+  name: string,
+  path: "brands" | "products" | "users"
+) => {
+  if (!name) return "";
 
-  return data.publicUrl
-}
+  const cleanName = name.replace(/^\/+/, ""); // remove leading slash
+
+  const { data } = supabase.storage
+    .from("e-commerce")
+    .getPublicUrl(`public/${path}/${cleanName}`);
+
+  return data.publicUrl;
+};
 
 export const uploadFile = async (
   file: File,
   path: "brands" | "products" | "users" = "users"
 ): Promise<string> => {
   const fileType = file.type.split("/")[1];
+
   const filename = `${path}-${Date.now()}.${fileType}`;
 
   const { error } = await supabase.storage
@@ -47,9 +57,13 @@ export const deleteFile = async (
   filename: string,
   path: "brands" | "products" | "users" = "users"
 ) => {
+  if (!filename) return;
+
   const { error } = await supabase.storage
     .from("e-commerce")
     .remove([`public/${path}/${filename}`]);
 
-  if (error) console.warn("Failed to delete old file:", error.message);
+  if (error) {
+    console.warn("Failed to delete old file:", error.message);
+  }
 };

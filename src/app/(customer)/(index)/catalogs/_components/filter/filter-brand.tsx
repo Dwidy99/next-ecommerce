@@ -1,4 +1,4 @@
-import { getBrands } from "@/app/(admin)/dashboard/(index)/brands/lib/data";
+import { getBrands } from "@/app/(admin)/dashboard/brands/lib/data";
 import React from "react";
 import FilterCheckboxItem from "./filter-checkbox-item";
 

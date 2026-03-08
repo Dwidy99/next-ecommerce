@@ -1,4 +1,4 @@
-import { getCategories } from "@/app/(admin)/dashboard/(index)/categories/lib/data";
+import { getCategories } from "@/app/(admin)/dashboard/categories/lib/data";
 import React from "react";
 import FilterCheckboxItem from "./filter-checkbox-item";
 
