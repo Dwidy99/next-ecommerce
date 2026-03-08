@@ -1,11 +1,8 @@
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-
 @tailwind base;
-
-@custom-variant dark (&:is(.dark *));
 @tailwind components;
 @tailwind utilities;
+
+@custom-variant dark (&:is(.dark *));
 
 /* --------------------------- */
 /* 🎨 Custom Base Styles       */
@@ -51,7 +48,7 @@
   }
 
   * {
-    @apply outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)/50] border-border outline-ring/50;
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)/50] border-border;
   }
   html {
     @apply font-sans;
