@@ -12,6 +12,7 @@ import {
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -19,6 +20,13 @@ interface HeaderProps {
 
 export default function DashboardHeader({ onToggleSidebar }: HeaderProps) {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   const segments = pathname.split("/").filter(Boolean).slice(1);
 
@@ -42,7 +50,6 @@ export default function DashboardHeader({ onToggleSidebar }: HeaderProps) {
 
           {segments.map((segment, index) => {
             const href = `/dashboard/${segments.slice(0, index + 1).join("/")}`;
-
             const isLast = index === segments.length - 1;
 
             const label = segment
@@ -52,7 +59,6 @@ export default function DashboardHeader({ onToggleSidebar }: HeaderProps) {
             return (
               <BreadcrumbItem key={href}>
                 <BreadcrumbSeparator />
-
                 {isLast ? (
                   <BreadcrumbPage>{label}</BreadcrumbPage>
                 ) : (

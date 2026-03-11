@@ -13,9 +13,17 @@ export default function DashboardShell({
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // 🔹 Deteksi lebar layar
+  // memastikan client sudah mount
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // deteksi mobile
+  useEffect(() => {
+    if (!mounted) return;
+
     const media = window.matchMedia("(max-width: 1024px)");
 
     const handleResize = () => setIsMobile(media.matches);
@@ -25,12 +33,14 @@ export default function DashboardShell({
     media.addEventListener("change", handleResize);
 
     return () => media.removeEventListener("change", handleResize);
-  }, []);
+  }, [mounted]);
 
   const toggleSidebar = () => {
     if (isMobile) setMobileOpen((prev) => !prev);
     else setCollapsed((prev) => !prev);
   };
+
+  if (!mounted) return null;
 
   return (
     <div className="flex h-screen bg-background text-foreground">
@@ -46,7 +56,7 @@ export default function DashboardShell({
         <Sidebar collapsed={collapsed} />
       </div>
 
-      {/* Overlay saat sidebar mobile terbuka */}
+      {/* Overlay mobile */}
       {mobileOpen && (
         <div
           className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm lg:hidden"
@@ -54,7 +64,7 @@ export default function DashboardShell({
         />
       )}
 
-      {/* Konten utama */}
+      {/* Main Content */}
       <div className="flex flex-col flex-1 overflow-hidden">
         <Header onToggleSidebar={toggleSidebar} />
 
