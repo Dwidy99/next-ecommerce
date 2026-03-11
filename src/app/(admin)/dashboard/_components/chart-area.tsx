@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+
 import {
   Card,
   CardContent,
@@ -9,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import {
   ChartConfig,
   ChartContainer,
@@ -16,29 +18,26 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-/**
- * Props interface for the chart.
- */
 interface ChartAreaProps {
   data: { month: string; orders: number; revenue: number }[];
 }
 
 /**
- * Responsive area chart component using Recharts and ShadCN UI.
- * Supports light/dark theme color variables from Tailwind (oklch).
+ * Chart configuration
+ * dipisah agar tidak dibuat ulang setiap render
  */
-export function ChartArea({ data }: ChartAreaProps) {
-  const chartConfig = {
-    orders: {
-      label: "Orders",
-      color: "var(--primary)",
-    },
-    revenue: {
-      label: "Revenue",
-      color: "oklch(0.58 0.12 180)", // teal accent color
-    },
-  } satisfies ChartConfig;
+const chartConfig = {
+  orders: {
+    label: "Orders",
+    color: "var(--primary)",
+  },
+  revenue: {
+    label: "Revenue",
+    color: "oklch(0.58 0.12 180)",
+  },
+} satisfies ChartConfig;
 
+export function ChartArea({ data }: ChartAreaProps) {
   return (
     <Card className="w-full h-full border-border bg-background text-foreground shadow-sm">
       <CardHeader className="pb-2">
@@ -55,7 +54,6 @@ export function ChartArea({ data }: ChartAreaProps) {
             data={data}
             margin={{ top: 20, right: 20, left: 0, bottom: 20 }}
           >
-            {/* Gradient Fills */}
             <defs>
               <linearGradient id="fillOrders" x1="0" y1="0" x2="0" y2="1">
                 <stop
@@ -69,6 +67,7 @@ export function ChartArea({ data }: ChartAreaProps) {
                   stopOpacity={0.1}
                 />
               </linearGradient>
+
               <linearGradient id="fillRevenue" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
@@ -102,7 +101,6 @@ export function ChartArea({ data }: ChartAreaProps) {
               cursor={false}
             />
 
-            {/* Orders Area */}
             <Area
               type="natural"
               dataKey="orders"
@@ -113,7 +111,6 @@ export function ChartArea({ data }: ChartAreaProps) {
               stackId="a"
             />
 
-            {/* Revenue Area */}
             <Area
               type="natural"
               dataKey="revenue"
