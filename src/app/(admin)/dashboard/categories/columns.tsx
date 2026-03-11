@@ -5,7 +5,8 @@ import { Category } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit } from "lucide-react";
 import Link from "next/link";
-import FormDelete from "./_components/form-delete";
+import DeleteDialog from "../_components/delete-dialog";
+import { deleteCategory } from "./lib/actions";
 
 export const columns: ColumnDef<Category>[] = [
   {
@@ -25,7 +26,12 @@ export const columns: ColumnDef<Category>[] = [
               <Edit className="w-4 h-4 mr-2" /> Edit
             </Link>
           </Button>
-          <FormDelete key={category.id} id={category.id} />
+          <DeleteDialog
+            id={category.id}
+            action={deleteCategory}
+            title="Delete Category"
+            description="Are you sure you want to delete this category?"
+          />
         </div>
       );
     },

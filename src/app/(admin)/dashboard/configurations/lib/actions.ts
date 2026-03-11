@@ -1,7 +1,7 @@
 "use server";
 
+import { refreshAndRedirect } from "@/lib/nextjs";
 import { prisma } from "lib/prisma";
-import { revalidatePath } from "next/cache";
 
 
 export async function createConfiguration(data: FormData) {
@@ -22,7 +22,7 @@ export async function createConfiguration(data: FormData) {
         },
     });
 
-    revalidatePath("/dashboard/configurations");
+    refreshAndRedirect("/dashboard/configurations");
 }
 
 export async function updateConfiguration(id: number, data: FormData) {
@@ -37,7 +37,7 @@ export async function updateConfiguration(id: number, data: FormData) {
         },
     });
 
-    revalidatePath("/dashboard/configurations");
+    refreshAndRedirect("/dashboard/configurations");
 }
 
 export async function deleteConfiguration(id: number) {
@@ -49,5 +49,5 @@ export async function deleteConfiguration(id: number) {
     }
 
     await prisma.configuration.delete({ where: { id } });
-    revalidatePath("/dashboard/configurations");
+    refreshAndRedirect("/dashboard/configurations");
 }

@@ -77,21 +77,22 @@ export async function updateLocation(
   return redirect("/dashboard/locations");
 }
 
-export async function deleteLocation(
-  _: unknown,
-  formData: FormData,
-): Promise<ActionResult> {
+export async function deleteLocation(formData: FormData): Promise<void> {
   const id = Number(formData.get("id"));
 
   if (!id) {
-    return { error: "Invalid location ID" };
+    throw new Error("Invalid location ID");
   }
 
   try {
-    await prisma.location.delete({ where: { id } });
-  } catch (err: any) {
-    console.error("Delete error:", err);
-    return { error: "Location could not be deleted. It may be linked to other data." };
+    await prisma.location.delete({
+      where: { id },
+    });
+  } catch (err) {
+    console.error("Delete location error:", err);
+    throw new Error(
+      "Location could not be deleted. It may be linked to other data."
+    );
   }
 
   redirect("/dashboard/locations");

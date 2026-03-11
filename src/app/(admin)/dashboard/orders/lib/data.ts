@@ -1,6 +1,6 @@
 
 import { prisma } from 'lib/prisma';
-import { TColumn } from '../columns';
+import { TColumn } from './columns';
 import { getImageUrl } from "@/lib/supabase";
 
 export async function getOrders() {

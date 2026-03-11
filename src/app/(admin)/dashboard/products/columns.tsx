@@ -8,8 +8,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Edit } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import FormDelete from "./_components/delete-product";
 import { rupiahFormat, dateFormat } from "@/lib/utils";
+import DeleteDialog from "../_components/delete-dialog";
+import { deleteProduct } from "./lib/actions";
 
 export type TColumn = {
   id: number;
@@ -88,7 +89,12 @@ export const columns: ColumnDef<TColumn>[] = [
               <Edit className="w-4 h-4 mr-2" /> Edit
             </Link>
           </Button>
-          <FormDelete key={product.id} id={product.id} />
+          <DeleteDialog
+            id={product.id}
+            action={deleteProduct}
+            title="Delete Product"
+            description="This will permanently delete the product."
+          />
         </div>
       );
     },

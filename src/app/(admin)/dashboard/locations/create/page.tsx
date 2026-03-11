@@ -1,10 +1,10 @@
-import React from 'react'
-import FormCategory from '../_components/form-location'
+import React from "react";
+import FormLocation from "../_components/form-location";
 
 export default function page() {
   return (
     <div>
-      <FormCategory/>
+      <FormLocation />
     </div>
-  )
+  );
 }

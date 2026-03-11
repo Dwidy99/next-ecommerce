@@ -1,28 +1,54 @@
-'use server';
+"use server";
+
+import { refreshAndRedirect } from "@/lib/nextjs";
 import { schemaProduct, schemaProductEdit } from "@/lib/schema";
 import { checkFileExists, deleteFile, uploadFile } from "@/lib/supabase";
 import { slugify } from "@/lib/utils";
 import { ActionResult } from "@/types";
 import { Prisma, ProductStock } from "@prisma/client";
 import { prisma } from "lib/prisma";
-
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-// 🧩 Prisma error handler reusable
+
+// ============================
+// Prisma Error Handler
+// ============================
 function handlePrismaError(err: unknown): string {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    switch (err.code) {
-      case "P2002":
-        return "Product name or slug already exists.";
-      case "P2025":
-        return "Product not found.";
-      default:
-        return "Database error occurred.";
+    if (err.code === "P2002") return "Product name or slug already exists.";
+    if (err.code === "P2025") return "Product not found.";
+  }
+  return "Unexpected database error.";
+}
+
+
+// ============================
+// Upload Images
+// ============================
+async function uploadImages(images: File[]) {
+  const filenames: string[] = [];
+
+  for (const image of images) {
+    const filename = await uploadFile(image, "products");
+    filenames.push(filename);
+  }
+
+  return filenames;
+}
+
+
+// ============================
+// Delete Images
+// ============================
+async function deleteImages(images: string[]) {
+  for (const image of images) {
+    if (await checkFileExists(image, "products")) {
+      await deleteFile(image, "products");
     }
   }
-  return "Unexpected error occurred.";
 }
+
 
 // ============================
 // CREATE PRODUCT
@@ -31,6 +57,7 @@ export async function storeProduct(
   _: unknown,
   formData: FormData
 ): Promise<ActionResult> {
+
   const parse = schemaProduct.safeParse({
     name: formData.get("name"),
     price: formData.get("price"),
@@ -43,21 +70,14 @@ export async function storeProduct(
   });
 
   if (!parse.success) {
-    const messages = parse.error.issues.map((i) => i.message);
-    return { error: messages.join("\n") };
+    return { error: parse.error.issues.map(i => i.message).join("\n") };
   }
 
-  const uploaded_images = parse.data.images as File[];
-  const filenames: string[] = [];
-
-  for (const image of uploaded_images) {
-    const filename = await uploadFile(image, "products");
-    filenames.push(filename);
-  }
-
+  const filenames = await uploadImages(parse.data.images as File[]);
   const slug = slugify(parse.data.name);
 
   try {
+
     await prisma.product.create({
       data: {
         name: parse.data.name,
@@ -71,14 +91,15 @@ export async function storeProduct(
         images: filenames,
       },
     });
+
   } catch (err) {
-    console.error("Insert error:", err);
     return { error: handlePrismaError(err) };
   }
 
-  revalidatePath("/dashboard/products");
-  redirect("/dashboard/products");
+  refreshAndRedirect("/dashboard/products");
+  return { error: "" };
 }
+
 
 // ============================
 // UPDATE PRODUCT
@@ -88,6 +109,7 @@ export async function updateProduct(
   formData: FormData,
   id: number
 ): Promise<ActionResult> {
+
   const parse = schemaProductEdit.safeParse({
     id,
     name: formData.get("name")?.toString() ?? "",
@@ -100,49 +122,35 @@ export async function updateProduct(
   });
 
   if (!parse.success) {
-    const messages = parse.error.issues.map((i) => i.message);
-    return { error: messages.join("\n") };
+    return { error: parse.error.issues.map(i => i.message).join("\n") };
   }
 
   const product = await prisma.product.findUnique({ where: { id } });
   if (!product) return { error: "Product not found" };
 
-  const uploaded_images = formData.getAll("images") as File[];
-  const valid_uploaded_images = uploaded_images.filter(
-    (file) => file instanceof File && file.size > 0
-  );
+  const uploadedImages = (formData.getAll("images") as File[])
+    .filter(file => file instanceof File && file.size > 0);
 
   let filenames = product.images;
 
-  // 🧹 jika user upload gambar baru → hapus lama & upload baru
-  if (valid_uploaded_images.length > 0) {
+  if (uploadedImages.length > 0) {
+
     const parseImage = schemaProduct.pick({ images: true }).safeParse({
-      images: valid_uploaded_images,
+      images: uploadedImages,
     });
 
     if (!parseImage.success) {
-      const messages = parseImage.error.issues.map((i) => i.message);
-      return { error: messages.join("\n") };
+      return { error: parseImage.error.issues.map(i => i.message).join("\n") };
     }
 
-    // hapus gambar lama
-    for (const filename of product.images) {
-      if (await checkFileExists(filename, "products")) {
-        await deleteFile(filename, "products");
-      }
-    }
-
-    // upload baru
-    filenames = [];
-    for (const image of valid_uploaded_images) {
-      const filename = await uploadFile(image, "products");
-      filenames.push(filename);
-    }
+    await deleteImages(product.images);
+    filenames = await uploadImages(uploadedImages);
   }
 
   const slug = slugify(parse.data.name);
 
   try {
+
     await prisma.product.update({
       where: { id },
       data: {
@@ -157,50 +165,36 @@ export async function updateProduct(
         images: filenames,
       },
     });
+
   } catch (err) {
-    console.error("Update error:", err);
     return { error: handlePrismaError(err) };
   }
 
-  revalidatePath("/dashboard/products");
-  redirect("/dashboard/products");
+  refreshAndRedirect("/dashboard/products");
+  return { error: "" };
 }
 
 
-export async function deleteProduct(
-  formData: FormData,
-  id: number
-): Promise<ActionResult> {
+// ============================
+// DELETE PRODUCT
+// ============================
+export async function deleteProduct(formData: FormData): Promise<void> {
+  const id = Number(formData.get("id"));
+  if (!id) throw new Error("Invalid product ID");
 
-  const product = await prisma.product.findFirst({
-    where: { id: id },
-    select: { id: true, images: true }
-  })
+  const product = await prisma.product.findUnique({
+    where: { id },
+    select: { images: true },
+  });
 
-  if (!product) {
-    return {
-      error: "Product not found"
-    }
+  if (!product) throw new Error("Product not found");
+
+  for (const image of product.images) {
+    await deleteFile(image, "products");
   }
 
-  try {
-    for (const image of product.images) {
-      console.log(image)
-      await deleteFile(image, 'products')
-    }
+  await prisma.product.delete({ where: { id } });
 
-    await prisma.product.delete({
-      where: {
-        id
-      }
-    })
-  } catch (err) {
-    console.log(err)
-    return {
-      error: "Failed to delete data"
-    }
-  }
-  // finally {}
-
-  return redirect("/dashboard/products/")
+  revalidatePath("/dashboard/products");
+  redirect("/dashboard/products");
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import FormLogout from "./form-logout";
+import FormLogout from "./logout-button";
 import {
   Archive,
   Building,
@@ -58,7 +58,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
               "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all duration-200",
               isActive
                 ? "bg-muted text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted",
             );
 
             return (
@@ -83,7 +83,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         <div
           className={cn(
             "mt-auto px-2 pb-6 border-t border-muted/30",
-            collapsed ? "flex justify-center" : ""
+            collapsed ? "flex justify-center" : "",
           )}
         >
           <FormLogout />

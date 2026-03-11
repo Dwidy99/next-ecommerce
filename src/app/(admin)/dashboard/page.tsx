@@ -1,5 +1,5 @@
 import { ChartArea } from "./_components/chart-area";
-import { SectionCards } from "./_components/section-card";
+import { SectionCards } from "./_components/dashboard-section-card";
 import { getDashboardData } from "./lib/data";
 
 export default async function DashboardPage() {
