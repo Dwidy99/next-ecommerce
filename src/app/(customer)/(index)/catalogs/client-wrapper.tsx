@@ -8,7 +8,6 @@ interface ClientWrapperProps {
 }
 
 export default function ClientWrapper({ children }: ClientWrapperProps) {
-  // Gunakan useState agar tidak membuat client baru di setiap render
   const [queryClient] = useState(() => new QueryClient());
 
   return (

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import SignOutButton from "../../(auth)/_components/sign-out-button";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +12,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { Button } from "@/components/ui/button";
+
 import {
   User,
   ShoppingBag,
@@ -21,51 +24,58 @@ import {
   LogOut,
 } from "lucide-react";
 
-export default function NavbarClient({
-  user,
-  categories,
-}: {
-  user: any;
-  categories: { id: number; name: string; slug: string | null }[];
-}) {
-  const [isOpen, setIsOpen] = useState(false);
+type NavbarUser = {
+  name: string;
+  role: string;
+} | null;
 
+type NavbarCategory = {
+  id: number;
+  name: string;
+  slug: string | null;
+};
+
+interface NavbarClientProps {
+  user: NavbarUser;
+  categories: NavbarCategory[];
+}
+
+export default function NavbarClient({ user, categories }: NavbarClientProps) {
   return (
     <>
-      {/* 🟣 DESKTOP / TABLET NAVBAR */}
-      <nav className="hidden md:block rounded-xl md:my-16 bg-[#110843] text-white shadow-md relative z-50">
-        <div className="max-w-[1200px] mx-auto px-6 lg:px-8 py-3 flex items-center justify-between">
-          {/* Logo */}
+      {/* Desktop / Tablet Navbar */}
+      <nav className="relative z-50 hidden rounded-xl bg-[#110843] text-white shadow-md md:my-16 md:block">
+        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 lg:px-8">
           <Link href="/" className="flex items-center gap-2">
             <img
               src="/assets/logos/logos.svg"
               alt="logo"
-              className="h-9 sm:h-10 w-auto object-contain"
+              className="h-9 w-auto object-contain sm:h-10"
             />
           </Link>
 
-          {/* Menu */}
           <ul className="flex items-center gap-8 font-medium">
-            <li className="hover:text-[#FFC736] transition-all">
+            <li className="transition-all hover:text-[#FFC736]">
               <Link href="/catalogs">Shop</Link>
             </li>
 
-            <li className="relative group cursor-pointer">
+            <li className="group relative cursor-pointer">
               <span className="hover:text-[#FFC736]">Categories</span>
-              <ul className="absolute left-0 top-[100%] hidden group-hover:flex flex-col bg-white text-[#110843] rounded-lg shadow-md border border-gray-100 min-w-[160px] py-2 z-50">
+
+              <ul className="absolute left-0 top-full z-50 hidden min-w-[160px] flex-col rounded-lg border border-gray-100 bg-white py-2 text-[#110843] shadow-md group-hover:flex">
                 {categories.length > 0 ? (
                   categories.map((cat) => (
                     <li key={cat.id}>
                       <Link
                         href={`/categories/${cat.slug ?? cat.id}`}
-                        className="block px-4 py-2 text-[15px] hover:bg-[#FFF2B3] rounded-md"
+                        className="block rounded-md px-4 py-2 text-[15px] hover:bg-[#FFF2B3]"
                       >
                         {cat.name}
                       </Link>
                     </li>
                   ))
                 ) : (
-                  <li className="px-4 py-2 text-gray-500 text-sm">
+                  <li className="px-4 py-2 text-sm text-gray-500">
                     No categories
                   </li>
                 )}
@@ -81,9 +91,9 @@ export default function NavbarClient({
         </div>
       </nav>
 
-      {/* 🟡 MOBILE BOTTOM NAVBAR */}
-      <nav className="fixed md:hidden bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-[0_-4px_10px_rgba(0,0,0,0.08)] rounded-t-2xl z-50">
-        <div className="flex justify-around items-center py-2 px-1">
+      {/* Mobile Bottom Navbar */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl border-t border-gray-200 bg-white shadow-[0_-4px_10px_rgba(0,0,0,0.08)] md:hidden">
+        <div className="flex items-center justify-around px-1 py-2">
           <BottomNavItem href="/catalogs" icon={<ShoppingBag />} label="Shop" />
           <BottomNavDropdown categories={categories} />
           <BottomNavItem
@@ -99,14 +109,11 @@ export default function NavbarClient({
   );
 }
 
-/* ===========================================================
-   ✅ DESKTOP NAV RIGHT SECTION
-   =========================================================== */
-function NavbarRight({ user }: { user: any }) {
+function NavbarRight({ user }: { user: NavbarUser }) {
   return (
     <div className="flex items-center gap-3">
       <Link href="/carts">
-        <div className="w-10 h-10 flex shrink-0 hover:scale-110 transition-transform duration-200">
+        <div className="flex h-10 w-10 shrink-0 transition-transform duration-200 hover:scale-110">
           <img src="/assets/icons/cart.svg" alt="cart" />
         </div>
       </Link>
@@ -116,36 +123,42 @@ function NavbarRight({ user }: { user: any }) {
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="p-0 w-12 h-12 rounded-full border border-[#E5E5E5]/30 hover:border-[#FFC736]/60 hover:ring-2 hover:ring-[#FFC736]/40 transition-all duration-200"
+              className="h-12 w-12 rounded-full border border-[#E5E5E5]/30 p-0 transition-all duration-200 hover:border-[#FFC736]/60 hover:ring-2 hover:ring-[#FFC736]/40"
             >
               <img
                 src="/assets/photos/p4.png"
-                className="w-full h-full object-cover rounded-full"
+                className="h-full w-full rounded-full object-cover"
                 alt="photo"
               />
             </Button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent
             align="end"
             sideOffset={8}
-            className="w-48 rounded-xl border border-gray-200 shadow-lg bg-white"
+            className="w-48 rounded-xl border border-gray-200 bg-white shadow-lg"
           >
             <DropdownMenuLabel className="font-semibold text-gray-800">
               Hi, {user.name}
             </DropdownMenuLabel>
+
             <DropdownMenuSeparator />
+
             <DropdownMenuItem asChild>
               <Link
                 href="/user"
                 className="flex items-center gap-2 text-gray-700 hover:text-[#110843]"
               >
-                <User className="w-4 h-4" /> Profile
+                <User className="h-4 w-4" />
+                Profile
               </Link>
             </DropdownMenuItem>
+
             <DropdownMenuSeparator />
+
             <DropdownMenuItem
               asChild
-              className="text-red-600 hover:text-red-700 cursor-pointer"
+              className="cursor-pointer text-red-600 hover:text-red-700"
             >
               <SignOutButton />
             </DropdownMenuItem>
@@ -155,13 +168,14 @@ function NavbarRight({ user }: { user: any }) {
         <>
           <Link
             href="/sign-in"
-            className="p-[10px_16px] bg-white text-[#110843] rounded-full font-semibold hover:bg-[#FFF2B3] transition"
+            className="rounded-full bg-white px-[10px] py-[10px] font-semibold text-[#110843] transition hover:bg-[#FFF2B3]"
           >
             Sign In
           </Link>
+
           <Link
             href="/sign-up"
-            className="p-[10px_16px] bg-[#FFC736] text-[#110843] rounded-full font-semibold hover:bg-[#E6B800] transition"
+            className="rounded-full bg-[#FFC736] px-[10px] py-[10px] font-semibold text-[#110843] transition hover:bg-[#E6B800]"
           >
             Sign Up
           </Link>
@@ -171,9 +185,6 @@ function NavbarRight({ user }: { user: any }) {
   );
 }
 
-/* ===========================================================
-   ✅ MOBILE NAV ITEMS
-   =========================================================== */
 function BottomNavItem({
   href,
   icon,
@@ -186,51 +197,52 @@ function BottomNavItem({
   return (
     <Link
       href={href}
-      className="flex flex-col items-center justify-center text-gray-600 hover:text-[#110843] transition"
+      className="flex flex-col items-center justify-center text-gray-600 transition hover:text-[#110843]"
     >
-      <div className="w-6 h-6">{icon}</div>
-      <span className="text-[11px] mt-1 font-medium">{label}</span>
+      <div className="h-6 w-6">{icon}</div>
+      <span className="mt-1 text-[11px] font-medium">{label}</span>
     </Link>
   );
 }
 
-/* ===========================================================
-   ✅ MOBILE: CATEGORY DROPDOWN
-   =========================================================== */
-function BottomNavDropdown({
-  categories,
-}: {
-  categories: { id: number; name: string; slug: string | null }[];
-}) {
+function BottomNavDropdown({ categories }: { categories: NavbarCategory[] }) {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="relative">
       <button
-        onClick={() => setOpen(!open)}
-        className="flex flex-col items-center justify-center text-gray-600 hover:text-[#110843] transition"
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex flex-col items-center justify-center text-gray-600 transition hover:text-[#110843]"
       >
-        <Layers className="w-6 h-6" />
-        <span className="text-[11px] mt-1 font-medium">Categories</span>
+        <Layers className="h-6 w-6" />
+        <span className="mt-1 text-[11px] font-medium">Categories</span>
       </button>
 
       {open && (
         <>
           <div
             onClick={() => setOpen(false)}
-            className="fixed inset-0 bg-black/30 z-40"
+            className="fixed inset-0 z-40 bg-black/30"
           />
-          <div className="absolute bottom-14 left-1/2 -translate-x-1/2 bg-white text-[#110843] rounded-xl shadow-xl border border-gray-200 z-50 w-[180px] py-2">
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/categories/${cat.slug ?? cat.id}`}
-                className="block px-4 py-2 text-[14px] hover:bg-[#FFF2B3] transition"
-                onClick={() => setOpen(false)}
-              >
-                {cat.name}
-              </Link>
-            ))}
+
+          <div className="absolute bottom-14 left-1/2 z-50 w-[180px] -translate-x-1/2 rounded-xl border border-gray-200 bg-white py-2 text-[#110843] shadow-xl">
+            {categories.length > 0 ? (
+              categories.map((cat) => (
+                <Link
+                  key={cat.id}
+                  href={`/categories/${cat.slug ?? cat.id}`}
+                  className="block px-4 py-2 text-[14px] transition hover:bg-[#FFF2B3]"
+                  onClick={() => setOpen(false)}
+                >
+                  {cat.name}
+                </Link>
+              ))
+            ) : (
+              <div className="px-4 py-2 text-sm text-gray-500">
+                No categories
+              </div>
+            )}
           </div>
         </>
       )}
@@ -238,20 +250,18 @@ function BottomNavDropdown({
   );
 }
 
-/* ===========================================================
-   ✅ MOBILE: PROFILE DROPDOWN
-   =========================================================== */
-function BottomNavProfile({ user }: { user: any }) {
+function BottomNavProfile({ user }: { user: NavbarUser }) {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="relative">
       <button
-        onClick={() => setOpen(!open)}
-        className="flex flex-col items-center justify-center text-gray-600 hover:text-[#110843] transition"
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex flex-col items-center justify-center text-gray-600 transition hover:text-[#110843]"
       >
-        <User className="w-6 h-6" />
-        <span className="text-[11px] mt-1 font-medium">
+        <User className="h-6 w-6" />
+        <span className="mt-1 text-[11px] font-medium">
           {user ? "Profile" : "Sign In"}
         </span>
       </button>
@@ -260,9 +270,10 @@ function BottomNavProfile({ user }: { user: any }) {
         <>
           <div
             onClick={() => setOpen(false)}
-            className="fixed inset-0 bg-black/30 z-40"
+            className="fixed inset-0 z-40 bg-black/30"
           />
-          <div className="absolute bottom-14 left-1/2 -translate-x-1/2 bg-white text-[#110843] shadow-xl border border-gray-200 z-50 w-[180px] py-2">
+
+          <div className="absolute bottom-14 left-1/2 z-50 w-[180px] -translate-x-1/2 border border-gray-200 bg-white py-2 text-[#110843] shadow-xl">
             {user ? (
               <>
                 <Link
@@ -272,6 +283,7 @@ function BottomNavProfile({ user }: { user: any }) {
                 >
                   My Profile
                 </Link>
+
                 <Link
                   href="/payment/purchase-history"
                   onClick={() => setOpen(false)}
@@ -279,18 +291,21 @@ function BottomNavProfile({ user }: { user: any }) {
                 >
                   My Orders
                 </Link>
-                <div className="border-t border-gray-100 my-1" />
+
+                <div className="my-1 border-t border-gray-100" />
+
                 <button
+                  type="button"
                   onClick={() => {
                     setOpen(false);
                     const form = document.querySelector(
-                      "form#signout"
+                      "form#signout",
                     ) as HTMLFormElement | null;
                     form?.requestSubmit();
                   }}
-                  className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+                  className="block w-full px-4 py-2 text-left text-red-600 hover:bg-red-50"
                 >
-                  <LogOut className="inline w-4 h-4 mr-2" />
+                  <LogOut className="mr-2 inline h-4 w-4" />
                   Sign Out
                 </button>
               </>
@@ -303,6 +318,7 @@ function BottomNavProfile({ user }: { user: any }) {
                 >
                   Sign In
                 </Link>
+
                 <Link
                   href="/sign-up"
                   onClick={() => setOpen(false)}

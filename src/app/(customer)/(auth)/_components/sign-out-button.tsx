@@ -1,62 +1,56 @@
 "use client";
 
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LogOut, Loader2 } from "lucide-react";
 import { SignOut } from "../sign-in/lib/actions";
 
 export default function SignOutButton() {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
-  const handleSignOut = async () => {
-    try {
-      const res = await SignOut();
+  const handleSignOut = () => {
+    startTransition(async () => {
+      try {
+        const res = await SignOut();
 
-      if (res.error) {
-        toast.error("Sign out failed", {
-          description: res.error,
+        if (res?.error) {
+          toast.error("Sign out failed", {
+            description: res.error,
+          });
+          return;
+        }
+
+        toast.success("Signed out successfully");
+      } catch (error) {
+        console.error(error);
+
+        toast.error("Unexpected error occurred", {
+          description: "Please try again later.",
         });
-        return;
       }
-
-      toast.success("Signed out successfully", {
-        description: "Redirecting to login page...",
-      });
-
-      startTransition(() => {
-        setTimeout(() => router.push("/sign-in"), 1200);
-      });
-    } catch (error) {
-      console.error("SignOutButton error:", error);
-      toast.error("Unexpected error occurred", {
-        description: "Please try again later.",
-      });
-    }
+    });
   };
 
   return (
     <button
       onClick={handleSignOut}
       disabled={isPending}
-      className={`flex w-full items-center gap-2 px-3 py-2 rounded-md text-sm font-medium 
-        transition-all duration-200 
+      className={`flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all
         ${
           isPending
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-red-600 hover:text-red-700 hover:bg-red-50"
+            ? "cursor-not-allowed text-gray-400"
+            : "text-red-600 hover:bg-red-50 hover:text-red-700"
         }`}
     >
       {isPending ? (
         <>
-          <Loader2 className="w-4 h-4 animate-spin" />
-          <span>Signing out...</span>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Signing out...
         </>
       ) : (
         <>
-          <LogOut className="w-4 h-4" />
-          <span>Sign Out</span>
+          <LogOut className="h-4 w-4" />
+          Sign Out
         </>
       )}
     </button>
