@@ -6,7 +6,7 @@ import { useFilter } from "@/hooks/useFilter";
 import { fetchProduct } from "../lib/data";
 import CardProduct from "../../_components/card-product";
 import NoData from "../../_components/no-data";
-import Loading from "../../_components/loading";
+import Loading from "../../_components/loading-skeleton";
 import type { TProduct } from "@/types";
 
 /**
