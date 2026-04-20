@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import Navbar from "../../_components/navbar";
 import CarouselImages from "./_components/carousel-images";
 import PriceInfo from "./_components/price-info";
-import Loading from "../../_components/loading";
+import Loading from "../../_components/loading-skeleton";
 import ListProduct from "../../_components/list-product";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
 import { getUser } from "@/lib/auth";

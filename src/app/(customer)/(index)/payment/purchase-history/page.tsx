@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { TOrder } from "@/types";
 import OrdersList from "../_components/order-list";
 import { ArrowBigLeftDash, ShoppingCart } from "lucide-react";
-import Loading from "../../_components/loading";
+import Loading from "../../_components/loading-skeleton";
 import EmptyState from "../_components/empty-state";
 
 export default function PurchaseHistoryPage() {
