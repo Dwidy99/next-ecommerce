@@ -50,7 +50,7 @@ export default function ForgotPasswordForm() {
       </button>
 
       <Link
-        href="/login"
+        href="/sign-in"
         className="inline-block text-center px-6 py-3 rounded-full bg-white border border-[#110843] text-[#110843] font-semibold hover:bg-[#f3f3f3] transition-all duration-200"
       >
         ← Back
