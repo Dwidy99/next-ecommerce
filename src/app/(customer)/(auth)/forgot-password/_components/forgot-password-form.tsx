@@ -10,7 +10,7 @@ const initialState: ActionResult = { error: "" };
 export default function ForgotPasswordForm() {
   const [state, formAction, isPending] = useActionState(
     ForgotPasswordAction,
-    initialState
+    initialState,
   );
 
   return (
@@ -50,7 +50,7 @@ export default function ForgotPasswordForm() {
       </button>
 
       <Link
-        href="/sign-in"
+        href="/login"
         className="inline-block text-center px-6 py-3 rounded-full bg-white border border-[#110843] text-[#110843] font-semibold hover:bg-[#f3f3f3] transition-all duration-200"
       >
         ← Back
