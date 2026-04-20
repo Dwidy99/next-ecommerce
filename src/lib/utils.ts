@@ -48,6 +48,19 @@ export function slugify(text: string) {
 }
 
 /**
+ * Generate an alphanumeric code for references such as order numbers.
+ */
+export function generateRandomString(length = 15) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  const values = new Uint32Array(length)
+
+  crypto.getRandomValues(values)
+
+  return Array.from(values, (value) => characters[value % characters.length]).join("")
+}
+
+/**
  * Validate uploaded images
  */
 export function validateFiles(files: File[]): string | null {
