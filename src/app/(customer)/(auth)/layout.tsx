@@ -5,6 +5,8 @@ import { Toaster } from "sonner";
 import { getUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700", "800"],
   subsets: ["latin-ext"],
