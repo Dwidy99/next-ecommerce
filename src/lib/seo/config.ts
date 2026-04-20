@@ -17,31 +17,50 @@ export type SiteConfig = {
     }
 }
 
+const fallbackSiteConfig: SiteConfig = {
+    title: "Shopverse",
+    shortName: "Shopverse",
+    tagline: "Next-gen shopping experience",
+    description: "Next-gen shopping experience",
+    keywords: ["shop", "store", "ecommerce"],
+    url:
+        process.env.NEXT_PUBLIC_BASE_URL ||
+        process.env.NEXT_PUBLIC_REDIRECT_URL ||
+        "https://example.com",
+    icon: "/favicon.ico",
+    social: {},
+}
+
 export async function getSiteConfig(lang: "ID" | "EN" = "ID"): Promise<SiteConfig> {
-    const config = await prisma.configuration.findFirst({
-        where: { language: lang },
-    })
+    try {
+        const config = await prisma.configuration.findFirst({
+            where: { language: lang },
+        })
 
-    if (!config) throw new Error("Site configuration not found")
+        if (!config) return fallbackSiteConfig
 
-    return {
-        title: config.webname ?? "",
-        shortName: config.short_name ?? "",
-        tagline: config.tagline ?? "",
-        description: config.description ?? "",
-        // normalisasi keywords jadi array
-        keywords: config.keywords
-            ? config.keywords.split(",").map((k: string) => k.trim())
-            : [],
-        url: config.website && config.website.trim() !== ""
-            ? config.website
-            : "https://example.com",
-        logo: config.logo ?? undefined,
-        icon: config.icon ?? undefined,
-        social: {
-            facebook: config.facebook ?? undefined,
-            twitter: config.twitter ?? undefined,
-            instagram: config.instagram ?? undefined,
-        },
+        return {
+            title: config.webname ?? fallbackSiteConfig.title,
+            shortName: config.short_name ?? fallbackSiteConfig.shortName,
+            tagline: config.tagline ?? fallbackSiteConfig.tagline,
+            description: config.description ?? fallbackSiteConfig.description,
+            // normalisasi keywords jadi array
+            keywords: config.keywords
+                ? config.keywords.split(",").map((k: string) => k.trim())
+                : fallbackSiteConfig.keywords,
+            url: config.website && config.website.trim() !== ""
+                ? config.website
+                : fallbackSiteConfig.url,
+            logo: config.logo ?? undefined,
+            icon: config.icon ?? fallbackSiteConfig.icon,
+            social: {
+                facebook: config.facebook ?? undefined,
+                twitter: config.twitter ?? undefined,
+                instagram: config.instagram ?? undefined,
+            },
+        }
+    } catch (error) {
+        console.warn("Failed to load site configuration, using fallback config.", error)
+        return fallbackSiteConfig
     }
 }
