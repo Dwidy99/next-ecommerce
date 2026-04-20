@@ -5,7 +5,7 @@ import Navbar from "./_components/navbar";
 import ListCategory from "./_components/list-category";
 import ListProduct from "./_components/list-product";
 import ListBrand from "./_components/list-brand";
-import Loading from "./_components/loading";
+import Loading from "./_components/loading-skeleton";
 import ProductsCarouselWrapper from "./_components/products-carousel-wrapper";
 
 export default function LandingPage() {

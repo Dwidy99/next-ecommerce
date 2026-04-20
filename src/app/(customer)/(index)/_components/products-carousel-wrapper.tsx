@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import React, { Suspense } from "react";
-import Loading from "./loading";
+import Loading from "./loading-skeleton";
 
 // Import carousel secara dinamis hanya di client
 const ProductsCarousel = dynamic(() => import("./products-carousel"), {
