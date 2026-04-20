@@ -44,7 +44,7 @@ export default function NavbarClient({ user, categories }: NavbarClientProps) {
   return (
     <>
       {/* Desktop / Tablet Navbar */}
-      <nav className="relative z-50 hidden rounded-xl bg-[#110843] text-white shadow-md md:my-16 md:block">
+      <nav className="relative z-50 hidden rounded-xl bg-[#110843] text-white shadow-md md:my-4 md:block">
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 lg:px-8">
           <Link href="/" className="flex items-center gap-2">
             <img
