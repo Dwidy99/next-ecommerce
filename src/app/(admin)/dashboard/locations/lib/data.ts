@@ -1,4 +1,9 @@
+import { getErrorMessage, warnOnce } from "@/lib/error-message"
 import { prisma } from "lib/prisma"
+
+function warnLocationFallback(source: string, error: unknown) {
+  warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`)
+}
 
 export async function getLocations() {
   try {
@@ -8,7 +13,7 @@ export async function getLocations() {
       },
     })
   } catch (error) {
-    console.error("Failed to load locations:", error)
+    warnLocationFallback("Locations", error)
     return []
   }
 }
@@ -27,7 +32,7 @@ export async function getLocationById(id: string) {
       },
     })
   } catch (error) {
-    console.error("Failed to load location:", error)
+    warnLocationFallback("Location", error)
     return null
   }
 }

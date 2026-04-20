@@ -10,12 +10,16 @@ export async function fetchProduct(body?: TFilter): Promise<TProduct[]> {
             cache: "no-store",
         });
 
-        if (!res.ok) throw new Error(`Fetch failed: ${res.statusText}`);
+        if (!res.ok) {
+            console.warn(`[fetchProduct] Catalog API unavailable: ${res.statusText}`);
+            return [];
+        }
 
         const data: TProduct[] = await res.json();
-        return data ?? [];
+        return Array.isArray(data) ? data : [];
     } catch (error) {
-        console.error("[fetchProduct] Error:", error);
+        const message = error instanceof Error ? error.message : "Unknown fetch error";
+        console.warn(`[fetchProduct] Using empty fallback data. ${message}`);
         return [];
     }
 }

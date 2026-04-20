@@ -3,7 +3,7 @@
 import { prisma } from "lib/prisma"
 import { ActionResult } from "@/types"
 import { redirect } from "next/navigation"
-import { locationSchema } from "./schema"
+import { schemaLocation as locationSchema } from "@/lib/schema"
 
 export async function createLocation(
   _: unknown,
@@ -97,3 +97,4 @@ export async function deleteLocation(formData: FormData): Promise<void> {
 
   redirect("/dashboard/locations")
 }
+

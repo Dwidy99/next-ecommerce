@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 
@@ -12,35 +13,33 @@ export default function ResponsiveLayout({
   const [showFilters, setShowFilters] = useState(false);
 
   return (
-    <div className="container max-w-[1130px] mx-auto px-4 lg:px-0 mt-[40px] pb-[100px]">
-      {/* 🔹 Desktop */}
-      <div className="hidden lg:flex gap-[30px]">
-        <aside className="w-[300px] bg-white border border-[#E5E5E5] rounded-[20px] p-6 flex-shrink-0 h-fit">
+    <div className="container mx-auto mt-8 max-w-7xl px-4 pb-[100px] md:px-6">
+      <div className="hidden gap-6 lg:flex">
+        <aside className="h-fit w-[300px] flex-shrink-0 rounded-[22px] border border-slate-200 bg-white/95 p-6 shadow-sm ring-1 ring-white">
           {filters}
         </aside>
 
-        <main className="flex-1 bg-white border border-[#E5E5E5] rounded-[20px] p-6">
+        <main className="flex-1 rounded-[22px] border border-slate-200 bg-white/95 p-6 shadow-sm ring-1 ring-white">
           {products}
         </main>
       </div>
 
-      {/* 🔹 Mobile / Tablet */}
-      <div className="lg:hidden flex flex-col gap-4">
+      <div className="flex flex-col gap-4 lg:hidden">
         <button
-          onClick={() => setShowFilters((v) => !v)}
-          className="w-full flex items-center justify-center gap-2 bg-[rgb(255,255,255)] text-black font-semibold py-3 rounded-full shadow-sm"
+          onClick={() => setShowFilters((value) => !value)}
+          className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FFC736] py-3 font-semibold text-[#110843] shadow-sm transition hover:bg-[#ffda63]"
         >
           <SlidersHorizontal size={18} />
           {showFilters ? "Hide Filters" : "Show Filters"}
         </button>
 
         {showFilters && (
-          <div className="bg-white border border-[#E5E5E5] rounded-[20px] p-5">
+          <div className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-sm">
             {filters}
           </div>
         )}
 
-        <div className="bg-white border border-[#E5E5E5] rounded-[20px] p-5">
+        <div className="rounded-[22px] border border-slate-200 bg-white p-5 shadow-sm">
           {products}
         </div>
       </div>

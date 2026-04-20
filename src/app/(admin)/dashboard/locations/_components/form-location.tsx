@@ -17,7 +17,7 @@ import { AlertCircle, ChevronLeft, Loader2Icon } from "lucide-react"
 import Link from "next/link"
 import React, { useActionState } from "react"
 import { useFormStatus } from "react-dom"
-import { createLocation, updateLocation } from "../actions"
+import { createLocation, updateLocation } from "../lib/actions"
 
 const initialState: ActionResult = {
   error: "",
@@ -118,3 +118,4 @@ export function LocationForm({ data = null, type = "ADD" }: LocationFormProps) {
 }
 
 export default LocationForm
+

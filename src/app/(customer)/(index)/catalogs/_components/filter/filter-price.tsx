@@ -24,9 +24,9 @@ export default function FilterPrice() {
       <p className="font-semibold leading-[22px]">Range Harga</p>
 
       {/* Minimum Price Input */}
-      <div className="max-w-[480px] w-full bg-white flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
+      <div className="flex w-full max-w-[480px] items-center gap-[10px] rounded-full border border-[#FFE6A3] bg-[#FFF9E8] p-[12px_20px] transition-all duration-300 focus-within:ring-2 focus-within:ring-[#FFC736]">
         <div className="flex shrink-0">
-          <img src="assets/icons/dollar-circle.svg" alt="icon" />
+          <img src="/assets/icons/dollar-circle.svg" alt="icon" />
         </div>
         <input
           type="number"
@@ -38,9 +38,9 @@ export default function FilterPrice() {
       </div>
 
       {/* Maximum Price Input */}
-      <div className="max-w-[480px] w-full bg-white flex items-center gap-[10px] rounded-full border border-[#E5E5E5] p-[12px_20px] focus-within:ring-2 focus-within:ring-[#FFC736] transition-all duration-300">
+      <div className="flex w-full max-w-[480px] items-center gap-[10px] rounded-full border border-[#FFE6A3] bg-[#FFF9E8] p-[12px_20px] transition-all duration-300 focus-within:ring-2 focus-within:ring-[#FFC736]">
         <div className="flex shrink-0">
-          <img src="assets/icons/dollar-circle.svg" alt="icon" />
+          <img src="/assets/icons/dollar-circle.svg" alt="icon" />
         </div>
         <input
           type="number"

@@ -1,4 +1,4 @@
-import { getLocations } from "@/modules/locations/data";
+import { getLocations } from "@/app/(admin)/dashboard/locations/lib/data";
 import React from "react";
 import FilterCheckboxItem from "./filter-checkbox-item";
 

@@ -108,7 +108,7 @@ function SectionTitle({
       <div>
         <h2 className="text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl">
           {title}{" "}
-          {highlight && <span className="text-[#f05a28]">{highlight}</span>}
+          {highlight && <span className="text-[#d99000]">{highlight}</span>}
         </h2>
         {description && (
           <p className="mt-1 text-sm text-slate-500">{description}</p>
@@ -123,9 +123,9 @@ export function HomeTopStrip() {
   return (
     <div className="hidden bg-[#07111f] text-[11px] font-semibold uppercase tracking-[0.16em] text-white md:block">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
-        <span>Next Commerce</span>
+        <span>Shopverse Commerce</span>
         <span>Gadget store • Bundle setup • Fast checkout</span>
-        <span className="text-[#21c55d]">Online support</span>
+        <span className="text-[#FFC736]">Online support</span>
       </div>
     </div>
   )
@@ -134,7 +134,7 @@ export function HomeTopStrip() {
 export function HomeHero() {
   return (
     <section className="mx-auto max-w-7xl px-4 pt-4 md:px-6">
-      <div className="relative overflow-hidden rounded-[22px] bg-slate-950 shadow-sm">
+      <div className="relative overflow-hidden rounded-[22px] bg-[#110843] shadow-sm ring-1 ring-black/5">
         <Image
           src="/assets/banners/5.jpg"
           alt="Shopverse gadget banner"
@@ -143,10 +143,11 @@ export function HomeHero() {
           priority
           className="h-[360px] w-full object-cover md:h-[520px]"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#110843]/90 via-[#110843]/55 to-black/10" />
+        <div className="absolute left-0 top-0 h-40 w-40 rounded-full bg-[#FFC736]/25 blur-3xl" />
         <div className="absolute inset-0 flex items-center px-6 md:px-14">
           <div className="max-w-2xl">
-            <p className="mb-4 inline-flex rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-white backdrop-blur">
+            <p className="mb-4 inline-flex rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-[#FFC736] backdrop-blur">
               Shopverse picks
             </p>
             <h1 className="text-3xl font-extrabold leading-tight text-white md:text-5xl">
@@ -159,7 +160,7 @@ export function HomeHero() {
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href="/catalogs"
-                className="rounded-md bg-[#21c55d] px-7 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-green-950/20 transition hover:bg-[#35d46e]"
+                className="rounded-md bg-[#FFC736] px-7 py-3 text-sm font-bold text-[#110843] shadow-lg shadow-yellow-950/20 transition hover:bg-[#ffda63]"
               >
                 Klik untuk Selengkapnya
               </Link>
@@ -177,7 +178,7 @@ export function HomeHero() {
             <span
               key={item}
               className={`h-2 rounded-full ${
-                item === 0 ? "w-8 bg-white" : "w-2 bg-white/60"
+                item === 0 ? "w-8 bg-[#FFC736]" : "w-2 bg-white/60"
               }`}
             />
           ))}
@@ -193,9 +194,9 @@ export function BenefitStrip() {
       {benefits.map((benefit) => (
         <div
           key={benefit.title}
-          className="flex items-center gap-3 rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-slate-200"
+          className="flex items-center gap-3 rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:ring-[#FFC736]"
         >
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FFF4CC]">
             <Image src={benefit.icon} alt="" width={18} height={18} />
           </span>
           <span>
@@ -231,13 +232,13 @@ export async function CompactCategoryGrid() {
             href={`/categories/${category.slug ?? category.id}`}
             className={`group flex items-center gap-3 rounded-xl px-4 py-3 shadow-sm ring-1 transition ${
               index === 7
-                ? "bg-slate-800 text-white ring-slate-800"
-                : "bg-white text-slate-950 ring-slate-200 hover:ring-[#21c55d]"
+                ? "bg-[#110843] text-white ring-[#110843]"
+                : "bg-white text-slate-950 ring-slate-200 hover:-translate-y-0.5 hover:ring-[#FFC736]"
             }`}
           >
             <span
               className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-                index === 7 ? "bg-white/10" : "bg-slate-100"
+                index === 7 ? "bg-[#FFC736]/20" : "bg-[#FFF4CC]"
               }`}
             >
               <Image
@@ -287,7 +288,7 @@ export function PromoMosaic() {
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/25 to-transparent" />
             <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#21c55d]">
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#FFC736]">
                 Custom
               </p>
               <h3 className="mt-2 max-w-md text-2xl font-extrabold leading-none">
@@ -297,7 +298,7 @@ export function PromoMosaic() {
                 {tile.subtitle}
               </p>
               {index === 5 && (
-                <span className="mt-5 w-fit rounded-md bg-[#21c55d] px-5 py-2 text-sm font-bold text-slate-950">
+                <span className="mt-5 w-fit rounded-md bg-[#FFC736] px-5 py-2 text-sm font-bold text-[#110843]">
                   Info Selengkapnya
                 </span>
               )}
@@ -328,7 +329,7 @@ export async function ProductScroller() {
             href={`/detail-product/${product.id}`}
             className="group w-[230px] shrink-0 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-lg"
           >
-            <div className="relative h-[250px] bg-slate-100">
+            <div className="relative h-[250px] bg-[#FFF4CC]">
               <Image
                 src={product.image_url || "/assets/products/placeholder.svg"}
                 alt={product.name}
@@ -340,17 +341,17 @@ export async function ProductScroller() {
                 {index % 2 === 0 ? "HOT" : "NEW"}
               </span>
             </div>
-            <div className="border-t-4 border-[#159b42] p-4">
+            <div className="border-t-4 border-[#FFC736] p-4">
               <p className="line-clamp-1 text-sm font-bold text-slate-950">
                 {product.name}
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 {product.category?.name ?? "Product"}
               </p>
-              <p className="mt-3 text-sm font-extrabold text-[#f05a28]">
+              <p className="mt-3 text-sm font-extrabold text-[#d99000]">
                 {rupiahFormat(Number(product.price))}
               </p>
-              <span className="mt-4 block rounded-md bg-[#21c55d] py-2 text-center text-xs font-bold text-slate-950">
+              <span className="mt-4 block rounded-md bg-[#FFC736] py-2 text-center text-xs font-bold text-[#110843] transition group-hover:bg-[#ffda63]">
                 Add to Buy
               </span>
             </div>
@@ -374,9 +375,9 @@ export async function CollaborationSection() {
         {["Kolaborasi", "Potensi", "Manfaat"].map((title, index) => (
           <div
             key={title}
-            className="rounded-xl bg-white p-7 text-center shadow-sm ring-1 ring-slate-200"
+            className="rounded-xl bg-white p-7 text-center shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:ring-[#FFC736]"
           >
-            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100">
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#FFF4CC]">
               <Image
                 src={benefits[index].icon}
                 alt=""
@@ -400,7 +401,7 @@ export async function CollaborationSection() {
           {brands.slice(0, 4).map((brand: any) => (
             <div
               key={brand.id}
-              className="flex min-h-[110px] items-center justify-center rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
+              className="flex min-h-[110px] items-center justify-center rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:ring-[#FFC736]"
             >
               <Image
                 src={brand.logo_url || "/assets/logos/logo-black.svg"}
@@ -429,7 +430,7 @@ export function ArticleSection() {
         {articles.map((article) => (
           <article
             key={article.title}
-            className="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200"
+            className="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:ring-[#FFC736]"
           >
             <Image
               src={article.image}
@@ -452,3 +453,4 @@ export function ArticleSection() {
     </section>
   )
 }
+

@@ -1,14 +1,14 @@
 "use client"
 
-import DeleteDialog from "@/app/(admin)/dashboard/_components/delete-dialog"
+import DeleteDialog from "../_components/delete-dialog"
 import { Button } from "@/components/ui/button"
 import { Location } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import { Edit } from "lucide-react"
 import Link from "next/link"
-import { deleteLocation } from "./actions"
+import { deleteLocation } from "./lib/actions"
 
-export const locationColumns: ColumnDef<Location>[] = [
+export const columns: ColumnDef<Location>[] = [
   {
     accessorKey: "name",
     header: "Location",
@@ -37,4 +37,5 @@ export const locationColumns: ColumnDef<Location>[] = [
   },
 ]
 
-export const columns = locationColumns
+
+

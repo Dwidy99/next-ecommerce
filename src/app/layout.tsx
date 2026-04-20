@@ -1,13 +1,8 @@
 import "@/app/globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Geist } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
 
 export default function RootLayout({
   children,
@@ -18,7 +13,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("font-sans", geist.variable)}
+      className={cn("font-sans", GeistSans.variable)}
     >
       <body className="min-h-screen bg-background antialiased">
         <TooltipProvider delayDuration={200}>

@@ -1,4 +1,5 @@
 import { prisma } from "lib/prisma"
+import { getErrorMessage, warnOnce } from "@/lib/error-message"
 
 
 export type SiteConfig = {
@@ -60,7 +61,9 @@ export async function getSiteConfig(lang: "ID" | "EN" = "ID"): Promise<SiteConfi
             },
         }
     } catch (error) {
-        console.warn("Failed to load site configuration, using fallback config.", error)
+        warnOnce(
+            `Failed to load site configuration, using fallback config. ${getErrorMessage(error)}`,
+        )
         return fallbackSiteConfig
     }
 }

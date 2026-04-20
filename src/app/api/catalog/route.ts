@@ -1,5 +1,6 @@
 import { TFilter } from "@/hooks/useFilter";
 import { getImageUrl } from "@/lib/supabase";
+import { getErrorMessage, warnOnce } from "@/lib/error-message";
 import { TProduct } from "@/types";
 import { prisma } from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
@@ -92,7 +93,9 @@ export async function POST(request: Request) {
 
         return Response.json(response);
     } catch (err) {
-        console.error("[/api/catalog] Error:", err);
-        return Response.json({ error: "Internal Server Error" }, { status: 500 });
+        warnOnce(
+            `[/api/catalog] unavailable, using empty fallback data. ${getErrorMessage(err, "Unknown catalog error")}`,
+        );
+        return Response.json([]);
     }
 }

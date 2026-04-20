@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
@@ -11,11 +12,11 @@ export default function FilterGroup({ title, children }: FilterGroupProps) {
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="border-b border-[#E5E5E5] pb-4 last:border-none">
+    <div className="border-b border-slate-200 pb-4 last:border-none">
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full font-semibold text-left text-base md:text-lg"
+        className="flex w-full items-center justify-between text-left text-base font-semibold text-[#110843] md:text-lg"
       >
         {title}
         <ChevronDown
@@ -27,7 +28,7 @@ export default function FilterGroup({ title, children }: FilterGroupProps) {
 
       <div
         className={`overflow-hidden transition-all duration-300 ${
-          open ? "max-h-[500px] mt-3" : "max-h-0"
+          open ? "mt-3 max-h-[500px]" : "max-h-0"
         }`}
       >
         {children}

@@ -1,5 +1,12 @@
 import { getImageUrl } from "@/lib/supabase";
+import { getErrorMessage, warnOnce } from "@/lib/error-message";
 import { prisma } from "lib/prisma";
+
+function warnDatabaseFallback(source: string, error: unknown) {
+    warnOnce(
+        `${source} unavailable, using empty fallback data. ${getErrorMessage(error, "Unknown database error")}`,
+    );
+}
 
 export async function getCategories() {
     try {
@@ -13,7 +20,7 @@ export async function getCategories() {
             },
         });
     } catch (error) {
-        console.error(error);
+        warnDatabaseFallback("Categories", error);
         return [];
     }
 }
@@ -37,7 +44,7 @@ export async function getProducts() {
             image_url: getImageUrl(product.images[0], "products"),
         }));
     } catch (error) {
-        console.error(error);
+        warnDatabaseFallback("Products", error);
         return [];
     }
 }
@@ -56,7 +63,7 @@ export async function getBrands() {
             logo_url: getImageUrl(brand.logo, "brands"),
         }));
     } catch (error) {
-        console.error(error);
+        warnDatabaseFallback("Brands", error);
         return [];
     }
 }

@@ -1,11 +1,17 @@
+import { getErrorMessage, warnOnce } from "@/lib/error-message"
 import { prisma } from "../../../../../../lib/prisma"
+
+function warnBrandFallback(source: string, error: unknown) {
+    warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`);
+}
+
 export async function getBrands() {
     try {
         const brands = await prisma.brand.findMany({})
 
         return brands
     } catch (err) {
-        console.log(err);
+        warnBrandFallback("Brands", err);
         return []
     }
     // finally {}
@@ -21,7 +27,7 @@ export async function getBrandById(id: string) {
 
         return brand
     } catch (err) {
-        console.log(err);
+        warnBrandFallback("Brand", err);
         return null
     }
     // finally {}

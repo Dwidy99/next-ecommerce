@@ -5,6 +5,7 @@ import { cache } from "react";
 import { cookies } from "next/headers";
 import { User } from "lucia";
 import { prisma } from "../../lib/prisma";
+import { getErrorMessage, warnOnce } from "@/lib/error-message";
 
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user)
@@ -51,7 +52,7 @@ export const getUser = cache(
             } catch { }
             return result;
         } catch (error) {
-            console.warn("Failed to validate user session.", error);
+            warnOnce(`Failed to validate user session. ${getErrorMessage(error)}`);
             return {
                 user: null,
                 session: null

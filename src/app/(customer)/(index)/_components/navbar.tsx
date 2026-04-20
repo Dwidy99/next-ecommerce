@@ -1,4 +1,5 @@
 import { getUser } from "@/lib/auth";
+import { getErrorMessage, warnOnce } from "@/lib/error-message";
 import { prisma } from "lib/prisma";
 import NavbarClient from "./navbar-client";
 
@@ -17,7 +18,7 @@ export default async function Navbar() {
       },
     })
     .catch((error) => {
-      console.warn("Failed to load navbar categories.", error);
+      warnOnce(`Failed to load navbar categories. ${getErrorMessage(error)}`);
       return [];
     });
 

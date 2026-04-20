@@ -37,8 +37,9 @@ export default function SearchBar({
         flex flex-col lg:flex-row 
         items-start lg:items-center 
         justify-between
-        gap-6 sm:gap-8 py-8 sm:py-10
-        max-w-[1130px]
+        gap-6 sm:gap-8 p-6 sm:p-8
+        max-w-7xl
+        rounded-[24px] border border-slate-200 bg-white shadow-sm
       "
     >
       {/* 🔹 Breadcrumb + Title */}
@@ -75,8 +76,8 @@ export default function SearchBar({
         onSubmit={(e) => e.preventDefault()}
         className="
           w-full sm:max-w-[400px] lg:max-w-[480px]
-          bg-white flex items-center gap-2 sm:gap-3
-          rounded-full border border-[#E5E5E5]
+          bg-[#FFF9E8] flex items-center gap-2 sm:gap-3
+          rounded-full border border-[#FFE6A3]
           p-[10px_16px] sm:p-[12px_20px]
           focus-within:ring-2 focus-within:ring-[#FFC736]
           transition-all duration-300

@@ -1,16 +1,16 @@
-import { PrismaClient } from "@prisma/client";
+import { getErrorMessage, warnOnce } from "@/lib/error-message";
+import { prisma } from "lib/prisma";
 
-
-const prisma = new PrismaClient();
+function warnCategoryFallback(source: string, error: unknown) {
+  warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`);
+}
 
 export async function getCategories() {
   try {
     return await prisma.category.findMany();
   } catch (error) {
-    console.error(error);
+    warnCategoryFallback("Categories", error);
     return [];
-  } finally {
-    await prisma.$disconnect(); // penting untuk menghindari memory leak
   }
 }
 
@@ -23,9 +23,7 @@ export async function getCategoryById(id: string) {
       }
     })
   } catch (error) {
-    console.error(error);
+    warnCategoryFallback("Category", error);
     return null;
-  } finally {
-    await prisma.$disconnect(); // penting untuk menghindari memory leak
   }
 }

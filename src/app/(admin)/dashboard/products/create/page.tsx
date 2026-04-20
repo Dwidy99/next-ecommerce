@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import { getBrands } from "../../brands/lib/data";
 import { getCategories } from "../../categories/lib/data";
-import { getLocations } from "@/modules/locations/data";
+import { getLocations } from "../../locations/lib/data";
 
 export default async function CreatePage() {
   const brands = await getBrands();

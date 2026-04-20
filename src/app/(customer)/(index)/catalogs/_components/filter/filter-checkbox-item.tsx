@@ -81,7 +81,7 @@ export default function FilterCheckboxItem({
   return (
     <label
       htmlFor={id + value}
-      className="font-semibold flex items-center gap-3"
+      className="flex items-center gap-3 font-semibold text-slate-700"
     >
       <input
         type="checkbox"
@@ -89,7 +89,7 @@ export default function FilterCheckboxItem({
         value={id}
         name={type}
         onChange={onChange}
-        className="w-6 h-6 flex shrink-0 appearance-none checked:border-[3px] checked:border-solid checked:border-white rounded-md checked:bg-[#0D5CD7] ring-1 ring-[#0D5CD7]"
+        className="flex h-5 w-5 shrink-0 appearance-none rounded-md ring-1 ring-[#FFC736] checked:border-[3px] checked:border-solid checked:border-white checked:bg-[#FFC736]"
       />
       <span>{value}</span>
     </label>
