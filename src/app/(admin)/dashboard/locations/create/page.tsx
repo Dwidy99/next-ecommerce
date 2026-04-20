@@ -1,10 +1,3 @@
-import React from "react";
-import FormLocation from "../_components/form-location";
+import { LocationCreatePage } from "@/modules/locations/components/location-create-page"
 
-export default function page() {
-  return (
-    <div>
-      <FormLocation />
-    </div>
-  );
-}
+export default LocationCreatePage

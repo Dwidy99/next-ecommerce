@@ -10,7 +10,7 @@ import {
 import FormProduct from "../../_components/form-product";
 import { getBrands } from "../../../brands/lib/data";
 import { getCategories } from "../../../categories/lib/data";
-import { getLocations } from "../../../locations/lib/data";
+import { getLocations } from "@/modules/locations/data";
 import { getProductById } from "../../lib/data";
 import { redirect } from "next/navigation";
 
