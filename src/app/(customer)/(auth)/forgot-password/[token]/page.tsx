@@ -16,6 +16,10 @@ export default async function ResetPasswordPage({ params }: Props) {
             Token Invalid
           </h1>
           <p className="text-gray-600">{check.error}</p>
+          <p className="mt-4 text-sm text-gray-500">
+            If the problem continues, request a new reset link from the forgot
+            password page.
+          </p>
         </div>
       </main>
     );

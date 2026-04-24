@@ -3,13 +3,24 @@
 import { prisma } from "lib/prisma";
 
 export async function verifyResetToken(token: string) {
-  const record = await prisma.userToken.findUnique({
-    where: { token },
-    include: { user: true },
-  });
+  try {
+    const record = await prisma.userToken.findUnique({
+      where: { token },
+      include: { user: true },
+    });
 
-  if (!record) return { error: "Invalid or expired reset token" };
-  if (record.expires < new Date()) return { error: "Reset token has expired" };
+    if (!record) return { error: "Invalid or expired reset token" };
+    if (record.expires < new Date()) {
+      return { error: "Reset token has expired" };
+    }
 
-  return { user: record.user };
+    return { user: record.user };
+  } catch (error) {
+    console.error("Failed to verify reset password token:", error);
+
+    return {
+      error:
+        "We could not verify this reset link right now. Please try again later.",
+    };
+  }
 }

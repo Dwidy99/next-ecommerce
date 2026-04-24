@@ -35,6 +35,16 @@ export async function ForgotPasswordAction(_: unknown, formData: FormData) {
     },
   });
 
-  await sendResetPasswordEmail(user.email, token, user.name);
+  try {
+    await sendResetPasswordEmail(user.email, token, user.name);
+  } catch (error) {
+    console.error("Failed to send reset password email:", error);
+
+    return {
+      error:
+        "We could not send the reset link right now. Please try again later.",
+    };
+  }
+
   redirect("/forgot-password/sent");
 }

@@ -23,6 +23,12 @@ function createResetPasswordUrl(token: string) {
   return `${getAppBaseUrl()}/forgot-password/${token}`;
 }
 
+function getResetPasswordSender() {
+  return (
+    process.env.RESEND_FROM_EMAIL || "Shopverse Studio <onboarding@resend.dev>"
+  );
+}
+
 export async function sendResetPasswordEmail(
   to: string,
   token: string,
@@ -35,13 +41,16 @@ export async function sendResetPasswordEmail(
   const resend = new Resend(process.env.RESEND_API_KEY);
   const resetLink = createResetPasswordUrl(token);
 
-  await resend.emails.send({
-    from:
-      process.env.NODE_ENV === "production"
-        ? "Shopverse Studio <no-reply@shopverse.com>"
-        : "Shopverse Studio <onboarding@resend.dev>",
+  const result = await resend.emails.send({
+    from: getResetPasswordSender(),
     to,
     subject: "Reset your password",
     html: resetPasswordEmailTemplate({ name, resetLink }),
   });
+
+  if (result.error) {
+    throw new Error(result.error.message || "Failed to send reset email");
+  }
+
+  console.log("Reset password email sent:", result.data?.id);
 }

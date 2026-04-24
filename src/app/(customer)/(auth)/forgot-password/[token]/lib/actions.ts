@@ -18,24 +18,33 @@ export async function ResetPasswordAction(
   }
   if (password !== confirm) return { error: "Passwords do not match" };
 
-  const record = await prisma.userToken.findUnique({
-    where: { token },
-    include: { user: true },
-  });
+  try {
+    const record = await prisma.userToken.findUnique({
+      where: { token },
+      include: { user: true },
+    });
 
-  if (!record) return { error: "Invalid or expired reset token" };
-  if (record.expires < new Date()) return { error: "Token has expired" };
+    if (!record) return { error: "Invalid or expired reset token" };
+    if (record.expires < new Date()) return { error: "Token has expired" };
 
-  const hash = await bcrypt.hash(password, 12);
+    const hash = await bcrypt.hash(password, 12);
 
-  await prisma.user.update({
-    where: { id: record.userId },
-    data: { password: hash },
-  });
+    await prisma.user.update({
+      where: { id: record.userId },
+      data: { password: hash },
+    });
 
-  await prisma.userToken.delete({
-    where: { id: record.id },
-  });
+    await prisma.userToken.delete({
+      where: { id: record.id },
+    });
+  } catch (error) {
+    console.error("Failed to reset customer password:", error);
+
+    return {
+      error:
+        "We could not reset your password right now. Please try again later.",
+    };
+  }
 
   return redirect("/reset-password-success");
 }
