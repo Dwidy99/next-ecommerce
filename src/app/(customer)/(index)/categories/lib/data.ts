@@ -1,3 +1,4 @@
+import { getImageUrl } from "@/lib/supabase"
 import { prisma } from "lib/prisma"
 
 export async function fetchCategoriesWithProducts() {
@@ -30,7 +31,7 @@ export async function fetchCategoriesWithProducts() {
                 id: p.id,
                 name: p.name,
                 price: Number(p.price),
-                image_url: p.images?.[0] ?? "/assets/products/placeholder.png",
+                image_url: getImageUrl(p.images?.[0] ?? "", "products"),
                 category_name: p.category.name,
             })),
         }))

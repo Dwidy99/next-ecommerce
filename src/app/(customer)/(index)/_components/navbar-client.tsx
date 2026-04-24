@@ -90,16 +90,17 @@ export default function NavbarClient({
 
 function NavbarLogo({ site }: { site: NavbarSite }) {
   return (
-    <Link href="/" className="flex items-center gap-3">
-      <Image
-        src={site.logo || "/assets/logos/logos.svg"}
-        alt={site.webname}
-        width={120}
-        height={40}
-        className="h-9 w-auto object-contain sm:h-10"
-      />
-      <span className="hidden text-sm font-bold text-white xl:block">
-        {site.webname}
+    <Link href="/" className="flex items-center">
+      <span className="rounded-full border border-[#FFD86E] bg-[#FFE9A3] p-[2px] shadow-[0_0_0_3px_rgba(255,199,54,0.16)]">
+        <span className="flex min-h-12 items-center justify-center rounded-full bg-[#110843] px-4 py-2">
+          <Image
+            src="/assets/logos/logos.svg"
+            alt={site.webname}
+            width={118}
+            height={31}
+            className="h-8 w-auto object-contain sm:h-9"
+          />
+        </span>
       </span>
     </Link>
   );

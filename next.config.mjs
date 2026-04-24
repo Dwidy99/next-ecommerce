@@ -1,20 +1,18 @@
+const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+  : null
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-
-  // ✅ Masih boleh, tapi gunakan hanya jika perlu
   typescript: {
     ignoreBuildErrors: true,
   },
-
-  // ✅ Server Actions (masih experimental, aman digunakan)
   experimental: {
     serverActions: {
       bodySizeLimit: "2mb",
     },
   },
-
-  // ✅ Ganti images.domains → remotePatterns
   images: {
     remotePatterns: [
       {
@@ -29,14 +27,16 @@ const nextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
-      {
-        protocol: "https",
-        hostname: "*.supabase.co",
-      },
+      ...(supabaseHost
+        ? [
+            {
+              protocol: "https",
+              hostname: supabaseHost,
+            },
+          ]
+        : []),
     ],
   },
-
-  // ✅ Security headers
   async headers() {
     return [
       {
@@ -46,8 +46,8 @@ const nextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
         ],
       },
-    ];
+    ]
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

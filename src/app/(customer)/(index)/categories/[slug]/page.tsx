@@ -4,6 +4,7 @@ import CardProduct from "../../_components/card-product";
 import NoData from "../../_components/no-data";
 import { getCategoryBySlug } from "../lib/data";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
+import { getImageUrl } from "@/lib/supabase";
 
 export const dynamicParams = true;
 
@@ -41,10 +42,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     id: p.id,
     name: p.name,
     price: Number(p.price),
-    image_url:
-      typeof p.images === "string" && p.images
-        ? p.images
-        : "/assets/products/placeholder.svg",
+    image_url: getImageUrl(p.images?.[0] ?? "", "products"),
     category_name: p.category.name,
   }));
 

@@ -9,17 +9,85 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey)
 
+const SUPABASE_BUCKET_PUBLIC_PREFIX = "/storage/v1/object/public/e-commerce/"
+const fallbackImageByPath = {
+  brands: "/assets/logos/logos.svg",
+  products: "/assets/products/placeholder.svg",
+  users: "/assets/icons/profile-circle.svg",
+} satisfies Record<"brands" | "products" | "users", string>
+
+function normalizeStoragePath(
+  name: string,
+  path: "brands" | "products" | "users"
+) {
+  const value = name.trim()
+
+  if (!value) return ""
+
+  if (/^https?:\/\//i.test(value)) {
+    return value
+  }
+
+  const cleanName = value.replace(/^\/+/, "")
+
+  if (cleanName.startsWith("assets/")) {
+    return `/${cleanName}`
+  }
+
+  if (cleanName.startsWith("uploads/")) {
+    return fallbackImageByPath[path]
+  }
+
+  const prefixes = [
+    `public/${path}/`,
+    `${path}/`,
+    "public/",
+  ]
+
+  const normalizedName = prefixes.reduce((result, prefix) => {
+    return result.startsWith(prefix) ? result.slice(prefix.length) : result
+  }, cleanName)
+
+  return `public/${path}/${normalizedName}`
+}
+
+function extractSupabaseStoragePath(value: string) {
+  try {
+    const url = new URL(value)
+    const marker = "/storage/v1/object/public/e-commerce/"
+    const markerIndex = url.pathname.indexOf(marker)
+
+    if (markerIndex === -1) return ""
+
+    return url.pathname.slice(markerIndex + marker.length)
+  } catch {
+    return ""
+  }
+}
+
 export const getImageUrl = (
   name: string,
   path: "brands" | "products" | "users"
 ) => {
   if (!name) return "";
 
-  const cleanName = name.replace(/^\/+/, ""); // remove leading slash
+  const value = name.trim()
+
+  if (!value) return ""
+
+  const normalizedPath = value.includes(SUPABASE_BUCKET_PUBLIC_PREFIX)
+    ? normalizeStoragePath(extractSupabaseStoragePath(value), path)
+    : normalizeStoragePath(value, path)
+
+  if (!normalizedPath) return ""
+
+  if (normalizedPath.startsWith("/")) {
+    return normalizedPath
+  }
 
   const { data } = supabase.storage
     .from("e-commerce")
-    .getPublicUrl(`public/${path}/${cleanName}`);
+    .getPublicUrl(normalizedPath);
 
   return data.publicUrl;
 };
