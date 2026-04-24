@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+﻿const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcrypt");
 
 const prisma = new PrismaClient();
@@ -15,7 +15,7 @@ function slugify(text) {
 }
 
 async function main() {
-  console.log("🚀 Starting Prisma Seeder (English Data)...");
+  console.log("ðŸš€ Starting Prisma Seeder (English Data)...");
 
   await prisma.orderProduct.deleteMany();
   await prisma.orderDetail.deleteMany();
@@ -27,9 +27,9 @@ async function main() {
   await prisma.user.deleteMany();
   await prisma.configuration.deleteMany();
 
-  console.log("🧹 Existing data cleared");
+  console.log("ðŸ§¹ Existing data cleared");
 
-  // 1️⃣ Superadmin User
+  // 1ï¸âƒ£ Superadmin User
   const adminEmail = "admin@example.com";
   const existingAdmin = await prisma.user.findUnique({
     where: { email: adminEmail },
@@ -54,13 +54,13 @@ async function main() {
       ],
     });
     console.log(
-      "✅ Superadmin user created (email: admin@example.com | pass: Admin123!)"
+      "âœ… Superadmin user created (email: admin@example.com | pass: Admin123!)"
     );
   } else {
-    console.log("ℹ️ Superadmin already exists");
+    console.log("â„¹ï¸ Superadmin already exists");
   }
 
-  // 2️⃣ Brands
+  // 2ï¸âƒ£ Brands
   const brands = [
     { name: "TechNova", logo: "/uploads/brand-technova.png" },
     { name: "UrbanStyle", logo: "/uploads/brand-urbanstyle.png" },
@@ -72,11 +72,11 @@ async function main() {
     });
     if (!existing) {
       await prisma.brand.create({ data: brand });
-      console.log(`✅ Brand created: ${brand.name}`);
+      console.log(`âœ… Brand created: ${brand.name}`);
     }
   }
 
-  // 3️⃣ Categories
+  // 3ï¸âƒ£ Categories
   const categories = [
     { name: "Electronics" },
     { name: "Fashion" },
@@ -90,11 +90,11 @@ async function main() {
       await prisma.category.create({
         data: { ...cat, slug: slugify(cat.name) },
       });
-      console.log(`✅ Category created: ${cat.name}`);
+      console.log(`âœ… Category created: ${cat.name}`);
     }
   }
 
-  // 4️⃣ Locations
+  // 4ï¸âƒ£ Locations
   const locations = [
     { name: "New York Warehouse" },
     { name: "Los Angeles Store" },
@@ -105,11 +105,11 @@ async function main() {
     });
     if (!existing) {
       await prisma.location.create({ data: loc });
-      console.log(`✅ Location created: ${loc.name}`);
+      console.log(`âœ… Location created: ${loc.name}`);
     }
   }
 
-  // 5️⃣ Products
+  // 5ï¸âƒ£ Products
   const brandTech = await prisma.brand.findFirst({
     where: { name: "TechNova" },
   });
@@ -198,11 +198,11 @@ async function main() {
       await prisma.product.create({
         data: { ...product, slug: slugify(product.name) },
       });
-      console.log(`✅ Product created: ${product.name}`);
+      console.log(`âœ… Product created: ${product.name}`);
     }
   }
 
-  // 6️⃣ Configuration (Site Meta)
+  // 6ï¸âƒ£ Configuration (Site Meta)
   await prisma.configuration.deleteMany(); // paksa clear
 
   await prisma.configuration.create({
@@ -216,21 +216,22 @@ async function main() {
       website: "https://nextcommerce.example.com",
       email: "support@nextcommerce.com",
       logo: "/uploads/logo.png",
-      icon: "/uploads/favicon.ico",
+      icon: "/favicon.ico",
       keywords: "ecommerce, online shopping, nextcommerce",
       metatext:
         "Discover the latest trends in tech, fashion, and home essentials with Next Commerce.",
     },
   });
-  console.log("✅ Default configuration created");
+  console.log("âœ… Default configuration created");
 }
 
 main()
   .catch((e) => {
-    console.error("❌ Seeding failed:", e);
+    console.error("âŒ Seeding failed:", e);
     process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();
-    console.log("🌱 Seeding complete!");
+    console.log("ðŸŒ± Seeding complete!");
   });
+

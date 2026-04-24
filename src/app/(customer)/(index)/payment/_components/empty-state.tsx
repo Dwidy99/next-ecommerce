@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, ArrowLeft } from "lucide-react";
+import { ArrowLeft, ShoppingCart } from "lucide-react";
 
 type EmptyStateProps = {
   title?: string;
@@ -15,51 +15,59 @@ type EmptyStateProps = {
 
 export default function EmptyState({
   title = "No transactions yet",
-  message = "You haven't made any purchases yet. Start exploring our products and find what you love!",
+  message = "You have not made any purchases yet. Start exploring our products and find something worth checking out.",
   actionLabel = "Go Shopping",
   actionHref = "/catalogs",
   showBackButton = false,
 }: EmptyStateProps) {
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-6 py-20">
-      {/* 🔹 Illustration */}
-      <div className="relative w-52 h-52 md:w-64 md:h-64 mb-8">
-        <Image
-          src="/assets/icons/empty-cart.svg"
-          alt="Empty state illustration"
-          fill
-          className="object-contain opacity-90"
-          priority
-        />
+    <main className="bg-[#f7f4ea] px-4 py-12 md:px-6 md:py-16">
+      <div className="mx-auto flex min-h-[70vh] w-full max-w-4xl items-center justify-center">
+        <div className="w-full overflow-hidden rounded-[2rem] border border-[#f1d78a] bg-white shadow-[0_24px_80px_rgba(17,8,67,0.08)]">
+          <div className="bg-[#110843] px-6 py-10 text-center text-white md:px-10">
+            <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-[#FFC736]">
+              Purchase History
+            </span>
+            <h1 className="mt-5 text-3xl font-bold md:text-4xl">{title}</h1>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-white/75 md:text-base">
+              {message}
+            </p>
+          </div>
+
+          <div className="flex flex-col items-center px-6 py-10 text-center md:px-10">
+            <div className="relative mb-8 h-52 w-52 md:h-64 md:w-64">
+              <Image
+                src="/assets/icons/empty-cart.svg"
+                alt="Empty state illustration"
+                fill
+                className="object-contain opacity-95"
+                priority
+              />
+            </div>
+
+            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link href={actionHref}>
+                <Button className="h-12 rounded-full bg-[#110843] px-6 text-white hover:bg-[#24105f]">
+                  <ShoppingCart className="mr-2 h-4 w-4" />
+                  {actionLabel}
+                </Button>
+              </Link>
+
+              {showBackButton && (
+                <Link href="/">
+                  <Button
+                    variant="outline"
+                    className="h-12 rounded-full border-[#110843]/15 px-6 text-[#110843] hover:bg-[#110843]/5"
+                  >
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back Home
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-
-      {/* 🔹 Text */}
-      <h1 className="text-2xl md:text-3xl font-bold text-[#110843] mb-3">
-        {title}
-      </h1>
-      <p className="text-gray-600 text-sm md:text-base max-w-md mb-8 leading-relaxed">
-        {message}
-      </p>
-
-      {/* 🔹 Actions */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <Link href={actionHref}>
-          <Button className="flex items-center gap-2 bg-[#110843] hover:bg-[#2b127a] text-white rounded-full px-6 py-3">
-            <ShoppingCart className="w-4 h-4" /> {actionLabel}
-          </Button>
-        </Link>
-
-        {showBackButton && (
-          <Link href="/">
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 rounded-full border-[#110843] text-[#110843] hover:bg-[#110843]/5 px-6 py-3"
-            >
-              <ArrowLeft className="w-4 h-4" /> Back Home
-            </Button>
-          </Link>
-        )}
-      </div>
-    </div>
+    </main>
   );
 }

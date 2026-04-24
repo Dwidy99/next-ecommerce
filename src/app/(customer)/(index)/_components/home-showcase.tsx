@@ -1,7 +1,7 @@
-import { rupiahFormat } from "@/lib/utils"
-import Image from "next/image"
-import Link from "next/link"
-import { getBrands, getCategories, getProducts } from "../lib/data"
+import { rupiahFormat } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import { getBrands, getCategories, getProducts } from "../lib/data";
 
 const benefits = [
   {
@@ -29,7 +29,7 @@ const benefits = [
     title: "Delivery",
     description: "Track orders",
   },
-]
+];
 
 const categoryIcons = [
   "/assets/icons/mobile.svg",
@@ -40,7 +40,7 @@ const categoryIcons = [
   "/assets/icons/lamp.svg",
   "/assets/icons/box.svg",
   "/assets/icons/tag.svg",
-]
+];
 
 const promoTiles = [
   {
@@ -71,9 +71,10 @@ const promoTiles = [
   {
     title: "Need a Bulk Order?",
     subtitle: "Talk with us for team and community packages.",
-    image: "/assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png",
+    image:
+      "/assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png",
   },
-]
+];
 
 const articles = [
   {
@@ -91,16 +92,16 @@ const articles = [
     image: "/assets/banners/3.jpg",
     meta: "Review • 3 min read",
   },
-]
+];
 
 function SectionTitle({
   title,
   highlight,
   description,
 }: {
-  title: string
-  highlight?: string
-  description?: string
+  title: string;
+  highlight?: string;
+  description?: string;
 }) {
   return (
     <div className="mx-auto mb-7 flex w-full max-w-3xl items-center gap-4 text-center">
@@ -116,7 +117,7 @@ function SectionTitle({
       </div>
       <div className="h-px flex-1 bg-slate-300" />
     </div>
-  )
+  );
 }
 
 export function HomeTopStrip() {
@@ -128,7 +129,7 @@ export function HomeTopStrip() {
         <span className="text-[#FFC736]">Online support</span>
       </div>
     </div>
-  )
+  );
 }
 
 export function HomeHero() {
@@ -148,27 +149,27 @@ export function HomeHero() {
         <div className="absolute inset-0 flex items-center px-6 md:px-14">
           <div className="max-w-2xl">
             <p className="mb-4 inline-flex rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-[#FFC736] backdrop-blur">
-              Shopverse picks
+              Shopverse Picks
             </p>
             <h1 className="text-3xl font-extrabold leading-tight text-white md:text-5xl">
-              Temukan gadget pilihan untuk kerja, belajar, dan hiburan.
+              Discover curated gadgets for work, study, and entertainment.
             </h1>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/80 md:text-base">
-              Belanja produk berkualitas dengan kategori rapi, checkout cepat,
-              dan pengalaman katalog yang nyaman.
+              Shop quality products with organized categories, fast checkout,
+              and a smoother catalog experience.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href="/catalogs"
                 className="rounded-md bg-[#FFC736] px-7 py-3 text-sm font-bold text-[#110843] shadow-lg shadow-yellow-950/20 transition hover:bg-[#ffda63]"
               >
-                Klik untuk Selengkapnya
+                Explore Now
               </Link>
               <Link
                 href="/carts"
                 className="rounded-md bg-white/15 px-7 py-3 text-sm font-bold text-white ring-1 ring-white/30 backdrop-blur transition hover:bg-white/25"
               >
-                Lihat Keranjang
+                View Cart
               </Link>
             </div>
           </div>
@@ -185,7 +186,7 @@ export function HomeHero() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 export function BenefitStrip() {
@@ -210,20 +211,20 @@ export function BenefitStrip() {
         </div>
       ))}
     </section>
-  )
+  );
 }
 
 export async function CompactCategoryGrid() {
-  const categories = await getCategories()
+  const categories = await getCategories();
 
-  if (categories.length === 0) return null
+  if (categories.length === 0) return null;
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-6 md:px-6">
       <SectionTitle
-        title="Kategori"
-        highlight="Produk"
-        description="Pilih kategori yang paling sesuai dengan kebutuhanmu."
+        title="Product"
+        highlight="Categories"
+        description="Choose the category that best fits your needs."
       />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
         {categories.slice(0, 10).map((category: any, index: number) => (
@@ -257,14 +258,14 @@ export async function CompactCategoryGrid() {
                   index === 7 ? "text-white/65" : "text-slate-500"
                 }`}
               >
-                {category._count?.products ?? 0} item
+                {category._count?.products ?? 0} items
               </span>
             </span>
           </Link>
         ))}
       </div>
     </section>
-  )
+  );
 }
 
 export function PromoMosaic() {
@@ -299,7 +300,7 @@ export function PromoMosaic() {
               </p>
               {index === 5 && (
                 <span className="mt-5 w-fit rounded-md bg-[#FFC736] px-5 py-2 text-sm font-bold text-[#110843]">
-                  Info Selengkapnya
+                  Learn More
                 </span>
               )}
             </div>
@@ -307,20 +308,20 @@ export function PromoMosaic() {
         ))}
       </div>
     </section>
-  )
+  );
 }
 
 export async function ProductScroller() {
-  const products = await getProducts()
+  const products = await getProducts();
 
-  if (products.length === 0) return null
+  if (products.length === 0) return null;
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
       <SectionTitle
-        title="Merchandise"
-        highlight="Terlaris"
-        description="Produk populer yang paling sering dilihat pelanggan."
+        title="Best-Selling"
+        highlight="Products"
+        description="Popular products customers view the most."
       />
       <div className="flex gap-4 overflow-x-auto pb-5">
         {products.slice(0, 8).map((product: any, index: number) => (
@@ -352,45 +353,40 @@ export async function ProductScroller() {
                 {rupiahFormat(Number(product.price))}
               </p>
               <span className="mt-4 block rounded-md bg-[#FFC736] py-2 text-center text-xs font-bold text-[#110843] transition group-hover:bg-[#ffda63]">
-                Add to Buy
+                View Product
               </span>
             </div>
           </Link>
         ))}
       </div>
     </section>
-  )
+  );
 }
 
 export async function CollaborationSection() {
-  const brands = await getBrands()
+  const brands = await getBrands();
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
       <SectionTitle
-        title="Kolaborasi"
-        description="Partner dan brand yang tersedia di katalog Shopverse."
+        title="Collaboration"
+        description="Partners and brands available in the Shopverse catalog."
       />
       <div className="grid gap-4 md:grid-cols-3">
-        {["Kolaborasi", "Potensi", "Manfaat"].map((title, index) => (
+        {["Collaboration", "Potential", "Benefits"].map((title, index) => (
           <div
             key={title}
             className="rounded-xl bg-white p-7 text-center shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:ring-[#FFC736]"
           >
             <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#FFF4CC]">
-              <Image
-                src={benefits[index].icon}
-                alt=""
-                width={18}
-                height={18}
-              />
+              <Image src={benefits[index].icon} alt="" width={18} height={18} />
             </div>
             <h3 className="font-bold uppercase tracking-wide text-slate-950">
               {title}
             </h3>
             <p className="mt-2 text-sm leading-6 text-slate-500">
-              Bangun pengalaman belanja yang rapi, cepat, dan mudah
-              dikembangkan.
+              Build a shopping experience that feels organized, fast, and easy
+              to scale.
             </p>
           </div>
         ))}
@@ -415,16 +411,16 @@ export async function CollaborationSection() {
         </div>
       )}
     </section>
-  )
+  );
 }
 
 export function ArticleSection() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
       <SectionTitle
-        title="Artikel"
-        highlight="Terbaru"
-        description="Inspirasi singkat untuk memilih produk dengan lebih percaya diri."
+        title="Latest"
+        highlight="Articles"
+        description="Short inspiration to help customers choose products with more confidence."
       />
       <div className="grid gap-4 md:grid-cols-3">
         {articles.map((article) => (
@@ -451,6 +447,5 @@ export function ArticleSection() {
         ))}
       </div>
     </section>
-  )
+  );
 }
-
