@@ -71,7 +71,11 @@ export default function NavbarClient({
 
       <nav className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl border-t border-gray-200 bg-white shadow-[0_-4px_10px_rgba(0,0,0,0.08)] md:hidden">
         <div className="flex items-center justify-around px-1 py-2">
-          <MobileNavItem href="/" icon={<Home className="h-6 w-6" />} label="Home" />
+          <MobileNavItem
+            href="/"
+            icon={<Home className="h-6 w-6" />}
+            label="Home"
+          />
           <MobileNavItem
             href="/catalogs"
             icon={<ShoppingBag className="h-6 w-6" />}
@@ -105,10 +109,7 @@ function NavbarLogo({ site }: { site: NavbarSite }) {
 }
 
 function NavbarLinks() {
-  const items = [
-    { label: "Home", href: "/" },
-    { label: "Catalogs", href: "/catalogs" },
-  ];
+  const items = [{ label: "Catalogs", href: "/catalogs" }];
 
   return (
     <nav className="flex items-center gap-6 xl:gap-8">
@@ -282,7 +283,11 @@ function MobileNavItem({
   );
 }
 
-function MobileCategoriesMenu({ categories }: { categories: NavbarCategory[] }) {
+function MobileCategoriesMenu({
+  categories,
+}: {
+  categories: NavbarCategory[];
+}) {
   const [open, setOpen] = useState(false);
 
   return (
