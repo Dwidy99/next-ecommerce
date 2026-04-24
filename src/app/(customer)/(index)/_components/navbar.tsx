@@ -1,26 +1,39 @@
 import { getUser } from "@/lib/auth";
-import { getErrorMessage, warnOnce } from "@/lib/error-message";
-import { prisma } from "lib/prisma";
+import { getSiteConfig } from "@/lib/seo/config";
+import { getCategories } from "../lib/data";
 import NavbarClient from "./navbar-client";
 
 export default async function Navbar() {
   const { user } = await getUser();
+  const categoriesData = await getCategories();
+  const siteConfig = await getSiteConfig("ID");
 
-  const categories = await prisma.category
-    .findMany({
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-      },
-      orderBy: {
-        name: "asc",
-      },
-    })
-    .catch((error) => {
-      warnOnce(`Failed to load navbar categories. ${getErrorMessage(error)}`);
-      return [];
-    });
+  const site = {
+    webname: siteConfig.shortName || siteConfig.title || "Shopverse",
+    logo: siteConfig.logo || null,
+  };
 
-  return <NavbarClient user={user} categories={categories} />;
+  const categories = categoriesData.map((category: any) => ({
+    id: category.id,
+    name: category.name,
+    slug: category.slug,
+  }));
+
+  const navbarUser = user
+    ? {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        image: user.image ?? null,
+      }
+    : null;
+
+  return (
+    <NavbarClient
+      user={navbarUser}
+      categories={categories}
+      site={site}
+    />
+  );
 }
