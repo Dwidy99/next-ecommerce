@@ -215,7 +215,7 @@ async function main() {
         "Next Commerce is a modern e-commerce platform built with Next.js and Prisma.",
       website: "https://nextcommerce.example.com",
       email: "support@nextcommerce.com",
-      logo: "/uploads/logo.png",
+      logo: "/assets/logos/logos-black.svg",
       icon: "/favicon.ico",
       keywords: "ecommerce, online shopping, nextcommerce",
       metatext:

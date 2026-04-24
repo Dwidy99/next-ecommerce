@@ -1,3 +1,5 @@
+import fs from "node:fs"
+import path from "node:path"
 import { prisma } from "lib/prisma"
 import { getErrorMessage, warnOnce } from "@/lib/error-message"
 
@@ -28,8 +30,19 @@ const fallbackSiteConfig: SiteConfig = {
         process.env.NEXT_PUBLIC_BASE_URL ||
         process.env.NEXT_PUBLIC_REDIRECT_URL ||
         "https://example.com",
+    logo: "/assets/logos/logos-black.svg",
     icon: "/favicon.ico",
     social: {},
+}
+
+function resolvePublicAsset(assetPath?: string | null, fallback?: string) {
+    if (!assetPath) return fallback
+    if (!assetPath.startsWith("/")) return assetPath
+
+    const relativePath = assetPath.replace(/^\/+/, "")
+    const absolutePath = path.join(process.cwd(), "public", relativePath)
+
+    return fs.existsSync(absolutePath) ? assetPath : fallback
 }
 
 export async function getSiteConfig(lang: "ID" | "EN" = "ID"): Promise<SiteConfig> {
@@ -52,8 +65,8 @@ export async function getSiteConfig(lang: "ID" | "EN" = "ID"): Promise<SiteConfi
             url: config.website && config.website.trim() !== ""
                 ? config.website
                 : fallbackSiteConfig.url,
-            logo: config.logo ?? undefined,
-            icon: config.icon ?? fallbackSiteConfig.icon,
+            logo: resolvePublicAsset(config.logo, fallbackSiteConfig.logo),
+            icon: resolvePublicAsset(config.icon, fallbackSiteConfig.icon),
             social: {
                 facebook: config.facebook ?? undefined,
                 twitter: config.twitter ?? undefined,
