@@ -1,5 +1,49 @@
 import { getImageUrl } from "@/lib/supabase"
 import { prisma } from "lib/prisma"
+import type { CustomerProductItem } from "../../lib/data"
+
+type CategoryWithProductsItem = {
+    id: number
+    name: string
+    slug: string
+    products: CustomerProductItem[]
+}
+
+function createCategorySlug(name: string, slug: string | null) {
+    return slug ?? name.toLowerCase().replace(/\s+/g, "-")
+}
+
+function mapCategoryProduct(product: {
+    id: number
+    name: string
+    price: bigint | number
+    images?: string[] | null
+    category: {
+        name: string
+    }
+}): CustomerProductItem {
+    return {
+        id: product.id,
+        name: product.name,
+        price: Number(product.price),
+        image_url: getImageUrl(product.images?.[0] ?? "", "products"),
+        category_name: product.category.name,
+    }
+}
+
+export function formatCategoryProducts(
+    products: Array<{
+        id: number
+        name: string
+        price: bigint | number
+        images?: string[] | null
+        category: {
+            name: string
+        }
+    }>
+): CustomerProductItem[] {
+    return products.map(mapCategoryProduct)
+}
 
 export async function fetchCategoriesWithProducts() {
     try {
@@ -22,28 +66,20 @@ export async function fetchCategoriesWithProducts() {
             orderBy: { name: "asc" },
         })
 
-        const formatted = categories.map((cat) => ({
-            id: cat.id,
-            name: cat.name,
-            // 🧩 Fallback jika slug null
-            slug: cat.slug ?? cat.name.toLowerCase().replace(/\s+/g, "-"),
-            products: cat.products.map((p) => ({
-                id: p.id,
-                name: p.name,
-                price: Number(p.price),
-                image_url: getImageUrl(p.images?.[0] ?? "", "products"),
-                category_name: p.category.name,
-            })),
+        const formatted: CategoryWithProductsItem[] = categories.map((category) => ({
+            id: category.id,
+            name: category.name,
+            slug: createCategorySlug(category.name, category.slug),
+            products: formatCategoryProducts(category.products),
         }))
 
         return formatted
     } catch (error) {
-        console.error("❌ Error fetching categories:", error)
+        console.error("Error fetching categories:", error)
         return []
     }
 }
 
-// 🔹 Ambil 1 kategori berdasarkan slug (beserta produk)
 export async function getCategoryBySlug(slug: string) {
     return await prisma.category.findUnique({
         where: { slug },
@@ -70,10 +106,12 @@ export async function getAllCategorySlugs() {
     const categories = await prisma.category.findMany({
         select: { slug: true },
     })
-    return categories.map((c) => ({ slug: c.slug }))
+
+    return categories.map((category) => ({
+        slug: category.slug,
+    }))
 }
 
-// 🔹 Ambil nama kategori untuk metadata
 export async function getCategoryMeta(slug: string) {
     return prisma.category.findUnique({
         where: { slug },

@@ -2,9 +2,8 @@ import React from "react";
 import Navbar from "../../_components/navbar";
 import CardProduct from "../../_components/card-product";
 import NoData from "../../_components/no-data";
-import { getCategoryBySlug } from "../lib/data";
+import { formatCategoryProducts, getCategoryBySlug } from "../lib/data";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
-import { getImageUrl } from "@/lib/supabase";
 
 export const dynamicParams = true;
 
@@ -38,13 +37,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     );
   }
 
-  const products = (category.products ?? []).map((p) => ({
-    id: p.id,
-    name: p.name,
-    price: Number(p.price),
-    image_url: getImageUrl(p.images?.[0] ?? "", "products"),
-    category_name: p.category.name,
-  }));
+  const products = formatCategoryProducts(category.products ?? []);
 
   return (
     <>
@@ -63,7 +56,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
               {products.map((item) => (
-                <CardProduct key={item.id} item={item as any} />
+                <CardProduct key={item.id} item={item} />
               ))}
             </div>
           )}

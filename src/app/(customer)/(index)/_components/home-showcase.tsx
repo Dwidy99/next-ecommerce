@@ -1,7 +1,14 @@
 import { rupiahFormat } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { getBrands, getCategories, getProducts } from "../lib/data";
+import {
+  getBrands,
+  getCategories,
+  getProducts,
+  type CustomerBrandItem,
+  type CustomerCategoryItem,
+  type CustomerProductItem,
+} from "../lib/data";
 
 const benefits = [
   {
@@ -80,17 +87,17 @@ const articles = [
   {
     title: "How to Choose a Laptop for Work and Study",
     image: "/assets/banners/1.jpg",
-    meta: "Tips • 5 min read",
+    meta: "Tips - 5 min read",
   },
   {
     title: "Simple Ways to Build a Cleaner Desk Setup",
     image: "/assets/banners/2.jpg",
-    meta: "Guide • 4 min read",
+    meta: "Guide - 4 min read",
   },
   {
     title: "Accessories That Make Checkout Worth It",
     image: "/assets/banners/3.jpg",
-    meta: "Review • 3 min read",
+    meta: "Review - 3 min read",
   },
 ];
 
@@ -125,7 +132,7 @@ export function HomeTopStrip() {
     <div className="hidden bg-[#07111f] text-[11px] font-semibold uppercase tracking-[0.16em] text-white md:block">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
         <span>Shopverse Commerce</span>
-        <span>Gadget store • Bundle setup • Fast checkout</span>
+        <span>Gadget store - Bundle setup - Fast checkout</span>
         <span className="text-[#FFC736]">Online support</span>
       </div>
     </div>
@@ -227,7 +234,7 @@ export async function CompactCategoryGrid() {
         description="Choose the category that best fits your needs."
       />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
-        {categories.slice(0, 10).map((category: any, index: number) => (
+        {categories.slice(0, 10).map((category: CustomerCategoryItem, index) => (
           <Link
             key={category.id}
             href={`/categories/${category.slug ?? category.id}`}
@@ -258,7 +265,7 @@ export async function CompactCategoryGrid() {
                   index === 7 ? "text-white/65" : "text-slate-500"
                 }`}
               >
-                {category._count?.products ?? 0} items
+                {category.productCount} items
               </span>
             </span>
           </Link>
@@ -324,7 +331,7 @@ export async function ProductScroller() {
         description="Popular products customers view the most."
       />
       <div className="flex gap-4 overflow-x-auto pb-5">
-        {products.slice(0, 8).map((product: any, index: number) => (
+        {products.slice(0, 8).map((product: CustomerProductItem, index) => (
           <Link
             key={product.id}
             href={`/detail-product/${product.id}`}
@@ -347,10 +354,10 @@ export async function ProductScroller() {
                 {product.name}
               </p>
               <p className="mt-1 text-xs text-slate-500">
-                {product.category?.name ?? "Product"}
+                {product.category_name}
               </p>
               <p className="mt-3 text-sm font-extrabold text-[#d99000]">
-                {rupiahFormat(Number(product.price))}
+                {rupiahFormat(product.price)}
               </p>
               <span className="mt-4 block rounded-md bg-[#FFC736] py-2 text-center text-xs font-bold text-[#110843] transition group-hover:bg-[#ffda63]">
                 View Product
@@ -394,13 +401,13 @@ export async function CollaborationSection() {
 
       {brands.length > 0 && (
         <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {brands.slice(0, 4).map((brand: any) => (
+          {brands.slice(0, 4).map((brand: CustomerBrandItem) => (
             <div
               key={brand.id}
               className="flex min-h-[110px] items-center justify-center rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:ring-[#FFC736]"
             >
               <Image
-                src={brand.logo_url || "/assets/logos/logo-black.svg"}
+                src={brand.logo_url || "/assets/logos/logos-black.svg"}
                 alt={brand.logo}
                 width={180}
                 height={70}
