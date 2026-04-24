@@ -1,33 +1,35 @@
 import { Resend } from "resend";
-import { resetPasswordEmailTemplate } from "./email-templates/reset-password";
 
 if (!process.env.RESEND_API_KEY) {
-  throw new Error("❌ Missing RESEND_API_KEY in environment variables");
+  throw new Error("Missing RESEND_API_KEY in environment variables");
 }
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendResetPasswordEmail(to: string, token: string, name?: string) {
-  const resetLink = `${process.env.NEXT_PUBLIC_REDIRECT_URL}/forgot-password/${token}`;
+function getAppBaseUrl() {
+  const rawUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    process.env.NEXT_PUBLIC_REDIRECT_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "") ||
+    "http://localhost:3000";
 
   try {
-    const data = await resend.emails.send({
-      from: process.env.NODE_ENV === "production"
-        ? "Shopverse Studio <no-reply@shopverse.com>"
-        : "Shopverse Studio <onboarding@resend.dev>",
-      to,
-      subject: "Reset your password",
-      html: resetPasswordEmailTemplate({ name, resetLink }),
-    });
-
-    console.log("✅ Email sent:", data);
-  } catch (error) {
-    console.error("❌ Error sending email:", error);
+    const url = new URL(rawUrl);
+    url.pathname = "";
+    url.search = "";
+    url.hash = "";
+    return url.toString().replace(/\/$/, "");
+  } catch {
+    return "http://localhost:3000";
   }
 }
 
-export async function sendVerificationEmail(to: string, token: string, name?: string) {
-  const verifyLink = `${process.env.NEXT_PUBLIC_REDIRECT_URL}/verify-email/${token}`;
+export async function sendVerificationEmail(
+  to: string,
+  token: string,
+  name?: string,
+) {
+  const verifyLink = `${getAppBaseUrl()}/verify-email/${token}`;
 
   const html = `
   <!DOCTYPE html>
@@ -98,10 +100,10 @@ export async function sendVerificationEmail(to: string, token: string, name?: st
         <a href="${verifyLink}" target="_blank" class="button">Verify Email</a>
       </p>
       <p style="margin-top:30px;color:#999;font-size:13px">
-        If you didn’t request this, you can safely ignore this email. <br />
+        If you did not request this, you can safely ignore this email. <br />
         This link will expire in <strong>1 hour</strong>.
       </p>
-      <div class="footer">— Shopverse Team —</div>
+      <div class="footer">Shopverse Team</div>
     </div>
   </body>
   </html>
@@ -114,10 +116,5 @@ export async function sendVerificationEmail(to: string, token: string, name?: st
     html,
   });
 
-  console.log("✅ Verification email sent:", data);
+  console.log("Verification email sent:", data);
 }
-
-
-
-
-

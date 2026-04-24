@@ -3,14 +3,13 @@
 import { useFormState, useFormStatus } from "react-dom";
 import { ActionResult } from "@/types";
 import { Lock } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useCallback } from "react";
 import { ResetPasswordAction } from "../[token]/lib/actions";
 
 const initialState: ActionResult = { error: "" };
 
 function SubmitButton() {
   const { pending } = useFormStatus();
+
   return (
     <button
       type="submit"
@@ -22,24 +21,18 @@ function SubmitButton() {
   );
 }
 
-export default function ResetPasswordForm() {
-  const params = useParams<{ token: string }>();
-  const token = params.token;
+export default function ResetPasswordForm({ token }: { token: string }) {
+  const resetPassword = (_: ActionResult, formData: FormData) => {
+    return ResetPasswordAction(token, formData);
+  };
 
-  const action = useCallback(
-    (prevState: ActionResult, formData: FormData) =>
-      ResetPasswordAction(token, formData),
-    [token]
-  );
-
-  const [state, formAction] = useFormState(action, initialState);
+  const [state, formAction] = useFormState(resetPassword, initialState);
 
   return (
     <form
       action={formAction}
-      className="w-[500px] bg-white p-[50px_30px] flex flex-col gap-5 rounded-3xl border border-[#E5E5E5]"
+      className="flex w-full max-w-[500px] flex-col gap-5 rounded-3xl border border-[#E5E5E5] bg-white p-6 shadow-sm sm:p-[50px_30px]"
     >
-      {/* Header */}
       <div className="flex flex-col gap-2 items-center text-center">
         <img
           src="/assets/logos/logos-black.svg"
@@ -52,44 +45,35 @@ export default function ResetPasswordForm() {
         <p className="text-sm text-gray-500">Enter your new password below.</p>
       </div>
 
-      {/* Error Message */}
       {state.error && (
         <p className="text-red-500 text-sm bg-red-50 border border-red-200 p-2 rounded text-center">
           {state.error}
         </p>
       )}
 
-      {/* New Password */}
-      <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736]">
+      <div className="flex items-center gap-3 rounded-2xl border border-[#E5E5E5] px-4 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] sm:rounded-full sm:px-5">
         <Lock size={18} className="text-gray-600" />
         <input
           type="password"
           name="password"
           required
           placeholder="New password"
-          className="appearance-none outline-none w-full placeholder:text-[#616369] font-semibold text-black bg-transparent"
+          className="w-full appearance-none bg-transparent font-semibold text-black outline-none placeholder:text-[#616369]"
         />
       </div>
 
-      {/* Confirm Password */}
-      <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736]">
+      <div className="flex items-center gap-3 rounded-2xl border border-[#E5E5E5] px-4 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] sm:rounded-full sm:px-5">
         <Lock size={18} className="text-gray-600" />
         <input
           type="password"
           name="confirm"
           required
           placeholder="Confirm password"
-          className="appearance-none outline-none w-full placeholder:text-[#616369] font-semibold text-black bg-transparent"
+          className="w-full appearance-none bg-transparent font-semibold text-black outline-none placeholder:text-[#616369]"
         />
       </div>
 
       <SubmitButton />
-
-      {state.error === "" && (
-        <p className="text-sm text-green-600 text-center">
-          ✅ Password reset successfully. Redirecting...
-        </p>
-      )}
     </form>
   );
 }
