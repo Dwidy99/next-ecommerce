@@ -23,6 +23,7 @@ export const lucia = new Lucia(adapter, {
             name: attributes.name,
             email: attributes.email,
             role: attributes.role,
+            image: attributes.image,
         }
     }
 })
@@ -70,6 +71,7 @@ declare module "lucia" {
             name: string
             email: string
             role: RoleUser
+            image: string | null
         }
     }
 }
