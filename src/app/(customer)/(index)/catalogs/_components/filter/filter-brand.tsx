@@ -1,25 +1,13 @@
-import { getBrands } from "@/app/(admin)/dashboard/brands/lib/data";
 import React from "react";
+import { getFilterBrands } from "../../lib/filter-data";
 import FilterCheckboxItem from "./filter-checkbox-item";
 
 export default async function FilterBrand() {
-  const brands = await getBrands();
+  const brands = await getFilterBrands();
+
   return (
     <div className="flex flex-col p-4 gap-[14px]">
       {brands.map((brand) => (
-        //   <label
-        //     key={`${brand.name + brand.id}`}
-        //     htmlFor={`${brand.name + brand.id}`}
-        //     className="font-semibold flex items-center gap-3"
-        //   >
-        //     <input
-        //       type="checkbox"
-        //       name="brand"
-        //       value={brand.id}
-        //       className="w-6 h-6 flex shrink-0 appearance-none checked:border-[3px] checked:border-solid checked:border-white rounded-md checked:bg-[#0D5CD7] ring-1 ring-[#0D5CD7]"
-        //     />
-        //     <span>{brand.name}</span>
-        //   </label>
         <FilterCheckboxItem
           key={brand.id}
           id={brand.id.toString()}

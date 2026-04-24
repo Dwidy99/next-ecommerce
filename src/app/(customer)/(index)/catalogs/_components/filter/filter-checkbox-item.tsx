@@ -2,12 +2,14 @@
 
 import { useFilter } from "@/hooks/useFilter";
 import { ProductStock } from "@prisma/client";
-import React, { ChangeEvent } from "react";
+import type { ChangeEvent } from "react";
+
+type FilterType = "stock" | "brand" | "location" | "category";
 
 interface FilterCheckboxItemProps {
   id: string;
   value: string;
-  type?: "stock" | "brand" | "location" | "category";
+  type: FilterType;
 }
 
 export default function FilterCheckboxItem({
@@ -17,63 +19,41 @@ export default function FilterCheckboxItem({
 }: FilterCheckboxItemProps) {
   const { filter, setFilter } = useFilter();
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const valueId = event.target.value;
+    const checked = event.target.checked;
 
     switch (type) {
-      // 🟢 STOCK
       case "stock":
-        if (e.target.checked) {
-          setFilter({
-            stock: [...(filter?.stock ?? []), val as ProductStock],
-          });
-        } else {
-          setFilter({
-            stock: filter?.stock?.filter((s) => s !== val),
-          });
-        }
+        setFilter({
+          stock: checked
+            ? [...(filter?.stock ?? []), valueId as ProductStock]
+            : filter?.stock?.filter((stock) => stock !== valueId),
+        });
         break;
 
-      // 🟢 BRAND
       case "brand":
-        if (e.target.checked) {
-          setFilter({
-            brands: [...(filter?.brands ?? []), Number(val)],
-          });
-        } else {
-          setFilter({
-            brands: filter?.brands?.filter((b) => b !== Number(val)),
-          });
-        }
+        setFilter({
+          brands: checked
+            ? [...(filter?.brands ?? []), Number(valueId)]
+            : filter?.brands?.filter((brand) => brand !== Number(valueId)),
+        });
         break;
 
-      // 🟢 CATEGORY
       case "category":
-        if (e.target.checked) {
-          setFilter({
-            categories: [...(filter?.categories ?? []), Number(val)],
-          });
-        } else {
-          setFilter({
-            categories: filter?.categories?.filter((c) => c !== Number(val)),
-          });
-        }
+        setFilter({
+          categories: checked
+            ? [...(filter?.categories ?? []), Number(valueId)]
+            : filter?.categories?.filter((category) => category !== Number(valueId)),
+        });
         break;
 
-      // 🟢 LOCATION
       case "location":
-        if (e.target.checked) {
-          setFilter({
-            locations: [...(filter?.locations ?? []), Number(val)],
-          });
-        } else {
-          setFilter({
-            locations: filter?.locations?.filter((l) => l !== Number(val)),
-          });
-        }
-        break;
-
-      default:
+        setFilter({
+          locations: checked
+            ? [...(filter?.locations ?? []), Number(valueId)]
+            : filter?.locations?.filter((location) => location !== Number(valueId)),
+        });
         break;
     }
   };

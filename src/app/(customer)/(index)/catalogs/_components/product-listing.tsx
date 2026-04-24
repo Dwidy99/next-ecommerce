@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useFilter } from "@/hooks/useFilter";
 import { fetchProduct } from "../lib/data";
@@ -9,12 +8,6 @@ import NoData from "../../_components/no-data";
 import Loading from "../../_components/loading-skeleton";
 import type { TProduct } from "@/types";
 
-/**
- * ProductListing Component
- * - Menampilkan daftar produk dengan filter dinamis
- * - Menggunakan React Query
- * - Responsif untuk mobile (2 kolom), tablet (3 kolom), desktop (4 kolom)
- */
 export default function ProductListing(): JSX.Element {
   const { filter } = useFilter();
 
@@ -27,7 +20,6 @@ export default function ProductListing(): JSX.Element {
     queryFn: () => fetchProduct(filter),
   });
 
-  // 🟡 Loading State
   if (isLoading) {
     return (
       <div className="w-full">
@@ -36,7 +28,6 @@ export default function ProductListing(): JSX.Element {
     );
   }
 
-  // 🔴 Error State
   if (isError) {
     return (
       <NoData
@@ -47,7 +38,6 @@ export default function ProductListing(): JSX.Element {
     );
   }
 
-  // ⚪ Empty State
   if (!products || products.length === 0) {
     return (
       <NoData
@@ -58,16 +48,10 @@ export default function ProductListing(): JSX.Element {
     );
   }
 
-  // 🟢 Success State
   return (
     <section
       id="product-list"
-      className="
-        grid 
-        grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 
-        gap-4 sm:gap-5 md:gap-6 lg:gap-8
-        w-full
-      "
+      className="grid w-full grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8"
     >
       {products.map((product) => (
         <CardProduct key={`${product.id}-${product.name}`} item={product} />
