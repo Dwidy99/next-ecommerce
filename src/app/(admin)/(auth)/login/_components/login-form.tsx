@@ -32,8 +32,8 @@ export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="min-h-screen admin-auth-bg admin-auth-glow flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border p-8 flex flex-col gap-6">
+    <div className="w-full max-w-md rounded-2xl border bg-white p-8 shadow-lg">
+      <div className="flex flex-col gap-6">
         {/* Header */}
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-bold text-[#110843]">Admin Sign In</h1>
