@@ -1,3 +1,4 @@
+import { getErrorMessage, warnOnce } from "@/lib/error-message";
 import { getImageUrl } from "@/lib/supabase";
 import { prisma } from "lib/prisma";
 import type {
@@ -35,7 +36,7 @@ export async function fetchCategoriesWithProducts(): Promise<CategoryWithProduct
       products: formatCategoryProducts(category.products),
     }));
   } catch (error) {
-    console.error("Failed to fetch customer categories:", error);
+    warnCategoryFallback("Customer categories", error);
     return [];
   }
 }
@@ -63,7 +64,7 @@ export async function getCategoryBySlug(slug: string) {
       },
     });
   } catch (error) {
-    console.error("Failed to fetch category by slug:", error);
+    warnCategoryFallback(`Category "${slug}"`, error);
     return null;
   }
 }
@@ -77,7 +78,7 @@ export async function getAllCategorySlugs() {
 
     return categories.map((category) => ({ slug: category.slug }));
   } catch (error) {
-    console.error("Failed to fetch category slugs:", error);
+    warnCategoryFallback("Category slugs", error);
     return [];
   }
 }
@@ -90,7 +91,7 @@ export async function getCategoryMeta(slug: string) {
       select: { name: true },
     });
   } catch (error) {
-    console.error("Failed to fetch category metadata:", error);
+    warnCategoryFallback(`Category metadata "${slug}"`, error);
     return null;
   }
 }
@@ -112,6 +113,12 @@ function mapCategoryProduct(product: CategoryProductSource): CustomerProductItem
     name: product.name,
     price: Number(product.price),
     image_url: getImageUrl(product.images?.[0] ?? "", "products"),
-    category_name: product.category.name,
+    category_name: product.category?.name ?? "Product",
   };
+}
+
+function warnCategoryFallback(source: string, error: unknown) {
+  warnOnce(
+    `${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`,
+  );
 }
