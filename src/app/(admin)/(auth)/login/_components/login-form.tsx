@@ -32,7 +32,7 @@ export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="w-full max-w-md rounded-2xl border bg-white p-8 shadow-lg">
+    <div className="mx-auto w-full max-w-[440px] rounded-2xl border bg-white/95 p-6 shadow-lg backdrop-blur sm:p-8">
       <div className="flex flex-col gap-6">
         {/* Header */}
         <div className="text-center space-y-2">
@@ -56,7 +56,7 @@ export default function SignInForm() {
               name="email"
               required
               placeholder="admin@email.com"
-              className="w-full outline-none bg-transparent text-sm"
+              className="min-w-0 w-full bg-transparent text-sm outline-none"
             />
           </div>
 
@@ -69,7 +69,7 @@ export default function SignInForm() {
               name="password"
               required
               placeholder="Password"
-              className="w-full outline-none bg-transparent text-sm"
+              className="min-w-0 w-full bg-transparent text-sm outline-none"
             />
 
             <button
