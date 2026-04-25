@@ -14,7 +14,7 @@ import { AlertCircle, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React, { useActionState } from "react";
 import { postBrand, updateBrand } from "../lib/actions";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(admin)/types";
 import { useFormStatus } from "react-dom";
 import { Brand } from "@prisma/client";
 

@@ -5,10 +5,12 @@ import {
   getBrands,
   getCategories,
   getProducts,
-  type CustomerBrandItem,
-  type CustomerCategoryItem,
-  type CustomerProductItem,
 } from "../lib/data";
+import type {
+  CustomerBrandItem,
+  CustomerCategoryItem,
+  CustomerProductItem,
+} from "@/app/(customer)/types";
 
 const benefits = [
   {

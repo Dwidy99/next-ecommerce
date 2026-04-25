@@ -7,7 +7,7 @@ import {
   getImageUrl,
   uploadFile,
 } from "@/lib/supabase";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(customer)/types";
 import { z } from "zod";
 import { prisma } from "lib/prisma";
 

@@ -6,7 +6,7 @@ import { useFormStatus } from "react-dom";
 import { ChevronLeft, AlertCircle, Loader2 } from "lucide-react";
 
 import { postCategory, updateCategory } from "../lib/actions";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(admin)/types";
 import { Category } from "@prisma/client";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

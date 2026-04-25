@@ -1,12 +1,7 @@
 import { TFilter } from "@/hooks/useFilter";
 import { getErrorMessage, warnOnce } from "@/lib/error-message";
-import { TProduct } from "@/types";
+import type { FilterOption, TProduct } from "@/app/(customer)/types";
 import { prisma } from "lib/prisma";
-
-type FilterOption = {
-  id: number;
-  name: string;
-};
 
 // READ LIST
 export async function fetchProduct(body?: TFilter): Promise<TProduct[]> {

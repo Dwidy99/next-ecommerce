@@ -1,10 +1,10 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { rupiahFormat } from "@/lib/utils";
-import { TOrder } from "@/types";
+import { TOrder } from "@/app/(customer)/types";
 import {
   CalendarDays,
   CheckCircle2,

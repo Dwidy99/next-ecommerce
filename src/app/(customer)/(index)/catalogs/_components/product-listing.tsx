@@ -6,7 +6,7 @@ import { fetchProduct } from "../lib/data";
 import CardProduct from "../../_components/card-product";
 import NoData from "../../_components/no-data";
 import Loading from "../../_components/loading-skeleton";
-import type { TProduct } from "@/types";
+import type { TProduct } from "@/app/(customer)/types";
 
 export default function ProductListing(): JSX.Element {
   const { filter } = useFilter();

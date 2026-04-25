@@ -3,7 +3,7 @@
 import { refreshAndRedirect } from "@/lib/nextjs";
 import { schemaBrand } from "@/lib/schema";
 import { checkFileExists, deleteFile, uploadFile } from "@/lib/supabase";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(admin)/types";
 import { prisma } from "lib/prisma";
 import { redirect } from "next/navigation";
 

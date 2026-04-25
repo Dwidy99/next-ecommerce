@@ -1,7 +1,7 @@
 "use server";
 
 import { schemaSignUp } from "@/lib/schema";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(customer)/types";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 import { prisma } from "lib/prisma";

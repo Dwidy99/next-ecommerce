@@ -4,7 +4,7 @@ import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { SignIn } from "@/app/(admin)/dashboard/sign-in/lib/actions";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(admin)/types";
 
 const initialState: ActionResult = { error: "" };
 

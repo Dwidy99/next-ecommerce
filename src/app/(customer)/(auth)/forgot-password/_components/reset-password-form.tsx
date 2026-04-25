@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(customer)/types";
 import { Lock } from "lucide-react";
 import { ResetPasswordAction } from "../[token]/lib/actions";
 

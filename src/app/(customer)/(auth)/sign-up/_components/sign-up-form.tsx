@@ -3,7 +3,7 @@
 import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
 import { useState } from "react";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(customer)/types";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { SignUp } from "../lib/actions";
 

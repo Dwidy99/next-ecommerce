@@ -1,7 +1,7 @@
 'use server'
 
 import { schemaSignIn } from "@/lib/schema"
-import { ActionResult } from "@/types"
+import { ActionResult } from "@/app/(admin)/types"
 import { redirect } from "next/navigation"
 import bcrypt from "bcrypt"
 import { lucia } from "@/lib/auth"

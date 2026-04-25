@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { TOrder } from "@/types";
+import { TOrder } from "@/app/(customer)/types";
 import OrdersList from "../_components/order-list";
 import {
   ArrowBigLeftDash,

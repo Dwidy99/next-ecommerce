@@ -1,23 +1,10 @@
 import { getImageUrl } from "@/lib/supabase";
 import { prisma } from "lib/prisma";
-import type { CustomerProductItem } from "../../lib/data";
-
-type CategoryProductSource = {
-  id: number;
-  name: string;
-  price: bigint | number;
-  images?: string[] | null;
-  category: {
-    name: string;
-  };
-};
-
-type CategoryWithProductsItem = {
-  id: number;
-  name: string;
-  slug: string;
-  products: CustomerProductItem[];
-};
+import type {
+  CategoryProductSource,
+  CategoryWithProductsItem,
+  CustomerProductItem,
+} from "@/app/(customer)/types";
 
 // READ LIST
 export async function fetchCategoriesWithProducts(): Promise<CategoryWithProductsItem[]> {

@@ -1,6 +1,6 @@
 "use client";
 
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(customer)/types";
 import Link from "next/link";
 import { useActionState } from "react";
 import { ForgotPasswordAction } from "../lib/actions";

@@ -1,7 +1,7 @@
 "use server"
 
 import { prisma } from "lib/prisma"
-import { ActionResult } from "@/types"
+import { ActionResult } from "@/app/(admin)/types"
 import { redirect } from "next/navigation"
 import { schemaLocation as locationSchema } from "@/lib/schema"
 
@@ -97,4 +97,3 @@ export async function deleteLocation(formData: FormData): Promise<void> {
 
   redirect("/dashboard/locations")
 }
-

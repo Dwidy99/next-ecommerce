@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { SignIn } from "../lib/actions";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(admin)/types";
 import { useFormStatus } from "react-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";

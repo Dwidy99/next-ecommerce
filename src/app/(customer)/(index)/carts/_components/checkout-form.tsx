@@ -4,7 +4,7 @@ import { rupiahFormat } from "@/lib/utils";
 import React, { useActionState, useEffect, useMemo } from "react";
 import { useFormStatus } from "react-dom";
 import { storeOrder } from "../lib/actions";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(customer)/types";
 
 const initialState: ActionResult = { error: "" };
 

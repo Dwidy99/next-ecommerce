@@ -1,27 +1,11 @@
 import { getErrorMessage, warnOnce } from "@/lib/error-message";
 import { getImageUrl } from "@/lib/supabase";
+import type {
+  CustomerBrandItem,
+  CustomerCategoryItem,
+  CustomerProductItem,
+} from "@/app/(customer)/types";
 import { prisma } from "lib/prisma";
-
-export type CustomerCategoryItem = {
-  id: number;
-  name: string;
-  slug: string | null;
-  productCount: number;
-};
-
-export type CustomerProductItem = {
-  id: number;
-  name: string;
-  price: number;
-  image_url: string;
-  category_name: string;
-};
-
-export type CustomerBrandItem = {
-  id: number;
-  logo: string;
-  logo_url: string;
-};
 
 // READ LIST
 export async function getCategories(): Promise<CustomerCategoryItem[]> {

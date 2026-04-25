@@ -1,5 +1,5 @@
 import { rupiahFormat } from "@/lib/utils";
-import { TProduct } from "@/types";
+import { TProduct } from "@/app/(customer)/types";
 import Link from "next/link";
 
 interface CardProductProps {

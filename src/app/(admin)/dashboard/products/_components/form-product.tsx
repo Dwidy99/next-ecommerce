@@ -13,7 +13,7 @@ import { Label } from "@radix-ui/react-label";
 import { AlertCircle, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React, { ReactNode, startTransition, useActionState } from "react";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(admin)/types";
 import { useFormStatus } from "react-dom";
 import { Textarea } from "@/components/ui/textarea";
 import {

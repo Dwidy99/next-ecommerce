@@ -4,7 +4,7 @@ import { getUser } from "@/lib/auth";
 import { schemaShippingAddress } from "@/lib/schema";
 import { generateRandomString } from "@/lib/utils";
 import xenditClient from "@/lib/xendit";
-import { ActionResult, TCart } from "@/types";
+import { ActionResult, TCart } from "@/app/(customer)/types";
 import { Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { PaymentRequest, PaymentRequestParameters } from "xendit-node/payment_request/models";

@@ -2,7 +2,7 @@ import React from "react";
 import FormCategory from "../../_components/form-category";
 import { getCategoryById } from "../../lib/data";
 import { redirect } from "next/navigation";
-import { Tedit } from "@/types";
+import { Tedit } from "@/app/(admin)/types";
 
 export default async function EditPage({ params }: Tedit) {
   const { id } = await params;

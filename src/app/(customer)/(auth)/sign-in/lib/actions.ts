@@ -2,7 +2,7 @@
 
 import { lucia } from "@/lib/auth";
 import { schemaSignIn } from "@/lib/schema";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(customer)/types";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

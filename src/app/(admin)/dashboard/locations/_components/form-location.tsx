@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { ActionResult } from "@/types"
+import { ActionResult } from "@/app/(admin)/types"
 import { Location } from "@prisma/client"
 import { Label } from "@radix-ui/react-label"
 import { AlertCircle, ChevronLeft, Loader2Icon } from "lucide-react"
@@ -118,4 +118,3 @@ export function LocationForm({ data = null, type = "ADD" }: LocationFormProps) {
 }
 
 export default LocationForm
-

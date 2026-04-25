@@ -2,7 +2,7 @@
 
 import { useCart } from "@/hooks/useCart";
 import { rupiahFormat } from "@/lib/utils";
-import { TCart, TProduct } from "@/types";
+import { TCart, TProduct } from "@/app/(customer)/types";
 import { useRouter } from "next/navigation";
 
 interface PriceInfoProp {

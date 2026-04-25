@@ -1,7 +1,7 @@
 "use server";
 
 import { getUser } from "@/lib/auth";
-import type { ProfileResult } from "@/types";
+import type { ProfileResult } from "@/app/(customer)/types";
 import { prisma } from "lib/prisma";
 
 // READ DETAIL

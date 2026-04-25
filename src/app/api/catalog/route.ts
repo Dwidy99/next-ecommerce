@@ -1,7 +1,7 @@
 import { TFilter } from "@/hooks/useFilter";
 import { getImageUrl } from "@/lib/supabase";
 import { getErrorMessage, warnOnce } from "@/lib/error-message";
-import { TProduct } from "@/types";
+import { TProduct } from "@/app/(customer)/types";
 import { prisma } from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 

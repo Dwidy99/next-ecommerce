@@ -1,7 +1,7 @@
 "use server";
 
 import { sendVerificationEmail } from "@/lib/mailer";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(customer)/types";
 import { TokenType } from "@prisma/client";
 import { prisma } from "lib/prisma";
 import { createEmailVerificationToken } from "./data";

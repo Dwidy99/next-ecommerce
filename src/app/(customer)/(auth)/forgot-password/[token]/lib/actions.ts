@@ -3,7 +3,7 @@
 import { prisma } from "lib/prisma";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(customer)/types";
 
 // UPDATE PASSWORD
 export async function ResetPasswordAction(

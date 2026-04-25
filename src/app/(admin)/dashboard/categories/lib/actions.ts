@@ -1,6 +1,6 @@
 'use server';
 
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(admin)/types";
 import { redirect } from "next/navigation";
 import { schemaCategory } from "@/lib/schema";
 import { prisma } from "../../../../../../lib/prisma";

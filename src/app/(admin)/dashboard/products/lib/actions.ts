@@ -4,7 +4,7 @@ import { refreshAndRedirect } from "@/lib/nextjs";
 import { schemaProduct, schemaProductEdit } from "@/lib/schema";
 import { checkFileExists, deleteFile, uploadFile } from "@/lib/supabase";
 import { slugify } from "@/lib/utils";
-import { ActionResult } from "@/types";
+import { ActionResult } from "@/app/(admin)/types";
 import { Prisma, ProductStock } from "@prisma/client";
 import { prisma } from "lib/prisma";
 import { revalidatePath } from "next/cache";
