@@ -8,10 +8,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "lib/prisma";
 
-function getFirstValidationError(error: { issues?: Array<{ message: string }> }) {
-  return error.issues?.[0]?.message ?? "Invalid input";
-}
-
+// CREATE SESSION
 export async function SignIn(
   _: unknown,
   formData: FormData,
@@ -50,6 +47,7 @@ export async function SignIn(
   redirect("/");
 }
 
+// DELETE SESSION
 export async function SignOut(): Promise<ActionResult> {
   try {
     const cookieStore = await cookies();
@@ -74,4 +72,9 @@ export async function SignOut(): Promise<ActionResult> {
     console.error("Failed to sign out customer:", error);
     return { error: "Failed to sign out" };
   }
+}
+
+// VALIDATION HELPER
+function getFirstValidationError(error: { issues?: Array<{ message: string }> }) {
+  return error.issues?.[0]?.message ?? "Invalid input";
 }

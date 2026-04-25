@@ -8,12 +8,7 @@ type FilterOption = {
   name: string;
 };
 
-function warnFilterFallback(source: string, error: unknown) {
-  warnOnce(
-    `${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`,
-  );
-}
-
+// READ LIST
 export async function fetchProduct(body?: TFilter): Promise<TProduct[]> {
   try {
     const res = await fetch("/api/catalog", {
@@ -37,6 +32,7 @@ export async function fetchProduct(body?: TFilter): Promise<TProduct[]> {
   }
 }
 
+// READ FILTER OPTIONS
 export async function getFilterBrands(): Promise<FilterOption[]> {
   try {
     return await prisma.brand.findMany({
@@ -86,4 +82,11 @@ export async function getFilterLocations(): Promise<FilterOption[]> {
     warnFilterFallback("Catalog locations", error);
     return [];
   }
+}
+
+// ERROR HELPER
+function warnFilterFallback(source: string, error: unknown) {
+  warnOnce(
+    `${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`,
+  );
 }

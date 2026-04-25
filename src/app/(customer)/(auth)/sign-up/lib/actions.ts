@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "lib/prisma";
 import { sendEmailVerificationDirect } from "../../verify-email/lib/actions";
 
+// CREATE USER
 export async function SignUp(
   _: unknown,
   formData: FormData,

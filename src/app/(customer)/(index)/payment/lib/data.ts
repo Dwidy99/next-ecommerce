@@ -3,6 +3,7 @@
 import { getUser } from "@/lib/auth";
 import { prisma } from "lib/prisma";
 
+// READ LIST
 export async function getPurchaseHistory() {
   const { user } = await getUser();
   if (!user) return { error: "Unauthorized", orders: [] };

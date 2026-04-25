@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 import { ActionResult } from "@/types";
 
+// UPDATE PASSWORD
 export async function ResetPasswordAction(
   token: string,
   formData: FormData,

@@ -118,9 +118,10 @@ function NavbarLinks() {
         <Link
           key={item.href}
           href={item.href}
-          className="text-sm font-semibold text-white transition hover:text-[#FFC736]"
+          className="group relative rounded-full px-1 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:text-[#FFC736]"
         >
-          {item.label}
+          <span>{item.label}</span>
+          <span className="absolute bottom-1 left-1 right-1 h-0.5 origin-left scale-x-0 rounded-full bg-[#FFC736] transition-transform duration-200 group-hover:scale-x-100" />
         </Link>
       ))}
     </nav>
@@ -137,9 +138,10 @@ function NavbarCategoriesMenu({
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="text-sm font-semibold text-white transition hover:text-[#FFC736]"
+          className="group relative rounded-full px-1 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:text-[#FFC736]"
         >
-          Categories
+          <span>Categories</span>
+          <span className="absolute bottom-1 left-1 right-1 h-0.5 origin-left scale-x-0 rounded-full bg-[#FFC736] transition-transform duration-200 group-hover:scale-x-100" />
         </button>
       </DropdownMenuTrigger>
 
@@ -156,8 +158,12 @@ function NavbarCategoriesMenu({
         {categories.length > 0 ? (
           categories.map((category) => (
             <DropdownMenuItem key={category.id} asChild>
-              <Link href={`/categories/${category.slug ?? category.id}`}>
+              <Link
+                href={`/categories/${category.slug ?? category.id}`}
+                className="group/category flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-[#FFF4CC] hover:text-[#110843] focus:bg-[#FFF4CC] focus:text-[#110843]"
+              >
                 {category.name}
+                <span className="h-1.5 w-1.5 rounded-full bg-[#FFC736] opacity-0 transition group-hover/category:opacity-100" />
               </Link>
             </DropdownMenuItem>
           ))
@@ -285,9 +291,9 @@ function MobileNavItem({
   return (
     <Link
       href={href}
-      className="flex flex-col items-center justify-center text-gray-600 transition hover:text-[#110843]"
+      className="group flex flex-col items-center justify-center text-gray-600 transition hover:-translate-y-0.5 hover:text-[#110843]"
     >
-      {icon}
+      <span className="transition group-hover:scale-110">{icon}</span>
       <span className="mt-1 text-[11px] font-medium">{label}</span>
     </Link>
   );
@@ -305,9 +311,9 @@ function MobileCategoriesMenu({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex flex-col items-center justify-center text-gray-600 transition hover:text-[#110843]"
+        className="group flex flex-col items-center justify-center text-gray-600 transition hover:-translate-y-0.5 hover:text-[#110843]"
       >
-        <Layers className="h-6 w-6" />
+        <Layers className="h-6 w-6 transition group-hover:scale-110" />
         <span className="mt-1 text-[11px] font-medium">Categories</span>
       </button>
 
@@ -324,7 +330,7 @@ function MobileCategoriesMenu({
                 <Link
                   key={category.id}
                   href={`/categories/${category.slug ?? category.id}`}
-                  className="block px-4 py-2 text-[14px] transition hover:bg-[#FFF2B3]"
+                  className="block rounded-lg px-4 py-2 text-[14px] transition hover:bg-[#FFF2B3] hover:pl-5 hover:text-[#110843]"
                   onClick={() => setOpen(false)}
                 >
                   {category.name}
@@ -364,9 +370,9 @@ function MobileAccountMenu({ user }: { user: NavbarUser }) {
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex flex-col items-center justify-center text-gray-600 transition hover:text-[#110843]"
+        className="group flex flex-col items-center justify-center text-gray-600 transition hover:-translate-y-0.5 hover:text-[#110843]"
       >
-        <User className="h-6 w-6" />
+        <User className="h-6 w-6 transition group-hover:scale-110" />
         <span className="mt-1 text-[11px] font-medium">
           {user ? "Account" : "Sign In"}
         </span>
@@ -385,7 +391,7 @@ function MobileAccountMenu({ user }: { user: NavbarUser }) {
                 <Link
                   href="/user"
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-[#FFF2B3]"
+                  className="flex items-center gap-2 rounded-lg px-4 py-2 transition hover:bg-[#FFF2B3] hover:pl-5"
                 >
                   <User className="h-4 w-4" />
                   My Profile
@@ -394,7 +400,7 @@ function MobileAccountMenu({ user }: { user: NavbarUser }) {
                 <Link
                   href="/payment/purchase-history"
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-[#FFF2B3]"
+                  className="flex items-center gap-2 rounded-lg px-4 py-2 transition hover:bg-[#FFF2B3] hover:pl-5"
                 >
                   <ReceiptText className="h-4 w-4" />
                   Purchase History
@@ -411,7 +417,7 @@ function MobileAccountMenu({ user }: { user: NavbarUser }) {
                 <Link
                   href="/sign-in"
                   onClick={() => setOpen(false)}
-                  className="block px-4 py-2 hover:bg-[#FFF2B3]"
+                  className="block rounded-lg px-4 py-2 transition hover:bg-[#FFF2B3] hover:pl-5"
                 >
                   Sign In
                 </Link>
@@ -419,7 +425,7 @@ function MobileAccountMenu({ user }: { user: NavbarUser }) {
                 <Link
                   href="/sign-up"
                   onClick={() => setOpen(false)}
-                  className="block px-4 py-2 hover:bg-[#FFF2B3]"
+                  className="block rounded-lg px-4 py-2 transition hover:bg-[#FFF2B3] hover:pl-5"
                 >
                   Sign Up
                 </Link>

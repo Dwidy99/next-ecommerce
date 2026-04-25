@@ -4,6 +4,7 @@ import { getUser } from "@/lib/auth";
 import type { ProfileResult } from "@/types";
 import { prisma } from "lib/prisma";
 
+// READ DETAIL
 export async function getProfile(): Promise<ProfileResult> {
   const { user } = await getUser();
   if (!user) return { error: "Unauthorized" };

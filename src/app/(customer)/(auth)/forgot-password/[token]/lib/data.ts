@@ -2,6 +2,7 @@
 
 import { prisma } from "lib/prisma";
 
+// READ DETAIL
 export async function verifyResetToken(token: string) {
   try {
     const record = await prisma.userToken.findUnique({

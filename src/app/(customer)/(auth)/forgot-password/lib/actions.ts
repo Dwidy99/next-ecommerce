@@ -6,6 +6,7 @@ import crypto from "crypto";
 import { sendResetPasswordEmail } from "./email";
 import { redirect } from "next/navigation";
 
+// CREATE RESET TOKEN
 export async function ForgotPasswordAction(_: unknown, formData: FormData) {
   const email = String(formData.get("email") ?? "").trim();
   if (!email) return { error: "Email is required" };

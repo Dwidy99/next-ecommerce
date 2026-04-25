@@ -6,15 +6,7 @@ import { TokenType } from "@prisma/client";
 import { prisma } from "lib/prisma";
 import { createEmailVerificationToken } from "./data";
 
-export async function sendEmailVerificationDirect(
-  userId: number,
-  email: string,
-  name?: string,
-) {
-  const token = await createEmailVerificationToken(userId);
-  await sendVerificationEmail(email, token, name);
-}
-
+// CREATE / SEND
 export async function sendEmailVerification(
   _: unknown,
   formData: FormData,
@@ -35,6 +27,28 @@ export async function sendEmailVerification(
   }
 }
 
+// CREATE / RESEND
+export async function resendEmailVerification(
+  _: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) return { error: "Email is required" };
+
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) return { error: "User not found" };
+
+    await sendEmailVerificationDirect(user.id, user.email, user.name);
+
+    return { error: "", message: "Verification link sent successfully." };
+  } catch (error) {
+    console.error("Failed to resend verification email:", error);
+    return { error: "Failed to resend verification email" };
+  }
+}
+
+// UPDATE / VERIFY
 export async function verifyEmailToken(token: string) {
   try {
     const record = await prisma.userToken.findUnique({
@@ -59,22 +73,12 @@ export async function verifyEmailToken(token: string) {
   }
 }
 
-export async function resendEmailVerification(
-  _: unknown,
-  formData: FormData,
-): Promise<ActionResult> {
-  const email = String(formData.get("email") ?? "").trim();
-  if (!email) return { error: "Email is required" };
-
-  try {
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return { error: "User not found" };
-
-    await sendEmailVerificationDirect(user.id, user.email, user.name);
-
-    return { error: "", message: "Verification link sent successfully." };
-  } catch (error) {
-    console.error("Failed to resend verification email:", error);
-    return { error: "Failed to resend verification email" };
-  }
+// SHARED ACTION HELPER
+export async function sendEmailVerificationDirect(
+  userId: number,
+  email: string,
+  name?: string,
+) {
+  const token = await createEmailVerificationToken(userId);
+  await sendVerificationEmail(email, token, name);
 }

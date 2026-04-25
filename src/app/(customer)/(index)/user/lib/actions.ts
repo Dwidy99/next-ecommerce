@@ -22,10 +22,7 @@ const profileSchema = z.object({
     ),
 });
 
-function getValidationMessage(error: z.ZodError) {
-  return error.issues.map((issue) => issue.message).join("\n");
-}
-
+// UPDATE
 export async function updateProfile(formData: FormData): Promise<ActionResult> {
   const { user } = await getUser();
   if (!user) return { error: "Unauthorized" };
@@ -75,4 +72,9 @@ export async function updateProfile(formData: FormData): Promise<ActionResult> {
     console.error("Failed to update customer profile:", error);
     return { error: "Failed to update profile" };
   }
+}
+
+// VALIDATION HELPER
+function getValidationMessage(error: z.ZodError) {
+  return error.issues.map((issue) => issue.message).join("\n");
 }

@@ -19,26 +19,7 @@ type CategoryWithProductsItem = {
   products: CustomerProductItem[];
 };
 
-function createCategorySlug(name: string, slug: string | null) {
-  return slug ?? name.toLowerCase().replace(/\s+/g, "-");
-}
-
-function mapCategoryProduct(product: CategoryProductSource): CustomerProductItem {
-  return {
-    id: product.id,
-    name: product.name,
-    price: Number(product.price),
-    image_url: getImageUrl(product.images?.[0] ?? "", "products"),
-    category_name: product.category.name,
-  };
-}
-
-export function formatCategoryProducts(
-  products: CategoryProductSource[],
-): CustomerProductItem[] {
-  return products.map(mapCategoryProduct);
-}
-
+// READ LIST
 export async function fetchCategoriesWithProducts(): Promise<CategoryWithProductsItem[]> {
   try {
     const categories = await prisma.category.findMany({
@@ -72,6 +53,7 @@ export async function fetchCategoriesWithProducts(): Promise<CategoryWithProduct
   }
 }
 
+// READ DETAIL
 export async function getCategoryBySlug(slug: string) {
   try {
     return await prisma.category.findUnique({
@@ -99,6 +81,7 @@ export async function getCategoryBySlug(slug: string) {
   }
 }
 
+// READ STATIC PARAMS
 export async function getAllCategorySlugs() {
   try {
     const categories = await prisma.category.findMany({
@@ -112,6 +95,7 @@ export async function getAllCategorySlugs() {
   }
 }
 
+// READ METADATA
 export async function getCategoryMeta(slug: string) {
   try {
     return await prisma.category.findUnique({
@@ -122,4 +106,25 @@ export async function getCategoryMeta(slug: string) {
     console.error("Failed to fetch category metadata:", error);
     return null;
   }
+}
+
+// FORMATTER
+export function formatCategoryProducts(
+  products: CategoryProductSource[],
+): CustomerProductItem[] {
+  return products.map(mapCategoryProduct);
+}
+
+function createCategorySlug(name: string, slug: string | null) {
+  return slug ?? name.toLowerCase().replace(/\s+/g, "-");
+}
+
+function mapCategoryProduct(product: CategoryProductSource): CustomerProductItem {
+  return {
+    id: product.id,
+    name: product.name,
+    price: Number(product.price),
+    image_url: getImageUrl(product.images?.[0] ?? "", "products"),
+    category_name: product.category.name,
+  };
 }

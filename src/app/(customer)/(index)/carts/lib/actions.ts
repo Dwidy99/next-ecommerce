@@ -13,19 +13,7 @@ import { prisma } from "lib/prisma";
 const MIN_CHECKOUT_TOTAL = 100;
 const MAX_CHECKOUT_TOTAL = 20_000_000;
 
-function buildOrderProducts(products: TCart[], orderId: number) {
-  return products.map<Prisma.OrderProductCreateManyInput>((product) => ({
-    order_id: orderId,
-    product_id: product.id,
-    quantity: product.quantity ?? 1,
-    subtotal: product.price,
-  }));
-}
-
-function getPaymentRedirectUrl(response: PaymentRequest) {
-  return response.actions?.find((action) => action.urlType === "DEEPLINK")?.url ?? "/";
-}
-
+// CREATE
 export async function storeOrder(
   _: unknown,
   formData: FormData,
@@ -114,4 +102,18 @@ export async function storeOrder(
     redirectUrl: redirectPaymentUrl,
     code: order?.code ?? "",
   };
+}
+
+// MAPPERS
+function buildOrderProducts(products: TCart[], orderId: number) {
+  return products.map<Prisma.OrderProductCreateManyInput>((product) => ({
+    order_id: orderId,
+    product_id: product.id,
+    quantity: product.quantity ?? 1,
+    subtotal: product.price,
+  }));
+}
+
+function getPaymentRedirectUrl(response: PaymentRequest) {
+  return response.actions?.find((action) => action.urlType === "DEEPLINK")?.url ?? "/";
 }

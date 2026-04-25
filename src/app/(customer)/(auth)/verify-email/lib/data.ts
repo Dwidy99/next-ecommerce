@@ -6,6 +6,7 @@ import { prisma } from "lib/prisma";
 
 const EMAIL_VERIFICATION_EXPIRES_IN_MS = 1000 * 60 * 60;
 
+// CREATE
 export async function createEmailVerificationToken(userId: number): Promise<string> {
   const token = crypto.randomBytes(32).toString("hex");
   const expires = new Date(Date.now() + EMAIL_VERIFICATION_EXPIRES_IN_MS);
@@ -19,10 +20,12 @@ export async function createEmailVerificationToken(userId: number): Promise<stri
   return token;
 }
 
+// READ DETAIL
 export async function findEmailVerificationToken(token: string) {
   return prisma.userToken.findUnique({ where: { token } });
 }
 
+// UPDATE + DELETE
 export async function completeEmailVerification(tokenId: number, userId: number) {
   await prisma.user.update({
     where: { id: userId },
@@ -32,6 +35,7 @@ export async function completeEmailVerification(tokenId: number, userId: number)
   await prisma.userToken.delete({ where: { id: tokenId } });
 }
 
+// QUERY WORKFLOW
 export async function verifyEmailToken(token: string): Promise<boolean> {
   const record = await prisma.userToken.findUnique({
     where: { token },

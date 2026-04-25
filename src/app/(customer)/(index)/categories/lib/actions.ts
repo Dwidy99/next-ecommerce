@@ -3,6 +3,7 @@
 import { refreshAndRedirect } from "@/lib/nextjs";
 import { prisma } from "lib/prisma";
 
+// DELETE
 export async function deleteCategory(id: number) {
   try {
     await prisma.category.delete({ where: { id } });
