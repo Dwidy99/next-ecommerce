@@ -1,15 +1,5 @@
-import { ProductStock } from "@prisma/client";
+import type { TFilter } from "@/app/(customer)/types";
 import { create } from "zustand";
-
-export type TFilter = {
-    search?: string;
-    minPrice?: number;
-    maxPrice?: number;
-    stock?: ProductStock[];   // tidak perlu null, cukup optional array
-    brands?: number[];
-    locations?: number[];
-    categories?: number[];
-};
 
 export interface FilterState {
     filter: TFilter;

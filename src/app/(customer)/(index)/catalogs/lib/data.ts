@@ -1,6 +1,5 @@
-import { TFilter } from "@/hooks/useFilter";
 import { getErrorMessage, warnOnce } from "@/lib/error-message";
-import type { FilterOption, TProduct } from "@/app/(customer)/types";
+import type { FilterOption, TFilter, TProduct } from "@/app/(customer)/types";
 import { prisma } from "lib/prisma";
 
 // READ LIST

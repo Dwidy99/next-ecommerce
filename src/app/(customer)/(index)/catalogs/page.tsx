@@ -2,12 +2,7 @@ import { generatePageSEO } from "@/lib/seo/seo-utils";
 import Image from "next/image";
 import Navbar from "../_components/navbar";
 import SearchBar from "../_components/search-bar";
-import FilterBrand from "./_components/filter/filter-brand";
-import FilterCategory from "./_components/filter/filter-category";
-import FilterGroup from "./_components/filter/filter-group";
-import FilterLocation from "./_components/filter/filter-location";
-import FilterPrice from "./_components/filter/filter-price";
-import FilterStock from "./_components/filter/filter-stock";
+import FilterSidebar from "./_components/filter/filter-sidebar";
 import ProductListing from "./_components/product-listing";
 import ResponsiveLayout from "./_components/responsive-layout";
 
@@ -71,38 +66,7 @@ export default function CatalogPage() {
       </div>
 
       <ResponsiveLayout
-        filters={
-          <>
-            <div className="mb-5">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d99000]">
-                Refine
-              </p>
-              <h2 className="mt-1 text-xl font-bold text-[#110843] md:text-2xl">
-                Filters
-              </h2>
-            </div>
-
-            <FilterGroup title="Price Range">
-              <FilterPrice />
-            </FilterGroup>
-
-            <FilterGroup title="Stock Availability">
-              <FilterStock />
-            </FilterGroup>
-
-            <FilterGroup title="Brands">
-              <FilterBrand />
-            </FilterGroup>
-
-            <FilterGroup title="Locations">
-              <FilterLocation />
-            </FilterGroup>
-
-            <FilterGroup title="Categories">
-              <FilterCategory />
-            </FilterGroup>
-          </>
-        }
+        filters={<FilterSidebar />}
         products={
           <>
             <div className="mb-5 flex flex-col justify-between gap-2 border-b border-slate-200 pb-4 md:flex-row md:items-end">

@@ -1,7 +1,6 @@
-import { TFilter } from "@/hooks/useFilter";
 import { getImageUrl } from "@/lib/supabase";
 import { getErrorMessage, warnOnce } from "@/lib/error-message";
-import { TProduct } from "@/app/(customer)/types";
+import type { TFilter, TProduct } from "@/app/(customer)/types";
 import { prisma } from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 
@@ -9,7 +8,7 @@ export async function POST(request: Request) {
     try {
         const res = (await request.json()) as TFilter;
 
-        // 🟢 1️⃣ Price filter (gunakan cast aman agar tidak error spread)
+        // Price filter
         const priceFilter: Prisma.ProductWhereInput = {};
         const price: Record<string, number> = {};
 
@@ -24,13 +23,13 @@ export async function POST(request: Request) {
             priceFilter.price = price;
         }
 
-        // 🟢 2️⃣ Stock filter
+        // Stock filter
         const stockFilter: Prisma.ProductWhereInput = {};
         if (res.stock && res.stock.length > 0) {
             stockFilter.stock = { in: res.stock };
         }
 
-        // 🟢 3️⃣ Search filter
+        // Search filter
         const searchFilter: Prisma.ProductWhereInput = {};
         if (res.search && res.search.trim() !== "") {
             searchFilter.name = {
@@ -39,7 +38,7 @@ export async function POST(request: Request) {
             };
         }
 
-        // 🟢 4️⃣ Brand / Category / Location
+        // Brand, category, and location filters
         const brandFilter: Prisma.ProductWhereInput = {};
         if (res.brands && res.brands.length > 0) {
             brandFilter.brand = { id: { in: res.brands } };
@@ -55,7 +54,7 @@ export async function POST(request: Request) {
             locationFilter.location = { id: { in: res.locations } };
         }
 
-        // 🟢 5️⃣ Gabungkan semua filter dengan AND
+        // Combine every active filter with AND
         const whereClause: Prisma.ProductWhereInput = {
             AND: [
                 priceFilter,
@@ -67,7 +66,7 @@ export async function POST(request: Request) {
             ],
         };
 
-        // 🟢 6️⃣ Ambil data produk
+        // Read products from database
         const products = await prisma.product.findMany({
             where: whereClause,
             select: {
@@ -82,7 +81,7 @@ export async function POST(request: Request) {
             orderBy: { created_at: "desc" },
         });
 
-        // 🟢 7️⃣ Mapping hasil ke TProduct
+        // Map database rows to the customer product card shape
         const response: TProduct[] = products.map((product) => ({
             id: product.id,
             name: product.name,
