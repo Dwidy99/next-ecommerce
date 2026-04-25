@@ -1,5 +1,5 @@
 import React from "react";
-import { getFilterBrands } from "../../lib/filter-data";
+import { getFilterBrands } from "../../lib/data";
 import FilterCheckboxItem from "./filter-checkbox-item";
 
 export default async function FilterBrand() {

@@ -2,11 +2,12 @@ import ResetPasswordForm from "../_components/reset-password-form";
 import { verifyResetToken } from "./lib/data";
 
 type Props = {
-  params: { token: string };
+  params: Promise<{ token: string }>;
 };
 
 export default async function ResetPasswordPage({ params }: Props) {
-  const check = await verifyResetToken(params.token);
+  const { token } = await params;
+  const check = await verifyResetToken(token);
 
   if ("error" in check) {
     return (
@@ -27,7 +28,7 @@ export default async function ResetPasswordPage({ params }: Props) {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#EFF3FA] px-4 py-8 sm:px-6">
-      <ResetPasswordForm token={params.token} />
+      <ResetPasswordForm token={token} />
     </main>
   );
 }

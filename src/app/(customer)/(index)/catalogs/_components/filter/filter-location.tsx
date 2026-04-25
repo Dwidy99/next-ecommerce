@@ -1,5 +1,5 @@
 import React from "react";
-import { getFilterLocations } from "../../lib/filter-data";
+import { getFilterLocations } from "../../lib/data";
 import FilterCheckboxItem from "./filter-checkbox-item";
 
 export default async function FilterLocation() {
