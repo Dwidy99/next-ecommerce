@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { getProducts } from "../lib/data";
 import CardProduct from "./card-product";
 import Link from "next/link";
@@ -45,15 +45,15 @@ export default async function ListProduct({
           gap-4 sm:gap-6 lg:gap-8
         "
       >
-        {products.map((product: any) => (
+        {products.map((product) => (
           <CardProduct
             key={`${product.name}-${product.id}`}
             item={{
               id: product.id,
               name: product.name,
               image_url: product.image_url,
-              price: Number(product.price),
-              category_name: product.category.name,
+              price: product.price,
+              category_name: product.category_name,
             }}
           />
         ))}
