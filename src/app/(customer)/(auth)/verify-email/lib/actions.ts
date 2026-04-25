@@ -1,80 +1,80 @@
 "use server";
 
 import { sendVerificationEmail } from "@/lib/mailer";
-import { createEmailVerificationToken } from "./data";
-import { prisma } from "lib/prisma";
-import { TokenType } from "@prisma/client";
 import { ActionResult } from "@/types";
+import { TokenType } from "@prisma/client";
+import { prisma } from "lib/prisma";
+import { createEmailVerificationToken } from "./data";
 
-/**
- * 🔹 Utility — Kirim email verifikasi langsung via user data
- * (dipakai di server, bukan dari form)
- */
 export async function sendEmailVerificationDirect(
-    userId: number,
-    email: string,
-    name?: string
+  userId: number,
+  email: string,
+  name?: string,
 ) {
-    const token = await createEmailVerificationToken(userId);
-    await sendVerificationEmail(email, token, name);
+  const token = await createEmailVerificationToken(userId);
+  await sendVerificationEmail(email, token, name);
 }
 
-/**
- * 🔹 Server Action — Untuk form (useFormState)
- */
 export async function sendEmailVerification(
-    _: unknown,
-    formData: FormData
+  _: unknown,
+  formData: FormData,
 ): Promise<ActionResult> {
-    const email = String(formData.get("email") ?? "").trim();
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) return { error: "Email is required" };
 
-    if (!email) return { error: "Email is required" };
-
+  try {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return { error: "No account found with this email" };
 
-    // Gunakan versi direct di sini
     await sendEmailVerificationDirect(user.id, user.email, user.name);
 
     return { error: "", message: "Verification link sent successfully." };
+  } catch (error) {
+    console.error("Failed to send verification email:", error);
+    return { error: "Failed to send verification email" };
+  }
 }
 
-/**
- * 🔹 Verifikasi token
- */
 export async function verifyEmailToken(token: string) {
+  try {
     const record = await prisma.userToken.findUnique({
-        where: { token },
-        include: { user: true },
+      where: { token },
+      include: { user: true },
     });
 
     if (!record || record.type !== TokenType.EMAIL_VERIFICATION) return false;
     if (record.expires < new Date()) return false;
 
     await prisma.user.update({
-        where: { id: record.userId },
-        data: { emailVerified: new Date() },
+      where: { id: record.userId },
+      data: { emailVerified: new Date() },
     });
 
     await prisma.userToken.delete({ where: { id: record.id } });
 
     return true;
+  } catch (error) {
+    console.error("Failed to verify email token:", error);
+    return false;
+  }
 }
 
-/**
- * 🔹 Kirim ulang verifikasi email (manual trigger)
- */
 export async function resendEmailVerification(
-    _: unknown,
-    formData: FormData
+  _: unknown,
+  formData: FormData,
 ): Promise<ActionResult> {
-    const email = formData.get("email") as string;
-    if (!email) return { error: "Email is required" };
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) return { error: "Email is required" };
 
+  try {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return { error: "User not found" };
 
-    // ✅ Pakai versi direct, bukan server action
     await sendEmailVerificationDirect(user.id, user.email, user.name);
+
     return { error: "", message: "Verification link sent successfully." };
+  } catch (error) {
+    console.error("Failed to resend verification email:", error);
+    return { error: "Failed to resend verification email" };
+  }
 }

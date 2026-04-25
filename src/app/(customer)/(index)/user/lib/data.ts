@@ -1,29 +1,34 @@
 "use server";
 
 import { getUser } from "@/lib/auth";
-import { prisma } from "lib/prisma";
 import type { ProfileResult } from "@/types";
+import { prisma } from "lib/prisma";
 
 export async function getProfile(): Promise<ProfileResult> {
-    const { user } = await getUser();
-    if (!user) return { error: "Unauthorized" };
+  const { user } = await getUser();
+  if (!user) return { error: "Unauthorized" };
 
-    try {
-        const found = await prisma.user.findUnique({
-            where: { id: user.id },
-            select: { name: true, email: true, image: true, created_at: true, },
-        });
+  try {
+    const profile = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: {
+        name: true,
+        email: true,
+        image: true,
+        created_at: true,
+      },
+    });
 
-        if (!found) return { error: "User not found" };
+    if (!profile) return { error: "User not found" };
 
-        return {
-            name: found.name,
-            email: found.email,
-            image: found.image ?? null,
-            created_at: found.created_at,
-        };
-    } catch (err) {
-        console.error("Error fetching profile:", err);
-        return { error: "Failed to fetch profile" };
-    }
+    return {
+      name: profile.name,
+      email: profile.email,
+      image: profile.image ?? null,
+      created_at: profile.created_at,
+    };
+  } catch (error) {
+    console.error("Failed to fetch customer profile:", error);
+    return { error: "Failed to fetch profile" };
+  }
 }
