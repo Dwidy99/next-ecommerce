@@ -1,10 +1,10 @@
 import { generatePageSEO } from "@/lib/seo/seo-utils";
 import Image from "next/image";
+import { SlidersHorizontal } from "lucide-react";
 import Navbar from "../_components/navbar";
 import SearchBar from "../_components/search-bar";
 import FilterSidebar from "./_components/filter/filter-sidebar";
 import ProductListing from "./_components/product-listing";
-import ResponsiveLayout from "./_components/responsive-layout";
 
 export async function generateMetadata() {
   return await generatePageSEO({
@@ -18,6 +18,7 @@ export async function generateMetadata() {
 export default function CatalogPage() {
   return (
     <main className="min-h-screen bg-[#edf2f6] pb-12">
+      {/* Top strip */}
       <div className="hidden bg-[#07111f] text-[11px] font-semibold uppercase tracking-[0.16em] text-white md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
           <span>Shopverse Catalog</span>
@@ -26,6 +27,7 @@ export default function CatalogPage() {
         </div>
       </div>
 
+      {/* Header and hero */}
       <header className="bg-[#FFC736] px-4 pb-10 pt-1 sm:px-8 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <Navbar />
@@ -61,14 +63,30 @@ export default function CatalogPage() {
         </div>
       </header>
 
+      {/* Search */}
       <div className="mt-8">
         <SearchBar title="Explore Shopverse Catalog" />
       </div>
 
-      <ResponsiveLayout
-        filters={<FilterSidebar />}
-        products={
-          <>
+      {/* Main content */}
+      <section className="container mx-auto mt-8 max-w-7xl px-4 pb-[100px] md:px-6">
+        <div className="grid gap-6 lg:grid-cols-[300px_1fr]">
+          <aside className="hidden h-fit rounded-[22px] border border-slate-200 bg-white/95 p-6 shadow-sm ring-1 ring-white lg:block">
+            <FilterSidebar />
+          </aside>
+
+          <details className="group rounded-[22px] border border-slate-200 bg-white p-5 shadow-sm lg:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-center gap-2 rounded-full bg-[#FFC736] py-3 font-semibold text-[#110843] shadow-sm transition hover:bg-[#ffda63]">
+              <SlidersHorizontal size={18} />
+              <span>Show Filters</span>
+            </summary>
+
+            <div className="mt-5">
+              <FilterSidebar />
+            </div>
+          </details>
+
+          <main className="rounded-[22px] border border-slate-200 bg-white/95 p-5 shadow-sm ring-1 ring-white md:p-6">
             <div className="mb-5 flex flex-col justify-between gap-2 border-b border-slate-200 pb-4 md:flex-row md:items-end">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d99000]">
@@ -83,9 +101,9 @@ export default function CatalogPage() {
               </p>
             </div>
             <ProductListing />
-          </>
-        }
-      />
+          </main>
+        </div>
+      </section>
     </main>
   );
 }

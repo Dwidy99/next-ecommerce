@@ -59,6 +59,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <main className="min-h-screen bg-[#edf2f6] pb-16">
+      {/* Top strip */}
       <div className="hidden bg-[#07111f] text-[11px] font-semibold uppercase tracking-[0.16em] text-white md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
           <span>Shopverse Category</span>
@@ -67,6 +68,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </div>
       </div>
 
+      {/* Header and hero */}
       <header className="bg-[#FFC736] px-4 pb-10 pt-1 sm:px-8 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <Navbar />
@@ -105,6 +107,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </div>
       </header>
 
+      {/* Main content */}
       <section className="mx-auto mt-8 max-w-7xl px-4 sm:px-8 lg:px-16">
         <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm sm:p-8 md:p-10">
           <div className="mb-7 flex flex-col justify-between gap-3 border-b border-slate-200 pb-5 md:flex-row md:items-end">

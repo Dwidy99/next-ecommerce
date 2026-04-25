@@ -1,6 +1,7 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useFilter } from "@/hooks/useFilter";
 import { fetchProduct } from "../lib/data";
 import CardProduct from "../../_components/card-product";
@@ -9,6 +10,16 @@ import Loading from "../../_components/loading-skeleton";
 import type { TProduct } from "@/app/(customer)/types";
 
 export default function ProductListing(): JSX.Element {
+  const [queryClient] = useState(() => new QueryClient());
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ProductListingContent />
+    </QueryClientProvider>
+  );
+}
+
+function ProductListingContent(): JSX.Element {
   const { filter } = useFilter();
 
   const {
