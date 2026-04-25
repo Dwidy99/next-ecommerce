@@ -18,7 +18,7 @@ export default function CartClient() {
   const isEmpty = products.length === 0;
 
   return (
-    <main className="container max-w-[1130px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-[1130px]">
       <div
         id="title"
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 mt-10"
@@ -41,6 +41,6 @@ export default function CartClient() {
           <CheckoutForm />
         </>
       )}
-    </main>
+    </div>
   );
 }

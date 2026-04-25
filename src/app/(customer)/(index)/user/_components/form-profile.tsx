@@ -45,7 +45,7 @@ export default function FormProfile({ initialProfile }: FormProfileProps) {
   };
 
   return (
-    <main className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+    <div className="w-full rounded-[28px] border border-gray-100 bg-white p-6 shadow-sm md:p-10">
       <h1 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[#110843]">
         My Profile
       </h1>
@@ -148,6 +148,6 @@ export default function FormProfile({ initialProfile }: FormProfileProps) {
           </Button>
         </form>
       </div>
-    </main>
+    </div>
   );
 }
