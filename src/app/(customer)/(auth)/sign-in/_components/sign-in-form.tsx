@@ -126,13 +126,6 @@ export default function SignInForm() {
         >
           Create New Account
         </Link>
-
-        <Link
-          href="/catalogs"
-          className="text-[#110843] font-semibold underline underline-offset-4 hover:text-[#FFC736] transition"
-        >
-          Go to shop →
-        </Link>
       </div>
     </form>
   );

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import SignOutButton from "../../(auth)/_components/sign-out-button";
+import SignInForm from "../../(auth)/sign-in/_components/sign-in-form";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   ChevronDown,
+  X,
   Home,
   Layers,
   ReceiptText,
@@ -53,6 +55,8 @@ export default function NavbarClient({
   categories,
   site,
 }: NavbarClientProps) {
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+
   return (
     <>
       <nav className="relative z-50 hidden rounded-xl bg-[#110843] text-white shadow-md md:my-4 md:block">
@@ -65,7 +69,10 @@ export default function NavbarClient({
 
           <div className="flex items-center gap-3">
             <NavbarCartButton />
-            <NavbarAuthActions user={user} />
+            <NavbarAuthActions
+              user={user}
+              onOpenLogin={() => setLoginModalOpen(true)}
+            />
           </div>
         </div>
       </nav>
@@ -84,9 +91,17 @@ export default function NavbarClient({
           />
           <MobileCategoriesMenu categories={categories} />
           <MobileCartButton />
-          <MobileAccountMenu user={user} />
+          <MobileAccountMenu
+            user={user}
+            onOpenLogin={() => setLoginModalOpen(true)}
+          />
         </div>
       </nav>
+
+      <LoginModal
+        open={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+      />
     </>
   );
 }
@@ -192,16 +207,23 @@ function NavbarCartButton() {
   );
 }
 
-function NavbarAuthActions({ user }: { user: NavbarUser }) {
+function NavbarAuthActions({
+  user,
+  onOpenLogin,
+}: {
+  user: NavbarUser;
+  onOpenLogin: () => void;
+}) {
   if (!user) {
     return (
       <div className="flex items-center gap-2">
-        <Link
-          href="/sign-in"
+        <button
+          type="button"
+          onClick={onOpenLogin}
           className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#110843] transition hover:bg-[#FFF2B3]"
         >
           Sign In
-        </Link>
+        </button>
         <Link
           href="/sign-up"
           className="rounded-full bg-[#FFC736] px-4 py-2 text-sm font-semibold text-[#110843] transition hover:bg-[#E6B800]"
@@ -362,7 +384,13 @@ function MobileCartButton() {
   );
 }
 
-function MobileAccountMenu({ user }: { user: NavbarUser }) {
+function MobileAccountMenu({
+  user,
+  onOpenLogin,
+}: {
+  user: NavbarUser;
+  onOpenLogin: () => void;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -414,13 +442,16 @@ function MobileAccountMenu({ user }: { user: NavbarUser }) {
               </>
             ) : (
               <>
-                <Link
-                  href="/sign-in"
-                  onClick={() => setOpen(false)}
-                  className="block rounded-lg px-4 py-2 transition hover:bg-[#FFF2B3] hover:pl-5"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    onOpenLogin();
+                  }}
+                  className="block w-full rounded-lg px-4 py-2 text-left transition hover:bg-[#FFF2B3] hover:pl-5"
                 >
                   Sign In
-                </Link>
+                </button>
 
                 <Link
                   href="/sign-up"
@@ -434,6 +465,59 @@ function MobileAccountMenu({ user }: { user: NavbarUser }) {
           </div>
         </>
       )}
+    </div>
+  );
+}
+
+function LoginModal({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    if (!open) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-8">
+      <button
+        type="button"
+        aria-label="Close sign in modal"
+        onClick={onClose}
+        className="absolute inset-0 bg-[#110843]/55 backdrop-blur-sm"
+      />
+
+      <section className="relative z-10 w-full max-w-md">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute -right-2 -top-2 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-[#FFC736] text-[#110843] shadow-lg transition hover:bg-[#ffda63]"
+          aria-label="Close sign in modal"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        <div className="max-h-[90vh] overflow-y-auto rounded-[28px]">
+          <SignInForm />
+        </div>
+      </section>
     </div>
   );
 }
