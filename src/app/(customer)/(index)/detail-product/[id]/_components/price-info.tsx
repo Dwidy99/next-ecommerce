@@ -21,18 +21,18 @@ export default function PriceInfo({ item, isLogIn }: PriceInfoProp) {
   };
 
   return (
-    <aside className="w-full md:w-[320px] flex flex-col shrink-0 gap-5 h-fit">
-      <div className="bg-white border border-[#FFF9D9] p-6 sm:p-8 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300">
+    <aside className="flex h-fit w-full shrink-0 flex-col gap-5 lg:w-[360px]">
+      <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-[#FFC736] hover:shadow-md sm:p-8">
         <div className="mb-6">
-          <p className="font-semibold text-sm sm:text-base text-gray-700">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#d99000]">
             Brand New
           </p>
-          <p className="font-bold text-2xl sm:text-[32px] leading-tight mt-1 text-[#110843]">
+          <p className="mt-2 text-3xl font-extrabold leading-tight text-[#110843] sm:text-[34px]">
             {rupiahFormat(Number(item.price))}
           </p>
         </div>
 
-        <ul className="space-y-3 text-sm sm:text-base text-gray-700 mb-6">
+        <ul className="mb-6 space-y-3 text-sm text-slate-600 sm:text-base">
           {[
             "Cute packaging",
             "Manual book instructions",
@@ -54,7 +54,7 @@ export default function PriceInfo({ item, isLogIn }: PriceInfoProp) {
         <button
           onClick={checkout}
           disabled={!isLogIn}
-          className="w-full py-3 bg-[#12007a] hover:bg-[#24105e] text-white rounded-full font-semibold text-sm sm:text-base transition-all disabled:opacity-60"
+          className="w-full rounded-full bg-[#110843] py-3 text-sm font-bold text-white transition-all hover:bg-[#24105e] disabled:cursor-not-allowed disabled:opacity-60 sm:text-base"
         >
           Add to Cart
         </button>

@@ -19,15 +19,15 @@ export default function CarouselImages({ images }: CarouselImageProp) {
   }, [emblaApi]);
 
   return (
-    <section id="details-images" className="mt-10">
+    <section id="details-images">
       <div ref={emblaRef} className="overflow-hidden">
         <div className="flex gap-4">
           {images.map((src, i) => (
             <div
               key={src + i}
-              className="flex-shrink-0 w-[85%] sm:w-[60%] md:w-[48%] lg:w-[470px]"
+              className="w-[86%] flex-shrink-0 sm:w-[64%] md:w-[48%] lg:w-[470px]"
             >
-              <div className="bg-white border border-[#E5E5E5] rounded-3xl flex justify-center items-center h-[240px] sm:h-[300px] md:h-[350px] p-6 sm:p-8 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="flex h-[250px] items-center justify-center overflow-hidden rounded-[28px] border border-slate-200 bg-[#FFF4CC] p-6 shadow-sm transition-all duration-300 hover:border-[#FFC736] hover:shadow-md sm:h-[320px] sm:p-8 md:h-[380px]">
                 <img
                   src={src}
                   alt={`product-${i}`}

@@ -11,6 +11,7 @@ import type {
   CustomerCategoryItem,
   CustomerProductItem,
 } from "@/app/(customer)/types";
+import HomeHeroCarousel from "./home-hero-carousel";
 
 const benefits = [
   {
@@ -142,60 +143,7 @@ export function HomeTopStrip() {
 }
 
 export function HomeHero() {
-  return (
-    <section className="mx-auto max-w-7xl px-4 pt-4 md:px-6">
-      <div className="relative overflow-hidden rounded-[22px] bg-[#110843] shadow-sm ring-1 ring-black/5">
-        <Image
-          src="/assets/banners/5.jpg"
-          alt="Shopverse gadget banner"
-          width={1800}
-          height={720}
-          priority
-          className="h-[360px] w-full object-cover md:h-[520px]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#110843]/90 via-[#110843]/55 to-black/10" />
-        <div className="absolute left-0 top-0 h-40 w-40 rounded-full bg-[#FFC736]/25 blur-3xl" />
-        <div className="absolute inset-0 flex items-center px-6 md:px-14">
-          <div className="max-w-2xl">
-            <p className="mb-4 inline-flex rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-[#FFC736] backdrop-blur">
-              Shopverse Picks
-            </p>
-            <h1 className="text-3xl font-extrabold leading-tight text-white md:text-5xl">
-              Discover curated gadgets for work, study, and entertainment.
-            </h1>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-white/80 md:text-base">
-              Shop quality products with organized categories, fast checkout,
-              and a smoother catalog experience.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link
-                href="/catalogs"
-                className="rounded-md bg-[#FFC736] px-7 py-3 text-sm font-bold text-[#110843] shadow-lg shadow-yellow-950/20 transition hover:bg-[#ffda63]"
-              >
-                Explore Now
-              </Link>
-              <Link
-                href="/carts"
-                className="rounded-md bg-white/15 px-7 py-3 text-sm font-bold text-white ring-1 ring-white/30 backdrop-blur transition hover:bg-white/25"
-              >
-                View Cart
-              </Link>
-            </div>
-          </div>
-        </div>
-        <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-1.5">
-          {[0, 1, 2, 3, 4].map((item) => (
-            <span
-              key={item}
-              className={`h-2 rounded-full ${
-                item === 0 ? "w-8 bg-[#FFC736]" : "w-2 bg-white/60"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  return <HomeHeroCarousel />;
 }
 
 export function BenefitStrip() {
