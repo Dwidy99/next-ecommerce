@@ -2,6 +2,7 @@ import type { ProductStock } from "@prisma/client";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
+// Shared server action response type.
 export interface ActionResult {
   error: string;
   redirectUrl?: string;
@@ -9,11 +10,7 @@ export interface ActionResult {
   message?: string;
 }
 
-export type LoadingProps = {
-  count?: number;
-  type?: "grid" | "list";
-};
-
+// CRUD: User/Profile data.
 export type TProfile = {
   name: string;
   email: string;
@@ -23,24 +20,7 @@ export type TProfile = {
 
 export type ProfileResult = TProfile | { error: string };
 
-export type ResetPasswordPageProps = {
-  params: Promise<{ token: string }>;
-};
-
-export type CategoryPageProps = {
-  params: Promise<{ slug: string }>;
-};
-
-export type DetailProductPageProps = {
-  params: Promise<{ id: string }>;
-};
-
-export type PaymentResultPageProps = {
-  searchParams?: Promise<{
-    code?: string;
-  }>;
-};
-
+// CRUD: Product and cart data.
 export type TProduct = {
   id: number;
   image_url: string;
@@ -51,39 +31,47 @@ export type TProduct = {
 
 export type TCart = TProduct & { quantity: number };
 
-export type CardProductProps = {
-  item: TProduct;
+export type CustomerProductItem = {
+  id: number;
+  name: string;
+  price: number;
+  image_url: string;
+  category_name: string;
 };
 
-export type ListProductProps = {
-  title: ReactNode;
-  isShowDetail: boolean;
+// CRUD: Category data.
+export type CustomerCategoryItem = {
+  id: number;
+  name: string;
+  slug: string | null;
+  productCount: number;
 };
 
-export type NoDataProps = {
-  title?: string;
-  message?: string;
-  icon?: string;
+export type CategoryProductSource = {
+  id: number;
+  name: string;
+  price: bigint | number;
+  images?: string[] | null;
+  category: {
+    name: string;
+  };
 };
 
-export type SearchBarProps = {
-  currentPage?: string;
-  title?: string;
+export type CategoryWithProductsItem = {
+  id: number;
+  name: string;
+  slug: string;
+  products: CustomerProductItem[];
 };
 
-export type CarouselImagesProps = {
-  images: string[];
+// CRUD: Brand data.
+export type CustomerBrandItem = {
+  id: number;
+  logo: string;
+  logo_url: string;
 };
 
-export type PriceInfoProps = {
-  item: TProduct;
-  isLogIn: boolean;
-};
-
-export type FormProfileProps = {
-  initialProfile: TProfile;
-};
-
+// CRUD: Order and payment data.
 export type TOrder = {
   id: number;
   code: string;
@@ -114,10 +102,6 @@ export type TOrder = {
   orderProduct?: TOrder["products"];
 };
 
-export type OrdersListProps = {
-  orders?: TOrder[];
-};
-
 export type OrderStatusConfig = {
   label: string;
   description: string;
@@ -125,40 +109,7 @@ export type OrderStatusConfig = {
   icon: LucideIcon;
 };
 
-export type EmptyStateProps = {
-  title?: string;
-  message?: string;
-  actionLabel?: string;
-  actionHref?: string;
-  showBackButton?: boolean;
-};
-
-export type PaymentStatusProps = {
-  status: "success" | "pending" | "failed" | "cancelled";
-  code?: string;
-};
-
-export type CustomerCategoryItem = {
-  id: number;
-  name: string;
-  slug: string | null;
-  productCount: number;
-};
-
-export type CustomerProductItem = {
-  id: number;
-  name: string;
-  price: number;
-  image_url: string;
-  category_name: string;
-};
-
-export type CustomerBrandItem = {
-  id: number;
-  logo: string;
-  logo_url: string;
-};
-
+// Query: Catalog filter data.
 export type FilterOption = {
   id: number;
   name: string;
@@ -176,9 +127,53 @@ export type TFilter = {
 
 export type FilterKey = "stock" | "brands" | "locations" | "categories";
 
-export type FilterCheckboxOption = FilterOption | {
-  id: ProductStock;
-  name: string;
+export type FilterCheckboxOption =
+  | FilterOption
+  | {
+      id: ProductStock;
+      name: string;
+    };
+
+// Page props: dynamic routes and search params.
+export type ResetPasswordPageProps = {
+  params: Promise<{ token: string }>;
+};
+
+export type CategoryPageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export type DetailProductPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export type PaymentResultPageProps = {
+  searchParams?: Promise<{
+    code?: string;
+  }>;
+};
+
+// Component props: product, category, cart, profile, and payment UI.
+export type CardProductProps = {
+  item: TProduct;
+};
+
+export type ListProductProps = {
+  title: ReactNode;
+  isShowDetail: boolean;
+};
+
+export type CarouselImagesProps = {
+  images: string[];
+};
+
+export type PriceInfoProps = {
+  item: TProduct;
+  isLogIn: boolean;
+};
+
+export type FormProfileProps = {
+  initialProfile: TProfile;
 };
 
 export type FilterCheckboxListProps = {
@@ -186,6 +181,41 @@ export type FilterCheckboxListProps = {
   options: FilterCheckboxOption[];
 };
 
+export type OrdersListProps = {
+  orders?: TOrder[];
+};
+
+export type EmptyStateProps = {
+  title?: string;
+  message?: string;
+  actionLabel?: string;
+  actionHref?: string;
+  showBackButton?: boolean;
+};
+
+export type PaymentStatusProps = {
+  status: "success" | "pending" | "failed" | "cancelled";
+  code?: string;
+};
+
+// Component props: shared UI helpers.
+export type LoadingProps = {
+  count?: number;
+  type?: "grid" | "list";
+};
+
+export type NoDataProps = {
+  title?: string;
+  message?: string;
+  icon?: string;
+};
+
+export type SearchBarProps = {
+  currentPage?: string;
+  title?: string;
+};
+
+// Navbar data and props.
 export type NavbarUser = {
   id: number;
   name: string;
@@ -216,21 +246,3 @@ export type NavbarSiteConfigSource = {
   title?: string | null;
   logo?: string | null;
 };
-
-export type CategoryProductSource = {
-  id: number;
-  name: string;
-  price: bigint | number;
-  images?: string[] | null;
-  category: {
-    name: string;
-  };
-};
-
-export type CategoryWithProductsItem = {
-  id: number;
-  name: string;
-  slug: string;
-  products: CustomerProductItem[];
-};
-
