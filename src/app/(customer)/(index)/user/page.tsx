@@ -20,7 +20,7 @@ export default async function ProfilePage() {
   if ("error" in res) {
     return (
       <main className="min-h-screen bg-[#edf2f6] px-4 py-10 sm:px-6">
-        <section className="mx-auto flex min-h-[70vh] max-w-xl items-center justify-center">
+        <section className="mx-auto flex min-h-screen max-w-xl items-center justify-center">
           <div className="w-full rounded-[28px] border border-slate-200 bg-white p-8 text-center shadow-sm">
             <p className="mx-auto mb-4 inline-flex rounded-full bg-[#FFF4CC] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#d99000]">
               Account

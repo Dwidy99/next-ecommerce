@@ -21,7 +21,7 @@ export default function NoData({
       <h3 className="text-base sm:text-lg font-semibold text-gray-700">
         {title}
       </h3>
-      <p className="text-gray-500 text-sm mt-1 max-w-[300px] sm:max-w-none">
+        <p className="mt-1 max-w-xs text-sm text-gray-500 sm:max-w-none">
         {message}
       </p>
     </div>

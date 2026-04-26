@@ -14,7 +14,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="p-[12px_24px] bg-[#110843] text-white rounded-full font-semibold hover:bg-[#3a2086] transition-all duration-200 disabled:bg-[#7c70b6]"
+      className="px-6 py-3 bg-[#110843] text-white rounded-full font-semibold hover:bg-[#3a2086] transition-all duration-200 disabled:bg-[#7c70b6]"
     >
       {pending ? "Updating..." : "Reset Password"}
     </button>
@@ -31,7 +31,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
   return (
     <form
       action={formAction}
-      className="flex w-full max-w-[500px] flex-col gap-5 rounded-3xl border border-[#E5E5E5] bg-white p-6 shadow-sm sm:p-[50px_30px]"
+      className="flex w-full max-w-lg flex-col gap-5 rounded-3xl border border-[#E5E5E5] bg-white p-6 shadow-sm sm:px-8 py-12"
     >
       <div className="flex flex-col gap-2 items-center text-center">
         <img

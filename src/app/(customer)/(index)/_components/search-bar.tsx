@@ -55,7 +55,7 @@ export default function SearchBar({
           <span>/</span>
           <span className="hover:text-[#110843] transition-colors">Browse</span>
           <span>/</span>
-          <span className="font-medium text-[#110843] truncate max-w-[140px] sm:max-w-none">
+          <span className="font-medium text-[#110843] truncate max-w-36 sm:max-w-none">
             {currentPage}
           </span>
         </nav>
@@ -75,10 +75,10 @@ export default function SearchBar({
       <form
         onSubmit={(e) => e.preventDefault()}
         className="
-          w-full sm:max-w-[400px] lg:max-w-[480px]
+          w-full sm:max-w-md lg:max-w-md
           bg-[#FFF9E8] flex items-center gap-2 sm:gap-3
           rounded-full border border-[#FFE6A3]
-          p-[10px_16px] sm:p-[12px_20px]
+          px-4 py-2.5 sm:px-5 py-3
           focus-within:ring-2 focus-within:ring-[#FFC736]
           transition-all duration-300
         "

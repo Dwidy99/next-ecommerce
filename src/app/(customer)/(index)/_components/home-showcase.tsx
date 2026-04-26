@@ -285,9 +285,9 @@ export async function ProductScroller() {
           <Link
             key={product.id}
             href={`/detail-product/${product.id}`}
-            className="group w-[230px] shrink-0 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-lg"
+            className="group w-56 shrink-0 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-lg"
           >
-            <div className="relative h-[250px] bg-[#FFF4CC]">
+            <div className="relative h-64 bg-[#FFF4CC]">
               <Image
                 src={product.image_url || "/assets/products/placeholder.svg"}
                 alt={product.name}

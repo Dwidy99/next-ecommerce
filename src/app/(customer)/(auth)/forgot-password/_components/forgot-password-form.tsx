@@ -16,7 +16,7 @@ export default function ForgotPasswordForm() {
   return (
     <form
       action={formAction}
-      className="flex w-full max-w-[500px] flex-col gap-5 rounded-3xl border border-[#E5E5E5] bg-white p-6 shadow-sm sm:p-[40px_30px]"
+      className="flex w-full max-w-lg flex-col gap-5 rounded-3xl border border-[#E5E5E5] bg-white p-6 shadow-sm sm:px-8 py-10"
     >
       <h1 className="font-bold text-2xl text-[#110843] text-center">
         Forgot Password
@@ -44,7 +44,7 @@ export default function ForgotPasswordForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="rounded-full bg-[#110843] p-[12px_24px] font-semibold text-white transition-all duration-200 hover:bg-[#24105e] disabled:cursor-not-allowed disabled:bg-[#7c70b6]"
+        className="rounded-full bg-[#110843] px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#24105e] disabled:cursor-not-allowed disabled:bg-[#7c70b6]"
       >
         {isPending ? "Sending..." : "Send Reset Link"}
       </button>

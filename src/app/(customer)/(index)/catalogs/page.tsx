@@ -49,7 +49,7 @@ export default function CatalogPage() {
               </p>
             </div>
 
-            <div className="absolute bottom-0 right-6 hidden w-[360px] opacity-90 lg:block">
+            <div className="absolute bottom-0 right-6 hidden w-96 opacity-90 lg:block">
               <Image
                 src="/assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png"
                 alt="Featured gadget"
@@ -70,8 +70,8 @@ export default function CatalogPage() {
 
       {/* Main content */}
       <section className="container mx-auto mt-8 max-w-7xl px-4 pb-[100px] md:px-6">
-        <div className="grid gap-6 lg:grid-cols-[300px_1fr]">
-          <aside className="hidden h-fit rounded-[22px] border border-slate-200 bg-white/95 p-6 shadow-sm ring-1 ring-white lg:block">
+        <div className="grid gap-6 lg:grid-cols-4">
+          <aside className="hidden h-fit rounded-[22px] border border-slate-200 bg-white/95 p-6 shadow-sm ring-1 ring-white lg:col-span-1 lg:block">
             <FilterSidebar />
           </aside>
 
@@ -86,7 +86,7 @@ export default function CatalogPage() {
             </div>
           </details>
 
-          <main className="rounded-[22px] border border-slate-200 bg-white/95 p-5 shadow-sm ring-1 ring-white md:p-6">
+          <main className="rounded-[22px] border border-slate-200 bg-white/95 p-5 shadow-sm ring-1 ring-white md:p-6 lg:col-span-3">
             <div className="mb-5 flex flex-col justify-between gap-2 border-b border-slate-200 pb-4 md:flex-row md:items-end">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d99000]">

@@ -62,7 +62,7 @@ function ProductListingContent(): JSX.Element {
   return (
     <section
       id="product-list"
-      className="grid w-full grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8"
+      className="grid w-full grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8"
     >
       {products.map((product) => (
         <CardProduct key={`${product.id}-${product.name}`} item={product} />

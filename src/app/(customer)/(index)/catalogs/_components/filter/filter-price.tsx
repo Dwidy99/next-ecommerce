@@ -20,10 +20,10 @@ export default function FilterPrice() {
   }, [minPrice, maxPrice]);
 
   return (
-    <div className="flex flex-col gap-[14px]">
+    <div className="flex flex-col gap-3.5">
       <p className="font-semibold leading-[22px]">Price Range</p>
 
-      <div className="flex w-full max-w-[480px] items-center gap-[10px] rounded-full border border-[#FFE6A3] bg-[#FFF9E8] p-[12px_20px] transition-all duration-300 focus-within:ring-2 focus-within:ring-[#FFC736]">
+      <div className="flex w-full max-w-md items-center gap-2.5 rounded-full border border-[#FFE6A3] bg-[#FFF9E8] px-5 py-3 transition-all duration-300 focus-within:ring-2 focus-within:ring-[#FFC736]">
         <div className="flex shrink-0">
           <img src="/assets/icons/dollar-circle.svg" alt="icon" />
         </div>
@@ -36,7 +36,7 @@ export default function FilterPrice() {
         />
       </div>
 
-      <div className="flex w-full max-w-[480px] items-center gap-[10px] rounded-full border border-[#FFE6A3] bg-[#FFF9E8] p-[12px_20px] transition-all duration-300 focus-within:ring-2 focus-within:ring-[#FFC736]">
+      <div className="flex w-full max-w-md items-center gap-2.5 rounded-full border border-[#FFE6A3] bg-[#FFF9E8] px-5 py-3 transition-all duration-300 focus-within:ring-2 focus-within:ring-[#FFC736]">
         <div className="flex shrink-0">
           <img src="/assets/icons/dollar-circle.svg" alt="icon" />
         </div>

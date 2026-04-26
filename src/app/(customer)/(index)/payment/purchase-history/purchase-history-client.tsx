@@ -184,8 +184,8 @@ export default function PurchaseHistoryClient() {
     <main className="bg-[#f7f4ea] px-4 py-10 md:px-6 md:py-14">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
         <section className="overflow-hidden rounded-[2rem] border border-[#f1d78a] bg-[#110843] text-white shadow-[0_28px_90px_rgba(17,8,67,0.16)]">
-          <div className="grid gap-8 px-6 py-8 md:px-10 md:py-10 lg:grid-cols-[1.45fr_0.95fr] lg:items-end">
-            <div>
+          <div className="grid gap-8 px-6 py-8 md:px-10 md:py-10 lg:grid-cols-5 lg:items-end">
+            <div className="lg:col-span-3">
               <span className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-[#FFC736]">
                 Payment Center
               </span>
@@ -214,8 +214,8 @@ export default function PurchaseHistoryClient() {
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
+            <div className="grid gap-4 sm:grid-cols-3 lg:col-span-2 lg:grid-cols-1">
+              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
                 <div className="flex items-center gap-3 text-[#FFC736]">
                   <ReceiptText className="h-5 w-5" />
                   <span className="text-xs font-semibold uppercase tracking-[0.24em]">
@@ -228,7 +228,7 @@ export default function PurchaseHistoryClient() {
                 </p>
               </div>
 
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
+              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
                 <div className="flex items-center gap-3 text-[#FFC736]">
                   <BadgeCheck className="h-5 w-5" />
                   <span className="text-xs font-semibold uppercase tracking-[0.24em]">
@@ -241,7 +241,7 @@ export default function PurchaseHistoryClient() {
                 </p>
               </div>
 
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
+              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
                 <div className="flex items-center gap-3 text-[#FFC736]">
                   <Clock3 className="h-5 w-5" />
                   <span className="text-xs font-semibold uppercase tracking-[0.24em]">

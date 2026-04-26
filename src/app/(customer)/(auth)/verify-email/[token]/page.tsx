@@ -13,7 +13,7 @@ export default async function VerifyEmailPage({
   if (!verified) {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center bg-[#EFF3FA]">
-        <div className="w-[400px] bg-white border border-[#E5E5E5] rounded-2xl p-8 text-center">
+        <div className="w-full max-w-md bg-white border border-[#E5E5E5] rounded-2xl p-8 text-center">
           <img
             src="/assets/logos/logos-black.svg"
             alt="Logo"
@@ -38,7 +38,7 @@ export default async function VerifyEmailPage({
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-[#EFF3FA]">
-      <div className="w-[400px] bg-white border border-[#E5E5E5] rounded-2xl p-8 text-center">
+      <div className="w-full max-w-md bg-white border border-[#E5E5E5] rounded-2xl p-8 text-center">
         <img
           src="/assets/logos/logos-black.svg"
           alt="Logo"

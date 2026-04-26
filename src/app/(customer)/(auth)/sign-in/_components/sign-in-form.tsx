@@ -9,19 +9,14 @@ import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 
 const initialState: ActionResult = { error: "" };
 
-// ✅ Submit button that reacts to pending state
 function SubmitButton() {
   const { pending } = useFormStatus();
+
   return (
     <button
       type="submit"
       disabled={pending}
-      className="
-        w-full py-3 px-6
-        bg-[#110843] text-white font-semibold rounded-full
-        hover:bg-[#3a2086] transition-all duration-200
-        disabled:bg-[#7c70b6] disabled:cursor-not-allowed
-      "
+      className="w-full rounded-full bg-[#110843] px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#3a2086] disabled:cursor-not-allowed disabled:bg-[#7c70b6]"
     >
       {pending ? "Signing in..." : "Sign In to My Account"}
     </button>
@@ -40,36 +35,29 @@ export default function SignInForm() {
   return (
     <form
       action={formAction}
-      className="
-        bg-white border border-[#E5E5E5] rounded-3xl shadow-sm
-        flex flex-col gap-5 px-6 py-8 sm:px-10 sm:py-10
-        transition-all
-      "
+      className="flex flex-col gap-5 rounded-3xl border border-[#E5E5E5] bg-white px-6 py-8 shadow-sm transition-all sm:px-10 sm:py-10"
     >
-      {/* 🔹 Header */}
-      <div className="flex flex-col gap-2 items-center text-center">
+      <div className="flex flex-col items-center gap-2 text-center">
         <img
           src="/assets/logos/logos-black.svg"
           alt="Logo"
-          className="max-h-10 sm:max-h-12 w-auto object-contain"
+          className="max-h-10 w-auto object-contain sm:max-h-12"
         />
-        <h1 className="font-bold text-2xl sm:text-3xl text-[#110843] mt-2">
+        <h1 className="mt-2 text-2xl font-bold text-[#110843] sm:text-3xl">
           Sign In
         </h1>
-        <p className="text-sm sm:text-base text-gray-500">
+        <p className="text-sm text-gray-500 sm:text-base">
           Access your account below
         </p>
       </div>
 
-      {/* 🔸 Error Message */}
       {state.error && (
-        <p className="text-red-500 text-sm bg-red-50 border border-red-200 p-2 rounded text-center">
+        <p className="rounded border border-red-200 bg-red-50 p-2 text-center text-sm text-red-500">
           {state.error}
         </p>
       )}
 
-      {/* 📨 Email */}
-      <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition">
+      <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 transition focus-within:ring-2 focus-within:ring-[#FFC736]">
         <Mail size={18} className="text-gray-600" />
         <input
           type="email"
@@ -77,12 +65,11 @@ export default function SignInForm() {
           required
           defaultValue="guest@gmail.com"
           placeholder="Write your email address"
-          className="appearance-none outline-none w-full bg-transparent placeholder:text-[#616369] font-semibold text-black text-sm sm:text-base"
+          className="w-full appearance-none bg-transparent text-sm font-semibold text-black outline-none placeholder:text-[#616369] sm:text-base"
         />
       </div>
 
-      {/* 🔒 Password */}
-      <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition">
+      <div className="flex items-center gap-3 rounded-full border border-[#E5E5E5] px-5 py-3 transition focus-within:ring-2 focus-within:ring-[#FFC736]">
         <Lock size={18} className="text-gray-600" />
         <input
           type={showPassword ? "text" : "password"}
@@ -90,12 +77,12 @@ export default function SignInForm() {
           required
           defaultValue="qwerty12"
           placeholder="Write your password"
-          className="appearance-none outline-none w-full bg-transparent placeholder:text-[#616369] font-semibold text-black text-sm sm:text-base"
+          className="w-full appearance-none bg-transparent text-sm font-semibold text-black outline-none placeholder:text-[#616369] sm:text-base"
         />
         <button
           type="button"
           onClick={togglePassword}
-          className="flex shrink-0 text-gray-500 hover:text-[#110843] transition"
+          className="flex shrink-0 text-gray-500 transition hover:text-[#110843]"
         >
           {showPassword ? (
             <EyeOff size={20} strokeWidth={1.8} />
@@ -105,24 +92,21 @@ export default function SignInForm() {
         </button>
       </div>
 
-      {/* 🔗 Forgot Password */}
-      <div className="text-sm text-right">
+      <div className="text-right text-sm">
         <Link
           href="/forgot-password"
-          className="text-[#616369] underline hover:text-[#110843] transition"
+          className="text-[#616369] underline transition hover:text-[#110843]"
         >
           Forgot Password?
         </Link>
       </div>
 
-      {/* 🔘 Submit */}
       <SubmitButton />
 
-      {/* 🧭 Secondary Actions */}
-      <div className="flex flex-col gap-3 text-center mt-2">
+      <div className="mt-2 flex flex-col gap-3 text-center">
         <Link
           href="/sign-up"
-          className="p-[12px_24px] bg-white rounded-full border border-[#E5E5E5] font-semibold hover:bg-[#FFF2B3] hover:text-[#110843] transition"
+          className="rounded-full border border-[#E5E5E5] bg-white px-6 py-3 font-semibold transition hover:bg-[#FFF2B3] hover:text-[#110843]"
         >
           Create New Account
         </Link>

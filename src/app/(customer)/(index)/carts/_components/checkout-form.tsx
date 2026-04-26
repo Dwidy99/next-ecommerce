@@ -20,7 +20,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="p-3 sm:p-[12px_24px] bg-[#12007a] rounded-full text-center font-semibold text-white w-full hover:bg-[#3a2ea1] transition disabled:opacity-70"
+      className="w-full rounded-full bg-[#12007a] p-3 text-center font-semibold text-white transition hover:bg-[#3a2ea1] disabled:opacity-70 sm:px-6 sm:py-3"
     >
       {pending ? "Processing..." : "Checkout Now"}
     </button>
@@ -47,14 +47,14 @@ export default function CheckoutForm() {
     <form
       action={formAction}
       id="checkout-info"
-      className="flex flex-col lg:flex-row justify-between gap-6 mt-10 pb-24"
+      className="mt-10 flex flex-col gap-6 pb-24 lg:flex-row lg:justify-between"
     >
       {/* Left: Shipping Address */}
-      <div className="flex-1 flex flex-col gap-4 bg-white border border-[#E5E5E5] rounded-3xl p-5 sm:p-8">
-        <h2 className="font-bold text-xl sm:text-2xl">Shipping Address</h2>
+      <div className="flex flex-1 flex-col gap-4 rounded-3xl border border-[#E5E5E5] bg-white p-5 sm:p-8">
+        <h2 className="text-xl font-bold sm:text-2xl">Shipping Address</h2>
 
         {state?.error && (
-          <p className="text-red-500 font-semibold">{state.error}</p>
+          <p className="font-semibold text-red-500">{state.error}</p>
         )}
 
         <div className="space-y-4">
@@ -74,7 +74,7 @@ export default function CheckoutForm() {
                           ? "Postal code"
                           : "Phone / WhatsApp"
                 }
-                className="w-full border border-[#E5E5E5] rounded-full px-5 py-3 text-sm font-medium placeholder:text-[#616369] focus:ring-2 focus:ring-[#FFC736] outline-none"
+                className="w-full rounded-full border border-[#E5E5E5] px-5 py-3 text-sm font-medium outline-none placeholder:text-[#616369] focus:ring-2 focus:ring-[#FFC736]"
                 required={field !== "notes"}
               />
               <FieldError keyword={field} error={state?.error} />
@@ -84,16 +84,16 @@ export default function CheckoutForm() {
             name="notes"
             placeholder="Additional notes for courier"
             rows={4}
-            className="w-full border border-[#E5E5E5] rounded-2xl p-4 text-sm font-medium placeholder:text-[#616369] focus:ring-2 focus:ring-[#FFC736] outline-none resize-none"
+            className="w-full resize-none rounded-2xl border border-[#E5E5E5] p-4 text-sm font-medium outline-none placeholder:text-[#616369] focus:ring-2 focus:ring-[#FFC736]"
           ></textarea>
         </div>
       </div>
 
       {/* Right: Payment */}
-      <div className="flex-1 flex flex-col gap-4 h-fit">
-        <h2 className="font-bold text-xl sm:text-2xl">Payment Details</h2>
+      <div className="flex h-fit flex-1 flex-col gap-4">
+        <h2 className="text-xl font-bold sm:text-2xl">Payment Details</h2>
 
-        <div className="bg-white border border-[#E5E5E5] rounded-3xl p-5 sm:p-8 flex flex-col gap-6">
+        <div className="flex flex-col gap-6 rounded-3xl border border-[#E5E5E5] bg-white p-5 sm:p-8">
           <div className="flex items-center justify-between">
             <span className="font-semibold">Subtotal</span>
             <span>{rupiahFormat(grandTotal)}</span>
@@ -101,7 +101,7 @@ export default function CheckoutForm() {
 
           <div className="flex items-center justify-between">
             <span className="font-semibold">Grand Total</span>
-            <span className="text-xl sm:text-2xl font-bold text-[#12007a]">
+            <span className="text-xl font-bold text-[#12007a] sm:text-2xl">
               {rupiahFormat(grandTotal)}
             </span>
           </div>
@@ -110,7 +110,7 @@ export default function CheckoutForm() {
 
           <button
             type="button"
-            className="p-3 sm:p-[12px_24px] bg-white rounded-full text-center font-semibold border border-[#E5E5E5] w-full hover:bg-gray-50 transition"
+            className="w-full rounded-full border border-[#E5E5E5] bg-white p-3 text-center font-semibold transition hover:bg-gray-50 sm:px-6 sm:py-3"
           >
             Contact Sales
           </button>

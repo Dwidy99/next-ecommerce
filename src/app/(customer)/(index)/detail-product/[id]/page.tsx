@@ -121,8 +121,8 @@ export default async function DetailProduct({ params }: DetailProductProps) {
 
           <CarouselImages images={product.images} />
 
-          <section className="mt-10 grid gap-8 lg:grid-cols-[1fr_360px]">
-            <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-6 md:p-8">
+          <section className="mt-10 grid gap-8 lg:grid-cols-3">
+            <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-6 md:p-8 lg:col-span-2">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d99000]">
                 About Product
               </p>

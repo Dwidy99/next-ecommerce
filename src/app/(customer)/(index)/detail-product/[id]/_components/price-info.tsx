@@ -21,7 +21,7 @@ export default function PriceInfo({ item, isLogIn }: PriceInfoProp) {
   };
 
   return (
-    <aside className="flex h-fit w-full shrink-0 flex-col gap-5 lg:w-[360px]">
+    <aside className="flex h-fit w-full shrink-0 flex-col gap-5">
       <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-[#FFC736] hover:shadow-md sm:p-8">
         <div className="mb-6">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#d99000]">

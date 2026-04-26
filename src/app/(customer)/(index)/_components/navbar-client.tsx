@@ -60,7 +60,7 @@ export default function NavbarClient({
   return (
     <>
       <nav className="relative z-50 hidden rounded-xl bg-[#110843] text-white shadow-md md:my-4 md:block">
-        <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-6 px-6 py-3 lg:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3 lg:px-8">
           <div className="flex items-center gap-8">
             <NavbarLogo site={site} />
             <NavbarLinks />
@@ -109,7 +109,7 @@ export default function NavbarClient({
 function NavbarLogo({ site }: { site: NavbarSite }) {
   return (
     <Link href="/" className="flex items-center">
-      <span className="rounded-full border border-[#FFD86E] bg-[#FFE9A3] p-[2px] shadow-[0_0_0_3px_rgba(255,199,54,0.16)]">
+        <span className="rounded-full border border-[#FFD86E] bg-[#FFE9A3] p-0.5 shadow-[0_0_0_3px_rgba(255,199,54,0.16)]">
         <span className="flex min-h-12 items-center justify-center rounded-full bg-[#110843] px-4 py-2">
           <Image
             src="/assets/logos/logos.svg"
@@ -250,7 +250,7 @@ function NavbarAccountMenu({ user }: { user: Exclude<NavbarUser, null> }) {
         <span className="mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-[#FFC736] text-xs font-extrabold text-[#110843] ring-2 ring-white/10 transition group-hover:scale-105">
           {initial}
         </span>
-        <span className="max-w-[110px] truncate text-sm font-semibold">
+        <span className="max-w-28 truncate text-sm font-semibold">
           {user.name}
         </span>
         <ChevronDown className="ml-1 h-4 w-4 text-white/70 transition duration-200 group-hover:rotate-180 group-hover:text-[#FFC736]" />
@@ -346,7 +346,7 @@ function MobileCategoriesMenu({
             className="fixed inset-0 z-40 bg-black/30"
           />
 
-          <div className="absolute bottom-14 left-1/2 z-50 w-[190px] -translate-x-1/2 rounded-xl border border-slate-200 bg-white py-2 text-[#110843] shadow-xl">
+          <div className="absolute bottom-14 left-1/2 z-50 w-48 -translate-x-1/2 rounded-xl border border-slate-200 bg-white py-2 text-[#110843] shadow-xl">
             {categories.length > 0 ? (
               categories.map((category) => (
                 <Link
@@ -413,7 +413,7 @@ function MobileAccountMenu({
             className="fixed inset-0 z-40 bg-black/30"
           />
 
-          <div className="absolute bottom-14 left-1/2 z-50 w-[190px] -translate-x-1/2 rounded-xl border border-slate-200 bg-white py-2 text-[#110843] shadow-xl">
+          <div className="absolute bottom-14 left-1/2 z-50 w-48 -translate-x-1/2 rounded-xl border border-slate-200 bg-white py-2 text-[#110843] shadow-xl">
             {user ? (
               <>
                 <Link
