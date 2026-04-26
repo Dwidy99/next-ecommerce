@@ -65,7 +65,7 @@ export async function storeOrder(
         ewallet: {
           channelCode: "SHOPEEPAY",
           channelProperties: {
-            successReturnUrl: `${process.env.NEXT_PUBLIC_REDIRECT_PAYMENT_URL}?code=${order.code}`,
+            successReturnUrl: buildPaymentReturnUrl(order.code, "success"),
           },
         },
       },
@@ -110,10 +110,25 @@ function buildOrderProducts(products: TCart[], orderId: number) {
     order_id: orderId,
     product_id: product.id,
     quantity: product.quantity ?? 1,
-    subtotal: product.price,
+    subtotal: product.price * (product.quantity ?? 1),
   }));
 }
 
 function getPaymentRedirectUrl(response: PaymentRequest) {
   return response.actions?.find((action) => action.urlType === "DEEPLINK")?.url ?? "/";
+}
+
+function buildPaymentReturnUrl(code: string, status: "success" | "failed") {
+  const appUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    process.env.NEXT_PUBLIC_REDIRECT_URL ||
+    "http://localhost:3000";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_REDIRECT_PAYMENT_URL ||
+    `${appUrl}/payment/${status}`;
+
+  const url = new URL(baseUrl, appUrl);
+  url.searchParams.set("code", code);
+
+  return url.toString();
 }

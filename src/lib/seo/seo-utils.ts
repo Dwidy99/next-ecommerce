@@ -24,11 +24,11 @@ export async function generatePageSEO({
     const metaKeywords =
         keywords?.filter(Boolean).join(", ") || site.keywords?.join(", ") || ""
 
-    const siteUrl = site.url || "https://example.com"
+    const siteUrl = normalizeSiteUrl(site.url)
     const fullUrl = url
         ? url.startsWith("http")
             ? url
-            : `${siteUrl}${url}`
+            : `${siteUrl}${url.startsWith("/") ? url : `/${url}`}`
         : siteUrl
 
     const imageUrl = image || site.logo || site.icon || `${siteUrl}/favicon.ico`
@@ -55,5 +55,22 @@ export async function generatePageSEO({
         },
         icons: { icon: iconUrl },
         metadataBase: new URL(siteUrl),
+    }
+}
+
+function normalizeSiteUrl(url?: string) {
+    const fallbackUrl = "https://example.com"
+    const cleanUrl = url?.trim()
+
+    if (!cleanUrl) return fallbackUrl
+
+    try {
+        return new URL(cleanUrl).origin
+    } catch {
+        try {
+            return new URL(`https://${cleanUrl}`).origin
+        } catch {
+            return fallbackUrl
+        }
     }
 }

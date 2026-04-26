@@ -1,4 +1,5 @@
 import PaymentStatus from "../_components/payment-status";
+import { getOrderStatusByCode } from "../lib/data";
 
 export default async function PaymentDetailPage({
   params,
@@ -6,8 +7,7 @@ export default async function PaymentDetailPage({
   params: Promise<{ code: string }>;
 }) {
   const { code } = await params;
-  const res = await fetch(`/api/order/status?code=${code}`);
-  const data = await res.json();
+  const order = await getOrderStatusByCode(code);
 
-  return <PaymentStatus status={data.status} code={data.code} />;
+  return <PaymentStatus status={order?.status ?? "pending"} code={order?.code ?? code} />;
 }
