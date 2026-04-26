@@ -1,10 +1,5 @@
 import React from "react";
-
-interface NoDataProps {
-  title?: string;
-  message?: string;
-  icon?: string;
-}
+import type { NoDataProps } from "@/app/(customer)/types";
 
 export default function NoData({
   title = "No Data Found",

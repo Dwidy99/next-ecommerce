@@ -2,15 +2,10 @@
 
 import { useCart } from "@/hooks/useCart";
 import { rupiahFormat } from "@/lib/utils";
-import { TCart, TProduct } from "@/app/(customer)/types";
+import type { PriceInfoProps, TCart } from "@/app/(customer)/types";
 import { useRouter } from "next/navigation";
 
-interface PriceInfoProp {
-  item: TProduct;
-  isLogIn: boolean;
-}
-
-export default function PriceInfo({ item, isLogIn }: PriceInfoProp) {
+export default function PriceInfo({ item, isLogIn }: PriceInfoProps) {
   const { addProduct } = useCart();
   const router = useRouter();
 

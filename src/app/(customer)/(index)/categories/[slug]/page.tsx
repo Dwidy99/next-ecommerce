@@ -5,13 +5,10 @@ import NoData from "../../_components/no-data";
 import { formatCategoryProducts, getCategoryBySlug } from "../lib/data";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
 import Link from "next/link";
+import type { CategoryPageProps } from "@/app/(customer)/types";
 
 export const dynamicParams = true;
 export const dynamic = "force-dynamic";
-
-interface CategoryPageProps {
-  params: Promise<{ slug: string }>;
-}
 
 export async function generateMetadata({ params }: CategoryPageProps) {
   const { slug } = await params;

@@ -24,31 +24,12 @@ import {
   ShoppingCart,
   User,
 } from "lucide-react";
-
-type NavbarUser = {
-  id: number;
-  name: string;
-  email: string;
-  role: "customer" | "superadmin";
-  image?: string | null;
-} | null;
-
-type NavbarCategory = {
-  id: number;
-  name: string;
-  slug: string | null;
-};
-
-type NavbarSite = {
-  webname: string;
-  logo?: string | null;
-};
-
-interface NavbarClientProps {
-  user: NavbarUser;
-  categories: NavbarCategory[];
-  site: NavbarSite;
-}
+import type {
+  NavbarCategoryItem,
+  NavbarClientProps,
+  NavbarSite,
+  NavbarUser,
+} from "@/app/(customer)/types";
 
 export default function NavbarClient({
   user,
@@ -146,7 +127,7 @@ function NavbarLinks() {
 function NavbarCategoriesMenu({
   categories,
 }: {
-  categories: NavbarCategory[];
+  categories: NavbarCategoryItem[];
 }) {
   return (
     <DropdownMenu>
@@ -163,7 +144,7 @@ function NavbarCategoriesMenu({
       <DropdownMenuContent
         align="start"
         sideOffset={10}
-        className="max-h-[320px] w-56 overflow-y-auto rounded-xl border border-slate-200 bg-white"
+        className="max-h-80 w-56 overflow-y-auto rounded-xl border border-slate-200 bg-white"
       >
         <DropdownMenuLabel className="text-xs uppercase tracking-[0.2em] text-slate-500">
           Browse Categories
@@ -324,7 +305,7 @@ function MobileNavItem({
 function MobileCategoriesMenu({
   categories,
 }: {
-  categories: NavbarCategory[];
+  categories: NavbarCategoryItem[];
 }) {
   const [open, setOpen] = useState(false);
 

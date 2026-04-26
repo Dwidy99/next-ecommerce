@@ -1,15 +1,10 @@
 import PaymentStatus from "../_components/payment-status";
 import { updateOrderStatusByCode } from "../lib/data";
-
-type PaymentFailedPageProps = {
-  searchParams?: Promise<{
-    code?: string;
-  }>;
-};
+import type { PaymentResultPageProps } from "@/app/(customer)/types";
 
 export default async function PaymentFailedPage({
   searchParams,
-}: PaymentFailedPageProps) {
+}: PaymentResultPageProps) {
   const params = await searchParams;
   const order = await updateOrderStatusByCode(params?.code, "failed");
 

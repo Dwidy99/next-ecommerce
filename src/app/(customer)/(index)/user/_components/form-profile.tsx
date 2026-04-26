@@ -6,15 +6,7 @@ import React, { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { updateProfile } from "../lib/actions";
 import { redirect } from "next/navigation";
-
-type FormProfileProps = {
-  initialProfile: {
-    name: string;
-    email: string;
-    image: string | null;
-    created_at: Date;
-  };
-};
+import type { FormProfileProps } from "@/app/(customer)/types";
 
 export default function FormProfile({ initialProfile }: FormProfileProps) {
   const [isPending, startTransition] = useTransition();

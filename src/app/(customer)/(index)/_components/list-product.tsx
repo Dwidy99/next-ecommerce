@@ -1,12 +1,7 @@
-import type { ReactNode } from "react";
 import { getProducts } from "../lib/data";
 import CardProduct from "./card-product";
 import Link from "next/link";
-
-interface ListProductProps {
-  title: ReactNode;
-  isShowDetail: boolean;
-}
+import type { ListProductProps } from "@/app/(customer)/types";
 
 export default async function ListProduct({
   title,

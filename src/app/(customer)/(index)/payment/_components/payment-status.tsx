@@ -3,11 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Ban, CheckCircle2, Clock3, ShoppingBag, XCircle } from "lucide-react";
-
-type PaymentStatusProps = {
-  status: "success" | "pending" | "failed" | "cancelled";
-  code?: string;
-};
+import type { PaymentStatusProps } from "@/app/(customer)/types";
 
 export default function PaymentStatus({ status, code }: PaymentStatusProps) {
   const config = {

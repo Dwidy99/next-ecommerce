@@ -1,9 +1,6 @@
 "use client";
 
-interface LoadingProps {
-  count?: number;
-  type?: "grid" | "list";
-}
+import type { LoadingProps } from "@/app/(customer)/types";
 
 export default function Loading({ count = 4, type = "grid" }: LoadingProps) {
   return (

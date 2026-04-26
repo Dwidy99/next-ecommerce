@@ -1,4 +1,6 @@
 import type { ProductStock } from "@prisma/client";
+import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 
 export interface ActionResult {
   error: string;
@@ -6,6 +8,11 @@ export interface ActionResult {
   code?: string;
   message?: string;
 }
+
+export type LoadingProps = {
+  count?: number;
+  type?: "grid" | "list";
+};
 
 export type TProfile = {
   name: string;
@@ -16,6 +23,24 @@ export type TProfile = {
 
 export type ProfileResult = TProfile | { error: string };
 
+export type ResetPasswordPageProps = {
+  params: Promise<{ token: string }>;
+};
+
+export type CategoryPageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export type DetailProductPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export type PaymentResultPageProps = {
+  searchParams?: Promise<{
+    code?: string;
+  }>;
+};
+
 export type TProduct = {
   id: number;
   image_url: string;
@@ -25,6 +50,39 @@ export type TProduct = {
 };
 
 export type TCart = TProduct & { quantity: number };
+
+export type CardProductProps = {
+  item: TProduct;
+};
+
+export type ListProductProps = {
+  title: ReactNode;
+  isShowDetail: boolean;
+};
+
+export type NoDataProps = {
+  title?: string;
+  message?: string;
+  icon?: string;
+};
+
+export type SearchBarProps = {
+  currentPage?: string;
+  title?: string;
+};
+
+export type CarouselImagesProps = {
+  images: string[];
+};
+
+export type PriceInfoProps = {
+  item: TProduct;
+  isLogIn: boolean;
+};
+
+export type FormProfileProps = {
+  initialProfile: TProfile;
+};
 
 export type TOrder = {
   id: number;
@@ -54,6 +112,30 @@ export type TOrder = {
   }[];
   orderDetail?: TOrder["detail"];
   orderProduct?: TOrder["products"];
+};
+
+export type OrdersListProps = {
+  orders?: TOrder[];
+};
+
+export type OrderStatusConfig = {
+  label: string;
+  description: string;
+  badgeClassName: string;
+  icon: LucideIcon;
+};
+
+export type EmptyStateProps = {
+  title?: string;
+  message?: string;
+  actionLabel?: string;
+  actionHref?: string;
+  showBackButton?: boolean;
+};
+
+export type PaymentStatusProps = {
+  status: "success" | "pending" | "failed" | "cancelled";
+  code?: string;
 };
 
 export type CustomerCategoryItem = {
@@ -97,6 +179,42 @@ export type FilterKey = "stock" | "brands" | "locations" | "categories";
 export type FilterCheckboxOption = FilterOption | {
   id: ProductStock;
   name: string;
+};
+
+export type FilterCheckboxListProps = {
+  name: FilterKey;
+  options: FilterCheckboxOption[];
+};
+
+export type NavbarUser = {
+  id: number;
+  name: string;
+  email: string;
+  role: "customer" | "superadmin";
+  image?: string | null;
+} | null;
+
+export type NavbarCategoryItem = {
+  id: number;
+  name: string;
+  slug: string | null;
+};
+
+export type NavbarSite = {
+  webname: string;
+  logo?: string | null;
+};
+
+export type NavbarClientProps = {
+  user: NavbarUser;
+  categories: NavbarCategoryItem[];
+  site: NavbarSite;
+};
+
+export type NavbarSiteConfigSource = {
+  shortName?: string | null;
+  title?: string | null;
+  logo?: string | null;
 };
 
 export type CategoryProductSource = {

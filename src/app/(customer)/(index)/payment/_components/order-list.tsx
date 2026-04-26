@@ -4,7 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { rupiahFormat } from "@/lib/utils";
-import type { TOrder } from "@/app/(customer)/types";
+import type {
+  OrdersListProps,
+  OrderStatusConfig,
+  TOrder,
+} from "@/app/(customer)/types";
 import {
   CalendarDays,
   CheckCircle2,
@@ -17,18 +21,7 @@ import {
   XCircle,
 } from "lucide-react";
 
-interface OrdersListProps {
-  orders?: TOrder[];
-}
-
-type StatusConfig = {
-  label: string;
-  description: string;
-  badgeClassName: string;
-  icon: typeof CheckCircle2;
-};
-
-const statusMap: Record<TOrder["status"], StatusConfig> = {
+const statusMap: Record<TOrder["status"], OrderStatusConfig> = {
   success: {
     label: "Paid",
     description: "Payment completed successfully.",

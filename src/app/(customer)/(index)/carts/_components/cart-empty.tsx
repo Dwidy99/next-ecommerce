@@ -12,7 +12,7 @@ export default function EmptyCartUI() {
       <img
         src="/assets/icons/cart.svg"
         alt="Empty Cart"
-        className="w-[90px] sm:w-[110px] md:w-[130px] h-auto mb-6"
+        className="w-24 sm:w-28 md:w-32 h-auto mb-6"
       />
 
       {/* 🧾 Title */}

@@ -3,17 +3,13 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useFilter } from "@/hooks/useFilter";
+import type { SearchBarProps } from "@/app/(customer)/types";
 
 /**
  * SearchBar Component
  * - Menampilkan breadcrumb, judul halaman, dan input pencarian
  * - Responsif: Desktop, Tablet, dan Mobile
  */
-interface SearchBarProps {
-  currentPage?: string; // contoh: "Catalog" atau "Laptop"
-  title?: string; // contoh: "Our Product Catalog"
-}
-
 export default function SearchBar({
   currentPage = "Catalog",
   title = "Our Product Catalog",

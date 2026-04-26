@@ -4,14 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
-
-type EmptyStateProps = {
-  title?: string;
-  message?: string;
-  actionLabel?: string;
-  actionHref?: string;
-  showBackButton?: boolean;
-};
+import type { EmptyStateProps } from "@/app/(customer)/types";
 
 export default function EmptyState({
   title = "No transactions yet",

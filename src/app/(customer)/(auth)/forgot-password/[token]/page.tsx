@@ -1,11 +1,10 @@
 import ResetPasswordForm from "../_components/reset-password-form";
 import { verifyResetToken } from "./lib/data";
+import type { ResetPasswordPageProps } from "@/app/(customer)/types";
 
-type Props = {
-  params: Promise<{ token: string }>;
-};
-
-export default async function ResetPasswordPage({ params }: Props) {
+export default async function ResetPasswordPage({
+  params,
+}: ResetPasswordPageProps) {
   const { token } = await params;
   const check = await verifyResetToken(token);
 

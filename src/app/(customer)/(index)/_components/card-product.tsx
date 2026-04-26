@@ -1,10 +1,6 @@
 import { rupiahFormat } from "@/lib/utils";
-import { TProduct } from "@/app/(customer)/types";
+import type { CardProductProps } from "@/app/(customer)/types";
 import Link from "next/link";
-
-interface CardProductProps {
-  item: TProduct;
-}
 
 export default function CardProduct({ item }: CardProductProps) {
   return (

@@ -1,15 +1,7 @@
 "use client";
 
-import type {
-  FilterCheckboxOption,
-  FilterKey,
-} from "@/app/(customer)/types";
+import type { FilterCheckboxListProps } from "@/app/(customer)/types";
 import { useFilter } from "@/hooks/useFilter";
-
-interface FilterCheckboxListProps {
-  name: FilterKey;
-  options: FilterCheckboxOption[];
-}
 
 export default function FilterCheckboxList({
   name,

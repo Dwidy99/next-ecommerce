@@ -9,12 +9,9 @@ import ListProduct from "../../_components/list-product";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
 import { getUser } from "@/lib/auth";
 import { getProductById } from "../lib/data";
+import type { DetailProductPageProps } from "@/app/(customer)/types";
 
-interface DetailProductProps {
-  params: Promise<{ id: string }>;
-}
-
-export async function generateMetadata({ params }: DetailProductProps) {
+export async function generateMetadata({ params }: DetailProductPageProps) {
   const { id } = await params;
   const product = await getProductById(id);
 
@@ -38,7 +35,7 @@ export async function generateMetadata({ params }: DetailProductProps) {
   });
 }
 
-export default async function DetailProduct({ params }: DetailProductProps) {
+export default async function DetailProduct({ params }: DetailProductPageProps) {
   const { id } = await params;
   const product = await getProductById(id);
   if (!product) redirect("/catalogs");
