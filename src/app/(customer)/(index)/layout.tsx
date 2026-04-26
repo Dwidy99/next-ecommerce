@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getSiteConfig } from "@/lib/seo/config";
 import { defaultMetadata } from "@/lib/seo/default-metadata";
+import NavigationLoading from "../_components/navigation-loading";
 
 export const dynamic = "force-dynamic";
 
@@ -57,6 +58,7 @@ export default async function CustomerLayout({
           </Link>
         </div>
       </div>
+      <NavigationLoading />
       {children}
       <Footer />
       <Toaster richColors position="top-center" />

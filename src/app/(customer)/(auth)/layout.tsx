@@ -4,6 +4,7 @@ import "../../globalsLanding.css";
 import { Toaster } from "sonner";
 import { getUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import NavigationLoading from "../_components/navigation-loading";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,7 @@ export default async function AuthRootLayout({
 
   return (
     <div className={poppins.className}>
+      <NavigationLoading />
       {children}
       <Toaster richColors position="top-center" />
     </div>
