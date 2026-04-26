@@ -23,7 +23,7 @@ export default function EmptyState({
   return (
     <main className="bg-[#f7f4ea] px-4 py-12 md:px-6 md:py-16">
       <div className="mx-auto flex min-h-screen w-full max-w-4xl items-center justify-center">
-        <div className="w-full overflow-hidden rounded-[2rem] border border-[#f1d78a] bg-white shadow-[0_24px_80px_rgba(17,8,67,0.08)]">
+        <div className="w-full overflow-hidden rounded-3xl border border-[#f1d78a] bg-white shadow-xl">
           <div className="bg-[#110843] px-6 py-10 text-center text-white md:px-10">
             <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-[#FFC736]">
               Purchase History

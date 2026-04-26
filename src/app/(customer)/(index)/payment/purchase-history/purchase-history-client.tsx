@@ -52,7 +52,8 @@ export default function PurchaseHistoryClient() {
 
       setOrders(data.orders ?? []);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to fetch orders";
+      const message =
+        err instanceof Error ? err.message : "Failed to fetch orders";
       setError(message);
     } finally {
       setLoading(false);
@@ -63,18 +64,22 @@ export default function PurchaseHistoryClient() {
     fetchOrders();
   }, []);
 
-  const paidOrders = orders.filter((order) => order.status === "success").length;
-  const pendingOrders = orders.filter((order) => order.status === "pending").length;
+  const paidOrders = orders.filter(
+    (order) => order.status === "success",
+  ).length;
+  const pendingOrders = orders.filter(
+    (order) => order.status === "pending",
+  ).length;
   const latestOrder = orders[0];
 
   if (loading) {
     return (
       <main className="bg-[#f7f4ea] px-4 py-12 md:px-6 md:py-16">
-        <div className="mx-auto flex min-h-[60vh] w-full max-w-6xl items-center justify-center">
-          <div className="w-full max-w-5xl rounded-[2rem] border border-[#f1d78a] bg-white p-6 shadow-[0_24px_80px_rgba(17,8,67,0.08)] md:p-8">
+        <section className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center">
+          <div className="w-full max-w-5xl rounded-3xl border border-[#f1d78a] bg-white p-6 shadow-xl md:p-8">
             <Loading count={3} type="list" />
           </div>
-        </div>
+        </section>
       </main>
     );
   }
@@ -82,8 +87,8 @@ export default function PurchaseHistoryClient() {
   if (unauthorized) {
     return (
       <main className="bg-[#f7f4ea] px-4 py-12 md:px-6 md:py-16">
-        <div className="mx-auto flex min-h-[60vh] w-full max-w-3xl items-center justify-center">
-          <div className="w-full overflow-hidden rounded-[2rem] border border-[#f1d78a] bg-white shadow-[0_24px_80px_rgba(17,8,67,0.08)]">
+        <section className="mx-auto flex min-h-screen w-full max-w-3xl items-center justify-center">
+          <div className="w-full overflow-hidden rounded-3xl border border-[#f1d78a] bg-white shadow-xl">
             <div className="bg-[#110843] px-6 py-10 text-center text-white md:px-10">
               <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-[#FFC736]">
                 Purchase History
@@ -97,7 +102,7 @@ export default function PurchaseHistoryClient() {
               </p>
             </div>
 
-            <div className="space-y-5 px-6 py-8 text-center md:px-10">
+            <div className="flex flex-col gap-5 px-6 py-8 text-center md:px-10">
               <p className="text-sm leading-7 text-[#5f6480] md:text-base">
                 Please{" "}
                 <Link
@@ -127,7 +132,7 @@ export default function PurchaseHistoryClient() {
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </main>
     );
   }
@@ -135,8 +140,8 @@ export default function PurchaseHistoryClient() {
   if (error) {
     return (
       <main className="bg-[#f7f4ea] px-4 py-12 md:px-6 md:py-16">
-        <div className="mx-auto flex min-h-[60vh] w-full max-w-3xl items-center justify-center">
-          <div className="w-full rounded-[2rem] border border-[#ffd4cf] bg-white p-8 text-center shadow-[0_24px_80px_rgba(17,8,67,0.08)] md:p-10">
+        <section className="mx-auto flex min-h-screen w-full max-w-3xl items-center justify-center">
+          <div className="w-full rounded-3xl border border-[#ffd4cf] bg-white p-8 text-center shadow-xl md:p-10">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#fff3f1] text-[#d14b3f]">
               <TriangleAlert className="h-8 w-8" />
             </div>
@@ -163,7 +168,7 @@ export default function PurchaseHistoryClient() {
               </Link>
             </div>
           </div>
-        </div>
+        </section>
       </main>
     );
   }
@@ -183,7 +188,7 @@ export default function PurchaseHistoryClient() {
   return (
     <main className="bg-[#f7f4ea] px-4 py-10 md:px-6 md:py-14">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-        <section className="overflow-hidden rounded-[2rem] border border-[#f1d78a] bg-[#110843] text-white shadow-[0_28px_90px_rgba(17,8,67,0.16)]">
+        <section className="overflow-hidden rounded-3xl border border-[#f1d78a] bg-[#110843] text-white shadow-2xl">
           <div className="grid gap-8 px-6 py-8 md:px-10 md:py-10 lg:grid-cols-5 lg:items-end">
             <div className="lg:col-span-3">
               <span className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-[#FFC736]">
@@ -215,7 +220,7 @@ export default function PurchaseHistoryClient() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3 lg:col-span-2 lg:grid-cols-1">
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
+              <div className="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
                 <div className="flex items-center gap-3 text-[#FFC736]">
                   <ReceiptText className="h-5 w-5" />
                   <span className="text-xs font-semibold uppercase tracking-[0.24em]">
@@ -228,7 +233,7 @@ export default function PurchaseHistoryClient() {
                 </p>
               </div>
 
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
+              <div className="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
                 <div className="flex items-center gap-3 text-[#FFC736]">
                   <BadgeCheck className="h-5 w-5" />
                   <span className="text-xs font-semibold uppercase tracking-[0.24em]">
@@ -241,7 +246,7 @@ export default function PurchaseHistoryClient() {
                 </p>
               </div>
 
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
+              <div className="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
                 <div className="flex items-center gap-3 text-[#FFC736]">
                   <Clock3 className="h-5 w-5" />
                   <span className="text-xs font-semibold uppercase tracking-[0.24em]">
@@ -261,7 +266,7 @@ export default function PurchaseHistoryClient() {
           </div>
         </section>
 
-        <section className="rounded-[2rem] border border-[#f1d78a] bg-white p-6 shadow-[0_24px_80px_rgba(17,8,67,0.08)] md:p-8">
+        <section className="rounded-3xl border border-[#f1d78a] bg-white p-6 shadow-xl md:p-8">
           <div className="mb-8 flex flex-col gap-3 border-b border-[#ece7d6] pb-6 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#d99000]">

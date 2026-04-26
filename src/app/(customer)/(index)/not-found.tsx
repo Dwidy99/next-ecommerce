@@ -21,8 +21,8 @@ export default function NotFound() {
       </header>
 
       {/* Main content */}
-      <section className="mx-auto -mt-2 flex min-h-[60vh] max-w-7xl items-center justify-center px-4 sm:px-8 lg:px-16">
-        <div className="relative w-full max-w-2xl overflow-hidden rounded-[28px] border border-slate-200 bg-white p-8 text-center shadow-sm md:p-12">
+      <section className="mx-auto -mt-2 flex min-h-screen max-w-7xl items-center justify-center px-4 sm:px-8 lg:px-16">
+        <div className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm md:p-12">
           <div className="absolute left-0 top-0 h-40 w-40 rounded-full bg-[#FFC736]/25 blur-3xl" />
           <div className="absolute bottom-0 right-0 h-44 w-44 rounded-full bg-[#110843]/10 blur-3xl" />
 

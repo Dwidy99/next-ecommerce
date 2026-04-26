@@ -75,7 +75,7 @@ export default function HomeHeroCarousel() {
 
   return (
     <section className="mx-auto max-w-7xl px-4 pt-4 md:px-6">
-      <div className="relative overflow-hidden rounded-[22px] bg-[#110843] shadow-sm ring-1 ring-black/5">
+      <div className="relative overflow-hidden rounded-3xl bg-[#110843] shadow-sm ring-1 ring-black/5">
         <div
           className="flex transition-transform duration-700 ease-out"
           style={{ transform: `translateX(-${activeSlide * 100}%)` }}

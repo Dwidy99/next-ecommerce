@@ -64,7 +64,7 @@ export default async function DetailProduct({ params }: DetailProductProps) {
         <div className="mx-auto max-w-7xl">
           <Navbar />
 
-          <section className="relative mt-6 overflow-hidden rounded-[28px] bg-[#110843] p-7 shadow-xl md:p-10">
+          <section className="relative mt-6 overflow-hidden rounded-3xl bg-[#110843] p-7 shadow-xl md:p-10">
             <div className="absolute left-0 top-0 h-40 w-40 rounded-full bg-[#FFC736]/25 blur-3xl" />
             <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
             <div className="absolute right-10 top-10 hidden h-28 w-28 rounded-full border border-white/10 lg:block" />
@@ -99,7 +99,7 @@ export default async function DetailProduct({ params }: DetailProductProps) {
 
       {/* Main content */}
       <section className="mx-auto mt-8 max-w-7xl px-4 sm:px-8 lg:px-16">
-        <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm sm:p-8 md:p-10">
+        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8 md:p-10">
           <div className="mb-7 flex flex-col justify-between gap-3 border-b border-slate-200 pb-5 md:flex-row md:items-end">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d99000]">
@@ -122,7 +122,7 @@ export default async function DetailProduct({ params }: DetailProductProps) {
           <CarouselImages images={product.images} />
 
           <section className="mt-10 grid gap-8 lg:grid-cols-3">
-            <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-6 md:p-8 lg:col-span-2">
+            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 md:p-8 lg:col-span-2">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d99000]">
                 About Product
               </p>
@@ -166,7 +166,7 @@ export default async function DetailProduct({ params }: DetailProductProps) {
         </div>
 
         {/* Recommendation */}
-        <section className="mt-10 rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm sm:p-8 md:p-10">
+        <section className="mt-10 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8 md:p-10">
           <Suspense fallback={<Loading />}>
             <ListProduct
               title={

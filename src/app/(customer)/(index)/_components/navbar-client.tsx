@@ -514,7 +514,7 @@ function LoginModal({
           <X className="h-5 w-5" />
         </button>
 
-        <div className="max-h-[90vh] overflow-y-auto rounded-[28px]">
+        <div className="max-h-[90vh] overflow-y-auto rounded-3xl">
           <SignInForm />
         </div>
       </section>

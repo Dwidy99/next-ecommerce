@@ -32,7 +32,7 @@ export default function CatalogPage() {
         <div className="mx-auto max-w-7xl">
           <Navbar />
 
-          <section className="relative mt-6 overflow-hidden rounded-[28px] bg-[#110843] p-7 shadow-xl md:p-10">
+          <section className="relative mt-6 overflow-hidden rounded-3xl bg-[#110843] p-7 shadow-xl md:p-10">
             <div className="absolute left-0 top-0 h-40 w-40 rounded-full bg-[#FFC736]/25 blur-3xl" />
             <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
 
@@ -71,11 +71,11 @@ export default function CatalogPage() {
       {/* Main content */}
       <section className="container mx-auto mt-8 max-w-7xl px-4 pb-[100px] md:px-6">
         <div className="grid gap-6 lg:grid-cols-4">
-          <aside className="hidden h-fit rounded-[22px] border border-slate-200 bg-white/95 p-6 shadow-sm ring-1 ring-white lg:col-span-1 lg:block">
+          <aside className="hidden h-fit rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm ring-1 ring-white lg:col-span-1 lg:block">
             <FilterSidebar />
           </aside>
 
-          <details className="group rounded-[22px] border border-slate-200 bg-white p-5 shadow-sm lg:hidden">
+          <details className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm lg:hidden">
             <summary className="flex cursor-pointer list-none items-center justify-center gap-2 rounded-full bg-[#FFC736] py-3 font-semibold text-[#110843] shadow-sm transition hover:bg-[#ffda63]">
               <SlidersHorizontal size={18} />
               <span>Show Filters</span>
@@ -86,7 +86,7 @@ export default function CatalogPage() {
             </div>
           </details>
 
-          <main className="rounded-[22px] border border-slate-200 bg-white/95 p-5 shadow-sm ring-1 ring-white md:p-6 lg:col-span-3">
+          <main className="rounded-3xl border border-slate-200 bg-white/95 p-5 shadow-sm ring-1 ring-white md:p-6 lg:col-span-3">
             <div className="mb-5 flex flex-col justify-between gap-2 border-b border-slate-200 pb-4 md:flex-row md:items-end">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d99000]">

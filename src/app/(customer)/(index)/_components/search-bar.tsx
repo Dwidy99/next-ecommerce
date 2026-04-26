@@ -39,7 +39,7 @@ export default function SearchBar({
         justify-between
         gap-6 sm:gap-8 p-6 sm:p-8
         max-w-7xl
-        rounded-[24px] border border-slate-200 bg-white shadow-sm
+        rounded-3xl border border-slate-200 bg-white shadow-sm
       "
     >
       {/* 🔹 Breadcrumb + Title */}

@@ -31,7 +31,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     return (
       <main className="min-h-screen bg-[#edf2f6] px-4 py-10 sm:px-6">
         <section className="mx-auto flex min-h-screen max-w-xl items-center justify-center">
-          <div className="w-full rounded-[28px] border border-slate-200 bg-white p-8 text-center shadow-sm">
+          <div className="w-full rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
             <p className="mx-auto mb-4 inline-flex rounded-full bg-[#FFF4CC] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#d99000]">
               Category
             </p>
@@ -73,7 +73,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <div className="mx-auto max-w-7xl">
           <Navbar />
 
-          <section className="relative mt-6 overflow-hidden rounded-[28px] bg-[#110843] p-7 shadow-xl md:p-10">
+          <section className="relative mt-6 overflow-hidden rounded-3xl bg-[#110843] p-7 shadow-xl md:p-10">
             <div className="absolute left-0 top-0 h-40 w-40 rounded-full bg-[#FFC736]/25 blur-3xl" />
             <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
             <div className="absolute right-10 top-10 hidden h-28 w-28 rounded-full border border-white/10 lg:block" />
@@ -109,7 +109,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
       {/* Main content */}
       <section className="mx-auto mt-8 max-w-7xl px-4 sm:px-8 lg:px-16">
-        <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm sm:p-8 md:p-10">
+        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8 md:p-10">
           <div className="mb-7 flex flex-col justify-between gap-3 border-b border-slate-200 pb-5 md:flex-row md:items-end">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d99000]">

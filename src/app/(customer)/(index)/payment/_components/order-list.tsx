@@ -639,7 +639,7 @@ function buildReceiptHtml(order: TOrder) {
 export default function OrdersList({ orders = [] }: OrdersListProps) {
   if (!Array.isArray(orders) || orders.length === 0) {
     return (
-      <div className="rounded-[1.5rem] border border-dashed border-[#dccfa2] bg-[#fffdf6] px-6 py-12 text-center text-[#5f6480]">
+      <div className="rounded-3xl border border-dashed border-[#dccfa2] bg-[#fffdf6] px-6 py-12 text-center text-[#5f6480]">
         <p>No orders found.</p>
       </div>
     );
@@ -671,11 +671,11 @@ export default function OrdersList({ orders = [] }: OrdersListProps) {
         return (
           <article
             key={order.id}
-            className="overflow-hidden rounded-[1.75rem] border border-[#ece7d6] bg-[#fffdfa] shadow-[0_18px_50px_rgba(17,8,67,0.06)] transition-transform duration-300 hover:-translate-y-1"
+            className="overflow-hidden rounded-3xl border border-[#ece7d6] bg-[#fffdfa] shadow-lg transition-transform duration-300 hover:-translate-y-1"
           >
             <div className="flex flex-col gap-6 p-6 md:p-7">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                <div className="space-y-3">
+                <div className="flex flex-col gap-3">
                   <div className="flex flex-wrap items-center gap-3">
                     <span className="inline-flex items-center rounded-full bg-[#fff1b8] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#8b6500]">
                       Order #{order.code}
@@ -700,19 +700,21 @@ export default function OrdersList({ orders = [] }: OrdersListProps) {
                   </div>
                 </div>
 
-                <div className="rounded-[1.25rem] border border-[#efe3b8] bg-[#fff8de] px-4 py-3 text-left lg:min-w-[220px]">
+                <div className="rounded-2xl border border-[#efe3b8] bg-[#fff8de] px-4 py-3 text-left lg:min-w-56">
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b28700]">
                     Grand Total
                   </p>
                   <p className="mt-2 text-2xl font-bold text-[#110843]">
                     Rp {rupiahFormat(Number(order.total))}
                   </p>
-                  <p className="mt-1 text-sm text-[#7a6f48]">{status.description}</p>
+                  <p className="mt-1 text-sm text-[#7a6f48]">
+                    {status.description}
+                  </p>
                 </div>
               </div>
 
               <div className="grid gap-4 md:grid-cols-3">
-                <div className="rounded-[1.25rem] border border-[#ece7d6] bg-white p-4">
+                <div className="rounded-2xl border border-[#ece7d6] bg-white p-4">
                   <div className="flex items-center gap-2 text-[#d99000]">
                     <CalendarDays className="h-4 w-4" />
                     <p className="text-xs font-semibold uppercase tracking-[0.22em]">
@@ -724,7 +726,7 @@ export default function OrdersList({ orders = [] }: OrdersListProps) {
                   </p>
                 </div>
 
-                <div className="rounded-[1.25rem] border border-[#ece7d6] bg-white p-4">
+                <div className="rounded-2xl border border-[#ece7d6] bg-white p-4">
                   <div className="flex items-center gap-2 text-[#d99000]">
                     <Package2 className="h-4 w-4" />
                     <p className="text-xs font-semibold uppercase tracking-[0.22em]">
@@ -739,7 +741,7 @@ export default function OrdersList({ orders = [] }: OrdersListProps) {
                   </p>
                 </div>
 
-                <div className="rounded-[1.25rem] border border-[#ece7d6] bg-white p-4">
+                <div className="rounded-2xl border border-[#ece7d6] bg-white p-4">
                   <div className="flex items-center gap-2 text-[#d99000]">
                     <MapPin className="h-4 w-4" />
                     <p className="text-xs font-semibold uppercase tracking-[0.22em]">
@@ -756,7 +758,7 @@ export default function OrdersList({ orders = [] }: OrdersListProps) {
               </div>
 
               {items.length > 0 && (
-                <div className="rounded-[1.5rem] border border-[#ece7d6] bg-white p-4 md:p-5">
+                <div className="rounded-3xl border border-[#ece7d6] bg-white p-4 md:p-5">
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#d99000]">
@@ -773,12 +775,13 @@ export default function OrdersList({ orders = [] }: OrdersListProps) {
 
                   <div className="grid gap-3 md:grid-cols-2">
                     {items.slice(0, 2).map((item) => {
-                      const imageUrl = item.product.images?.[0] || "/assets/icons/no-data.svg";
+                      const imageUrl =
+                        item.product.images?.[0] || "/assets/icons/no-data.svg";
 
                       return (
                         <div
                           key={item.id}
-                          className="flex items-center gap-3 rounded-[1.25rem] border border-[#f0ead8] bg-[#fffdfa] p-3"
+                          className="flex items-center gap-3 rounded-2xl border border-[#f0ead8] bg-[#fffdfa] p-3"
                         >
                           <div className="relative h-16 w-16 overflow-hidden rounded-2xl bg-[#f7f4ea]">
                             <Image
@@ -795,7 +798,8 @@ export default function OrdersList({ orders = [] }: OrdersListProps) {
                               {item.product.name}
                             </p>
                             <p className="mt-1 text-sm text-[#5f6480]">
-                              Qty {item.quantity} - Rp {rupiahFormat(Number(item.subtotal))}
+                              Qty {item.quantity} - Rp{" "}
+                              {rupiahFormat(Number(item.subtotal))}
                             </p>
                           </div>
                         </div>
@@ -806,13 +810,14 @@ export default function OrdersList({ orders = [] }: OrdersListProps) {
               )}
 
               <div className="flex flex-col gap-4 border-t border-[#ece7d6] pt-5 md:flex-row md:items-center md:justify-between">
-                <div className="space-y-1">
+                <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2 text-sm font-medium text-[#110843]">
                     <ReceiptText className="h-4 w-4 text-[#d99000]" />
                     Ready to review this order again anytime.
                   </div>
                   <p className="text-sm text-[#5f6480]">
-                    Keep this page for payment follow-up, receipt printing, and quick order recall.
+                    Keep this page for payment follow-up, receipt printing, and
+                    quick order recall.
                   </p>
                 </div>
 
