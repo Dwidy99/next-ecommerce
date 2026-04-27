@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
+import type { AdminDashboardChartItem } from "@/app/(admin)/types";
 import {
   Card,
   CardContent,
@@ -19,7 +20,7 @@ import {
 } from "@/components/ui/chart";
 
 interface ChartAreaProps {
-  data: { month: string; orders: number; revenue: number }[];
+  data: AdminDashboardChartItem[];
 }
 
 /**
@@ -39,16 +40,18 @@ const chartConfig = {
 
 export function ChartArea({ data }: ChartAreaProps) {
   return (
-    <Card className="w-full h-full border-border bg-background text-foreground shadow-sm">
+    <Card className="h-full w-full border-border/70 bg-card/95 text-foreground shadow-sm">
       <CardHeader className="pb-2">
         <CardTitle>Sales Overview</CardTitle>
-        <CardDescription>Based on monthly transactions</CardDescription>
+        <CardDescription>
+          Monthly orders and revenue from recent transactions.
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="p-0">
         <ChartContainer
           config={chartConfig}
-          className="w-full h-[320px] -mx-6 -mb-6"
+          className="-mx-6 -mb-6 h-[320px] w-full"
         >
           <AreaChart
             data={data}
