@@ -30,15 +30,6 @@ export type AdminNavSection = {
   items: AdminNavItem[];
 };
 
-export type AdminSidebarProps = {
-  collapsed: boolean;
-  onNavigate?: () => void;
-};
-
-export type AdminDashboardHeaderProps = {
-  onToggleSidebar: () => void;
-};
-
 export type AdminDashboardShellProps = {
   children: React.ReactNode;
 };
