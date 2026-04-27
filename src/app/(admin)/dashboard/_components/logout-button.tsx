@@ -1,30 +1,23 @@
 "use client";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { LogOut } from "lucide-react";
 import { Logout } from "../lib/actions";
+import { cn } from "@/lib/utils";
 
-export default function FormLogout() {
+export default function FormLogout({ collapsed = false }: { collapsed?: boolean }) {
   return (
-    <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <form action={Logout}>
-            <button
-              type="submit"
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            >
-              <LogOut className="h-5 w-5" />
-              <span className="sr-only">Logout</span>
-            </button>
-          </form>
-        </TooltipTrigger>
-        <TooltipContent side="right">Logout</TooltipContent>
-      </Tooltip>
-    </nav>
+    <form action={Logout}>
+      <button
+        type="submit"
+        className={cn(
+          "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground",
+          collapsed && "justify-center px-2",
+        )}
+        title={collapsed ? "Logout" : undefined}
+      >
+        <LogOut className="h-5 w-5 shrink-0" />
+        {!collapsed && <span>Logout</span>}
+      </button>
+    </form>
   );
 }

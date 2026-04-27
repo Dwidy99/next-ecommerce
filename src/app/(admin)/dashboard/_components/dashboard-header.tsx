@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { PanelLeft } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,69 +11,66 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import type { AdminDashboardHeaderProps } from "@/app/(admin)/types";
 
-import { Menu } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-
-interface HeaderProps {
-  onToggleSidebar: () => void;
+function formatSegment(segment: string) {
+  return segment.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-export default function DashboardHeader({ onToggleSidebar }: HeaderProps) {
+export default function DashboardHeader({
+  onToggleSidebar,
+}: AdminDashboardHeaderProps) {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
   const segments = pathname.split("/").filter(Boolean).slice(1);
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center border-b bg-background px-4 sm:px-6">
-      <button
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b bg-background/95 px-4 backdrop-blur sm:px-6">
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
         onClick={onToggleSidebar}
         aria-label="Toggle sidebar"
-        className="mr-3 text-muted-foreground hover:text-foreground lg:hidden"
+        className="rounded-xl"
       >
-        <Menu className="h-5 w-5" />
-      </button>
+        <PanelLeft className="h-5 w-5" />
+      </Button>
 
-      <Breadcrumb className="hidden md:flex">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/dashboard">Dashboard</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
+      <div className="flex min-w-0 flex-col">
+        <p className="text-sm font-semibold text-foreground md:hidden">
+          Dashboard
+        </p>
 
-          {segments.map((segment, index) => {
-            const href = `/dashboard/${segments.slice(0, index + 1).join("/")}`;
-            const isLast = index === segments.length - 1;
+        <Breadcrumb className="hidden md:flex">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
 
-            const label = segment
-              .replace(/-/g, " ")
-              .replace(/\b\w/g, (c) => c.toUpperCase());
+            {segments.map((segment, index) => {
+              const href = `/dashboard/${segments.slice(0, index + 1).join("/")}`;
+              const isLast = index === segments.length - 1;
+              const label = formatSegment(segment);
 
-            return (
-              <BreadcrumbItem key={href}>
-                <BreadcrumbSeparator />
-                {isLast ? (
-                  <BreadcrumbPage>{label}</BreadcrumbPage>
-                ) : (
-                  <BreadcrumbLink asChild>
-                    <Link href={href}>{label}</Link>
-                  </BreadcrumbLink>
-                )}
-              </BreadcrumbItem>
-            );
-          })}
-        </BreadcrumbList>
-      </Breadcrumb>
+              return (
+                <BreadcrumbItem key={href}>
+                  <BreadcrumbSeparator />
+                  {isLast ? (
+                    <BreadcrumbPage>{label}</BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink asChild>
+                      <Link href={href}>{label}</Link>
+                    </BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+              );
+            })}
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
     </header>
   );
 }

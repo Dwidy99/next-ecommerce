@@ -2,9 +2,26 @@
 
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
-import { SignIn } from "@/app/(admin)/dashboard/sign-in/lib/actions";
-import { ActionResult } from "@/app/(admin)/types";
+import { Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { SignIn } from "../lib/actions";
+import type { ActionResult, AdminLoginFormProps } from "@/app/(admin)/types";
+import { cn } from "@/lib/utils";
 
 const initialState: ActionResult = { error: "" };
 
@@ -12,79 +29,102 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button
+    <Button
       type="submit"
       disabled={pending}
-      className="
-        w-full py-3 px-6
-        bg-[#110843] text-white font-semibold rounded-xl
-        hover:bg-[#3a2086] transition
-        disabled:opacity-60
-      "
+      className="h-11 w-full rounded-xl bg-[#110843] text-white hover:bg-[#24105e]"
     >
-      {pending ? "Signing in..." : "Sign In"}
-    </button>
+      {pending ? "Signing in..." : "Sign in to dashboard"}
+    </Button>
   );
 }
 
-export default function SignInForm() {
+export default function AdminLoginForm({ className }: AdminLoginFormProps) {
   const [state, formAction] = useActionState(SignIn, initialState);
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="mx-auto w-full max-w-[440px] rounded-2xl border bg-white/95 p-6 shadow-lg backdrop-blur sm:p-8">
-      <div className="flex flex-col gap-6">
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold text-[#110843]">Admin Sign In</h1>
-          <p className="text-gray-500 text-sm">Login to access the dashboard</p>
+    <Card
+      className={cn(
+        "w-full max-w-md border-[#e8dfc5] bg-white/95 shadow-2xl backdrop-blur",
+        className,
+      )}
+    >
+      <CardHeader className="text-center">
+        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#110843] text-lg font-black text-[#FFC736]">
+          A
         </div>
+        <CardTitle className="text-2xl font-bold text-[#110843]">
+          Admin Sign In
+        </CardTitle>
+        <CardDescription>
+          Enter your admin credentials to manage the dashboard.
+        </CardDescription>
+      </CardHeader>
 
-        <form action={formAction} className="flex flex-col gap-4">
-          {/* Error */}
-          {state.error && (
-            <p className="text-red-500 text-sm text-center bg-red-50 border border-red-200 p-2 rounded">
-              {state.error}
-            </p>
-          )}
+      <CardContent>
+        <form action={formAction}>
+          <FieldGroup>
+            {state.error && (
+              <Alert variant="destructive">
+                <AlertTitle>Unable to sign in</AlertTitle>
+                <AlertDescription>{state.error}</AlertDescription>
+              </Alert>
+            )}
 
-          {/* Email */}
-          <div className="flex items-center gap-3 border rounded-lg px-4 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition">
-            <Mail size={18} className="text-gray-500" />
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="admin@email.com"
-              className="min-w-0 w-full bg-transparent text-sm outline-none"
-            />
-          </div>
+            <Field>
+              <FieldLabel htmlFor="email">Email address</FieldLabel>
+              <div className="relative">
+                <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  defaultValue="guest.admin@gmail.com"
+                  placeholder="admin@email.com"
+                  className="h-11 rounded-xl pl-10"
+                />
+              </div>
+            </Field>
 
-          {/* Password */}
-          <div className="flex items-center gap-3 border rounded-lg px-4 py-3 focus-within:ring-2 focus-within:ring-[#FFC736] transition">
-            <Lock size={18} className="text-gray-500" />
+            <Field>
+              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <div className="relative">
+                <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  defaultValue="qwerty12"
+                  placeholder="Password"
+                  className="h-11 rounded-xl pl-10 pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-foreground"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+            </Field>
 
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              required
-              placeholder="Password"
-              className="min-w-0 w-full bg-transparent text-sm outline-none"
-            />
-
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="text-gray-500 hover:text-[#110843]"
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
-          </div>
-
-          {/* Submit */}
-          <SubmitButton />
+            <Field>
+              <SubmitButton />
+              <FieldDescription className="text-center">
+                This page is only for dashboard administrators.
+              </FieldDescription>
+            </Field>
+          </FieldGroup>
         </form>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

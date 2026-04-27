@@ -1,80 +1,64 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Sidebar from "./dashboard-sidebar";
-import Header from "./dashboard-header";
+import { useEffect, useState } from "react";
+import DashboardHeader from "./dashboard-header";
+import DashboardSidebar from "./dashboard-sidebar";
+import type { AdminDashboardShellProps } from "@/app/(admin)/types";
 import { cn } from "@/lib/utils";
 
-export default function DashboardShell({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardShell({ children }: AdminDashboardShellProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // memastikan client sudah mount
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // deteksi mobile
-  useEffect(() => {
-    if (!mounted) return;
-
-    const media = window.matchMedia("(max-width: 1024px)");
-
-    const handleResize = () => setIsMobile(media.matches);
-
-    handleResize();
-
-    media.addEventListener("change", handleResize);
-
-    return () => media.removeEventListener("change", handleResize);
-  }, [mounted]);
-
-  const toggleSidebar = () => {
-    if (isMobile) setMobileOpen((prev) => !prev);
-    else setCollapsed((prev) => !prev);
-  };
-
   if (!mounted) return null;
 
+  const closeMobileSidebar = () => setMobileOpen(false);
+
   return (
-    <div className="flex h-screen bg-background text-foreground">
-      {/* Sidebar */}
-      <div
+    <div className="flex min-h-screen bg-background text-foreground">
+      <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex h-full flex-col bg-background border-r transition-all duration-300 ease-in-out",
-          "lg:static lg:translate-x-0",
-          mobileOpen ? "translate-x-0 w-64" : "-translate-x-full w-64",
-          collapsed && !isMobile && "lg:w-16",
+          "fixed inset-y-0 left-0 z-40 border-r bg-background transition-all duration-300 lg:sticky lg:top-0 lg:translate-x-0",
+          collapsed ? "lg:w-20" : "lg:w-72",
+          mobileOpen ? "w-72 translate-x-0" : "w-72 -translate-x-full",
         )}
       >
-        <Sidebar collapsed={collapsed} />
-      </div>
+        <DashboardSidebar
+          collapsed={collapsed}
+          onNavigate={closeMobileSidebar}
+        />
+      </aside>
 
-      {/* Overlay mobile */}
       {mobileOpen && (
-        <div
+        <button
+          type="button"
+          aria-label="Close sidebar overlay"
           className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm lg:hidden"
-          onClick={() => setMobileOpen(false)}
+          onClick={closeMobileSidebar}
         />
       )}
 
-      {/* Main Content */}
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <Header onToggleSidebar={toggleSidebar} />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <DashboardHeader
+          onToggleSidebar={() => {
+            if (window.innerWidth < 1024) {
+              setMobileOpen((prev) => !prev);
+              return;
+            }
 
-        <main
-          className={cn(
-            "flex-1 overflow-y-auto transition-all duration-300",
-            "p-4 sm:p-6 lg:p-8",
-          )}
-        >
-          {children}
+            setCollapsed((prev) => !prev);
+          }}
+        />
+
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>

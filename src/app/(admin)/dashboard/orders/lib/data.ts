@@ -1,7 +1,7 @@
 
 import { prisma } from 'lib/prisma';
-import { TColumn } from './columns';
 import { getImageUrl } from "@/lib/supabase";
+import type { AdminOrderColumn } from "@/app/(admin)/types";
 
 export async function getOrders() {
     try {
@@ -16,7 +16,7 @@ export async function getOrders() {
             }
         })
 
-        const response: TColumn[] = orders.map((ord) => {
+        const response: AdminOrderColumn[] = orders.map((ord) => {
             return {
                 id: ord.id,
                 customer_name: ord.user?.name,

@@ -3,24 +3,11 @@
 import { Badge } from "@/components/ui/badge";
 import { getImageUrl } from "@/lib/supabase";
 import { rupiahFormat } from "@/lib/utils";
-import { StatusOrder } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
+import type { AdminOrderColumn } from "@/app/(admin)/types";
 
-type TProduct = {
-  name: string;
-  image: string;
-};
-
-export type TColumn = {
-  id: number;
-  products: TProduct[];
-  customer_name: string | undefined;
-  price: number;
-  status: StatusOrder;
-};
-
-export const columns: ColumnDef<TColumn>[] = [
+export const columns: ColumnDef<AdminOrderColumn>[] = [
   {
     accessorKey: "products",
     header: "Orders",
