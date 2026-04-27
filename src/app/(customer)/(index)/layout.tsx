@@ -1,6 +1,5 @@
 // app/layout.tsx
 import { Poppins } from "next/font/google";
-import "@/app/globalsLanding.css";
 import { Toaster } from "sonner";
 import Footer from "./_components/footer";
 import Link from "next/link";

@@ -1,6 +1,5 @@
 import { Poppins } from "next/font/google";
 import React, { ReactNode } from "react";
-import "../../globalsLanding.css";
 import { Toaster } from "sonner";
 import { getUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
