@@ -5,7 +5,7 @@ import { useCart } from "@/hooks/useCart";
 import CartProduct from "./cart-product";
 import CheckoutForm from "./checkout-form";
 import EmptyCartUI from "./cart-empty";
-import Loading from "../../../_components/loading-skeleton";
+import CustomerLoading from "@/app/(customer)/_components/customer-loading";
 
 export default function CartClient() {
   const { products } = useCart();
@@ -13,7 +13,7 @@ export default function CartClient() {
 
   useEffect(() => setIsMounted(true), []);
 
-  if (!isMounted) return <Loading />;
+  if (!isMounted) return <CustomerLoading />;
 
   const isEmpty = products.length === 0;
 

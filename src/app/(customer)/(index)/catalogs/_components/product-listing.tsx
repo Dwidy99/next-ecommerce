@@ -6,7 +6,7 @@ import { useFilter } from "@/hooks/useFilter";
 import { fetchProduct } from "../lib/data";
 import CardProduct from "../../_components/card-product";
 import NoData from "../../_components/no-data";
-import Loading from "../../../_components/loading-skeleton";
+import CustomerLoading from "@/app/(customer)/_components/customer-loading";
 import type { TProduct } from "@/app/(customer)/types";
 
 export default function ProductListing(): JSX.Element {
@@ -34,7 +34,7 @@ function ProductListingContent(): JSX.Element {
   if (isLoading) {
     return (
       <div className="w-full">
-        <Loading count={6} type="grid" />
+        <CustomerLoading count={6} type="grid" />
       </div>
     );
   }

@@ -198,12 +198,6 @@ export type PaymentStatusProps = {
   code?: string;
 };
 
-// Component props: shared UI helpers.
-export type LoadingProps = {
-  count?: number;
-  type?: "grid" | "list";
-};
-
 export type NoDataProps = {
   title?: string;
   message?: string;

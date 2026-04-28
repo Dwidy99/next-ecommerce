@@ -4,7 +4,7 @@ import Link from "next/link";
 import Navbar from "../../_components/navbar";
 import CarouselImages from "./_components/carousel-images";
 import PriceInfo from "./_components/price-info";
-import Loading from "../../../_components/loading-skeleton";
+import CustomerLoading from "@/app/(customer)/_components/customer-loading";
 import ListProduct from "../../_components/list-product";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
 import { getUser } from "@/lib/auth";
@@ -164,7 +164,7 @@ export default async function DetailProduct({ params }: DetailProductPageProps) 
 
         {/* Recommendation */}
         <section className="mt-10 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8 md:p-10">
-          <Suspense fallback={<Loading />}>
+          <Suspense fallback={<CustomerLoading />}>
             <ListProduct
               title={
                 <>

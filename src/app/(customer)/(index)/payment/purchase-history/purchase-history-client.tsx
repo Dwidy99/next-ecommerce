@@ -14,7 +14,7 @@ import {
   ShoppingCart,
   TriangleAlert,
 } from "lucide-react";
-import Loading from "../../../_components/loading-skeleton";
+import CustomerLoading from "@/app/(customer)/_components/customer-loading";
 import EmptyState from "../_components/empty-state";
 
 function formatShortDate(value: string) {
@@ -77,7 +77,7 @@ export default function PurchaseHistoryClient() {
       <main className="bg-[#f7f4ea] px-4 py-12 md:px-6 md:py-16">
         <section className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center">
           <div className="w-full max-w-5xl rounded-3xl border border-[#f1d78a] bg-white p-6 shadow-xl md:p-8">
-            <Loading count={3} type="list" />
+            <CustomerLoading count={3} type="list" />
           </div>
         </section>
       </main>

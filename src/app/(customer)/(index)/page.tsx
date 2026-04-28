@@ -1,7 +1,7 @@
 import { generatePageSEO } from "@/lib/seo/seo-utils"
 import { Suspense } from "react"
 import Navbar from "./_components/navbar"
-import Loading from "../_components/loading-skeleton"
+import CustomerLoading from "@/app/(customer)/_components/customer-loading"
 import {
   ArticleSection,
   BenefitStrip,
@@ -40,17 +40,17 @@ export default function LandingPage() {
       {/* Main content */}
       <BenefitStrip />
 
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<CustomerLoading />}>
         <CompactCategoryGrid />
       </Suspense>
 
       <PromoMosaic />
 
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<CustomerLoading />}>
         <ProductScroller />
       </Suspense>
 
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<CustomerLoading />}>
         <CollaborationSection />
       </Suspense>
 
