@@ -1,34 +1,45 @@
 import { getErrorMessage, warnOnce } from "@/lib/error-message"
-import { prisma } from "../../../../../../lib/prisma"
+import { prisma } from "lib/prisma"
 
 function warnBrandFallback(source: string, error: unknown) {
-    warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`);
+  warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`)
 }
 
 export async function getBrands() {
-    try {
-        const brands = await prisma.brand.findMany({})
-
-        return brands
-    } catch (err) {
-        warnBrandFallback("Brands", err);
-        return []
-    }
-    // finally {}
+  try {
+    return await prisma.brand.findMany({
+      orderBy: {
+        created_at: "desc",
+      },
+      include: {
+        _count: {
+          select: {
+            products: true,
+          },
+        },
+      },
+    })
+  } catch (error) {
+    warnBrandFallback("Brands", error)
+    return []
+  }
 }
 
 export async function getBrandById(id: string) {
-    try {
-        const brand = prisma.brand.findFirst({
-            where: {
-                id: Number.parseInt(id)
-            }
-        })
+  const brandId = Number.parseInt(id)
 
-        return brand
-    } catch (err) {
-        warnBrandFallback("Brand", err);
-        return null
-    }
-    // finally {}
+  if (Number.isNaN(brandId)) {
+    return null
+  }
+
+  try {
+    return await prisma.brand.findUnique({
+      where: {
+        id: brandId,
+      },
+    })
+  } catch (error) {
+    warnBrandFallback("Brand", error)
+    return null
+  }
 }

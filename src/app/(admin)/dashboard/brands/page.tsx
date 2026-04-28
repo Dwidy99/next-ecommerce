@@ -1,48 +1,88 @@
-import { Button } from "@/components/ui/button";
+import Link from "next/link"
+import { Building2, Package, PlusCircle, Sparkles } from "lucide-react"
+
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { PlusCircle } from "lucide-react";
-import Link from "next/link";
-import React from "react";
-import { DataTable } from "../../../../components/ui/data-table";
-import { columns } from "./columns";
-import { getBrands } from "./lib/data";
+} from "@/components/ui/card"
+import { DataTable } from "@/components/ui/data-table"
+import { columns } from "./columns"
+import { getBrands } from "./lib/data"
 
 export default async function BrandPage() {
-  const brands = await getBrands();
+  const brands = await getBrands()
+  const totalProducts = brands.reduce(
+    (total, brand) => total + brand._count.products,
+    0,
+  )
 
   return (
-    <div className="space-y-6">
-      {/* Header section */}
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight">Brands</h2>
-          <p className="text-muted-foreground text-sm">
-            Manage your brands and view their performance.
-          </p>
-        </div>
-        <Button asChild size="sm" className="h-8 gap-1">
-          <Link href="/dashboard/brands/create">
-            <PlusCircle className="h-4 w-4" />
-            <span className="hidden sm:inline">Add Brand</span>
-          </Link>
-        </Button>
-      </div>
+    <div className="flex flex-col gap-6">
+      <section className="overflow-hidden rounded-3xl border bg-[#110843] p-6 text-white shadow-sm md:p-8">
+        <div className="grid gap-6 lg:grid-cols-[1.4fr_0.6fr] lg:items-center">
+          <div>
+            <Badge className="bg-[#FFC736] text-[#110843] hover:bg-[#FFC736]">
+              Brand Management
+            </Badge>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+              Manage brand partners with a cleaner admin flow.
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75 md:text-base">
+              Keep brand names and logos organized so products look trustworthy
+              in the customer catalog.
+            </p>
+          </div>
 
-      {/* Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base font-medium">Brand List</CardTitle>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+              <div className="flex items-center gap-3">
+                <Building2 className="h-5 w-5 text-[#FFC736]" />
+                <div>
+                  <p className="text-2xl font-bold">{brands.length}</p>
+                  <p className="text-xs text-white/65">Total Brands</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+              <div className="flex items-center gap-3">
+                <Package className="h-5 w-5 text-[#FFC736]" />
+                <div>
+                  <p className="text-2xl font-bold">{totalProducts}</p>
+                  <p className="text-xs text-white/65">Assigned Products</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Card className="border-border/70 bg-card/95 shadow-sm">
+        <CardHeader className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-[#d99000]" />
+              Brands
+            </CardTitle>
+            <CardDescription>
+              Manage brand logos and product associations.
+            </CardDescription>
+          </div>
+          <Button asChild>
+            <Link href="/dashboard/brands/create">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add Brand
+            </Link>
+          </Button>
         </CardHeader>
         <CardContent>
           <DataTable columns={columns} data={brands} />
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

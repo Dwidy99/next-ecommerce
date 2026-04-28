@@ -1,6 +1,5 @@
-import React from 'react'
-import FormBrand from '../_components/form-brand'
+import FormBrand from "../_components/form-brand"
 
-export default function CreatePage() {
-  return <FormBrand type='ADD'/>
+export default function CreateBrandPage() {
+  return <FormBrand type="ADD" />
 }

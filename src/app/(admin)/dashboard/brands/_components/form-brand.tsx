@@ -1,375 +1,192 @@
-"use client";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+"use client"
+
+import { useActionState } from "react"
+import Image from "next/image"
+import Link from "next/link"
+import { useFormStatus } from "react-dom"
+import {
+  AlertCircle,
+  ArrowLeft,
+  Building2,
+  CheckCircle2,
+  ImagePlus,
+  Loader2,
+  Save,
+  Sparkles,
+} from "lucide-react"
+
+import type { ActionResult, AdminBrandFormData } from "@/app/(admin)/types"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
-import { AlertCircle, ChevronLeft } from "lucide-react";
-import Link from "next/link";
-import React, { useActionState } from "react";
-import { postBrand, updateBrand } from "../lib/actions";
-import { ActionResult } from "@/app/(admin)/types";
-import { useFormStatus } from "react-dom";
-import { Brand } from "@prisma/client";
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { getImageUrl } from "@/lib/supabase"
+import { postBrand, updateBrand } from "../lib/actions"
 
 const initialState: ActionResult = {
   error: "",
-};
+}
 
 interface FormBrandProps {
-  type?: "ADD" | "EDIT";
-  data?: Brand | null;
+  type?: "ADD" | "EDIT"
+  data?: AdminBrandFormData
 }
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
+function SubmitButton({ type }: { type: "ADD" | "EDIT" }) {
+  const { pending } = useFormStatus()
 
   return (
-    <Button type="submit" size="sm" disabled={pending}>
-      {pending ? "Loading..." : "Save Brand"}
+    <Button type="submit" disabled={pending} className="gap-2">
+      {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+      {pending
+        ? type === "ADD"
+          ? "Creating..."
+          : "Saving..."
+        : type === "ADD"
+          ? "Create Brand"
+          : "Save Changes"}
     </Button>
-  );
+  )
 }
 
-export default function FormBrand({
-  data = null,
-  type = "ADD",
-}: FormBrandProps) {
+export default function FormBrand({ data = null, type = "ADD" }: FormBrandProps) {
   const updateBrandWithId = (_: unknown, formData: FormData) =>
-    updateBrand(_, formData, data?.id ?? 0);
+    updateBrand(_, formData, data?.id ?? 0)
 
   const [state, formAction] = useActionState(
     type === "ADD" ? postBrand : updateBrandWithId,
-    initialState
-  );
+    initialState,
+  )
+
+  const title = type === "ADD" ? "Create Brand" : "Edit Brand"
+  const description =
+    type === "ADD"
+      ? "Add a new brand with a clean logo for the catalog."
+      : "Update brand identity without disturbing product relationships."
 
   return (
-    <form action={formAction}>
-      <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-        <div className="mx-auto grid flex-1 auto-rows-max gap-4">
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" className="h-7 w-7" asChild>
+    <form action={formAction} className="flex flex-col gap-6">
+      <section className="rounded-3xl border bg-[#110843] p-6 text-white shadow-sm md:p-8">
+        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <Badge className="bg-[#FFC736] text-[#110843] hover:bg-[#FFC736]">
+              {type === "ADD" ? "New Brand" : "Brand Editor"}
+            </Badge>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+              {title}
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75 md:text-base">
+              {description}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline" className="bg-white text-[#110843]">
               <Link href="/dashboard/brands">
-                <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Back</span>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back
               </Link>
             </Button>
-            <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-              Brand Controller
-            </h1>
-            <div className="hidden items-center gap-2 md:ml-auto md:flex">
-              <Button variant="outline" size="sm">
-                Discard
-              </Button>
-              <SubmitButton />
-            </div>
+            <SubmitButton type={type} />
           </div>
-          <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
-            <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-              <Card x-chunk="dashboard-07-chunk-0" className="w-[500px]">
-                <CardHeader>
-                  <CardTitle>Brand Details</CardTitle>
-                  <CardDescription>
-                    Lipsum dolor sit amet, consectetur adipiscing elit
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {state.error !== "" && (
-                    <Alert variant="destructive" className="mb-4">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertTitle>Error</AlertTitle>
-                      <AlertDescription>{state.error}</AlertDescription>
-                    </Alert>
-                  )}
+        </div>
+      </section>
 
-                  <div className="grid gap-6">
-                    <div className="grid gap-3">
-                      <Label htmlFor="name">Name</Label>
-                      <Input
-                        id="name"
-                        type="text"
-                        name="name"
-                        className="w-full"
-                        defaultValue={data?.name}
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="logo">Logo</Label>
-                      <Input
-                        id="logo"
-                        type="file"
-                        name="image"
-                        className="w-full"
-                      />
-                    </div>
-                    {/* <div className="grid gap-3">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                        id="description"
-                        defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec ultricies ultricies, nunc nisl ultricies nunc, nec ultricies nunc nisl nec nunc."
-                        className="min-h-32"
-                    />
-                    </div> */}
-                  </div>
-                </CardContent>
-              </Card>
-              {/* <Card x-chunk="dashboard-07-chunk-1">
-                <CardHeader>
-                <CardTitle>Stock</CardTitle>
-                <CardDescription>
-                    Lipsum dolor sit amet, consectetur adipiscing elit
-                </CardDescription>
-                </CardHeader>
-                <CardContent>
-                <Table>
-                    <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[100px]">SKU</TableHead>
-                        <TableHead>Stock</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead className="w-[100px]">Size</TableHead>
-                    </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                    <TableRow>
-                        <TableCell className="font-semibold">
-                        GGPC-001
-                        </TableCell>
-                        <TableCell>
-                        <Label htmlFor="stock-1" className="sr-only">
-                            Stock
-                        </Label>
-                        <Input
-                            id="stock-1"
-                            type="number"
-                            defaultValue="100"
-                        />
-                        </TableCell>
-                        <TableCell>
-                        <Label htmlFor="price-1" className="sr-only">
-                            Price
-                        </Label>
-                        <Input
-                            id="price-1"
-                            type="number"
-                            defaultValue="99.99"
-                        />
-                        </TableCell>
-                        <TableCell>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-semibold">
-                        GGPC-002
-                        </TableCell>
-                        <TableCell>
-                        <Label htmlFor="stock-2" className="sr-only">
-                            Stock
-                        </Label>
-                        <Input
-                            id="stock-2"
-                            type="number"
-                            defaultValue="143"
-                        />
-                        </TableCell>
-                        <TableCell>
-                        <Label htmlFor="price-2" className="sr-only">
-                            Price
-                        </Label>
-                        <Input
-                            id="price-2"
-                            type="number"
-                            defaultValue="99.99"
-                        />
-                        </TableCell>
-                        <TableCell>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-semibold">
-                        GGPC-003
-                        </TableCell>
-                        <TableCell>
-                        <Label htmlFor="stock-3" className="sr-only">
-                            Stock
-                        </Label>
-                        <Input
-                            id="stock-3"
-                            type="number"
-                            defaultValue="32"
-                        />
-                        </TableCell>
-                        <TableCell>
-                        <Label htmlFor="price-3" className="sr-only">
-                            Stock
-                        </Label>
-                        <Input
-                            id="price-3"
-                            type="number"
-                            defaultValue="99.99"
-                        />
-                        </TableCell>
-                        <TableCell>
-                        </TableCell>
-                    </TableRow>
-                    </TableBody>
-                </Table>
-                </CardContent>
-                <CardFooter className="justify-center border-t p-4">
-                <Button size="sm" variant="ghost" className="gap-1">
-                    <PlusCircle className="h-3.5 w-3.5" />
-                    Add Variant
-                </Button>
-                </CardFooter>
-            </Card> */}
-              {/* <Card x-chunk="dashboard-07-chunk-2">
-                <CardHeader>
-                <CardTitle>Product Brand</CardTitle>
-                </CardHeader>
-                <CardContent>
-                <div className="grid gap-6 sm:grid-cols-3">
-                    <div className="grid gap-3">
-                    <Label htmlFor="brand">Brand</Label>
-                    <Select>
-                        <SelectTrigger
-                        id="brand"
-                        aria-label="Select brand"
-                        >
-                        <SelectValue placeholder="Select brand" />
-                        </SelectTrigger>
-                        <SelectContent>
-                        <SelectItem value="clothing">Clothing</SelectItem>
-                        <SelectItem value="electronics">
-                            Electronics
-                        </SelectItem>
-                        <SelectItem value="accessories">
-                            Accessories
-                        </SelectItem>
-                        </SelectContent>
-                    </Select>
-                    </div>
-                    <div className="grid gap-3">
-                    <Label htmlFor="subbrand">
-                        Subbrand (optional)
-                    </Label>
-                    <Select>
-                        <SelectTrigger
-                        id="subbrand"
-                        aria-label="Select subbrand"
-                        >
-                        <SelectValue placeholder="Select subbrand" />
-                        </SelectTrigger>
-                        <SelectContent>
-                        <SelectItem value="t-shirts">T-Shirts</SelectItem>
-                        <SelectItem value="hoodies">Hoodies</SelectItem>
-                        <SelectItem value="sweatshirts">
-                            Sweatshirts
-                        </SelectItem>
-                        </SelectContent>
-                    </Select>
-                    </div>
-                </div>
-                </CardContent>
-            </Card> */}
+      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+        <Card className="border-border/70 bg-card/95 shadow-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-[#d99000]" />
+              Brand Details
+            </CardTitle>
+            <CardDescription>
+              Upload a logo and use a short brand name for better catalog display.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-6">
+            {state.error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Unable to save brand</AlertTitle>
+                <AlertDescription>{state.error}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="grid gap-3">
+              <Label htmlFor="name">Brand Name</Label>
+              <Input
+                id="name"
+                type="text"
+                name="name"
+                placeholder="Example: Apple"
+                defaultValue={data?.name ?? ""}
+                required
+              />
             </div>
-            {/* <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-            <Card x-chunk="dashboard-07-chunk-3">
-                <CardHeader>
-                <CardTitle>Product Status</CardTitle>
-                </CardHeader>
-                <CardContent>
-                <div className="grid gap-6">
-                    <div className="grid gap-3">
-                    <Label htmlFor="status">Status</Label>
-                    <Select>
-                        <SelectTrigger id="status" aria-label="Select status">
-                        <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                        <SelectItem value="draft">Draft</SelectItem>
-                        <SelectItem value="published">Active</SelectItem>
-                        <SelectItem value="archived">Archived</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    </div>
-                </div>
-                </CardContent>
-            </Card>
-            <Card
-                className="overflow-hidden" x-chunk="dashboard-07-chunk-4"
-            >
-                <CardHeader>
-                <CardTitle>Product Images</CardTitle>
-                <CardDescription>
-                    Lipsum dolor sit amet, consectetur adipiscing elit
-                </CardDescription>
-                </CardHeader>
-                <CardContent>
-                <div className="grid gap-2">
-                    <Image
-                    alt="Product image"
-                    className="aspect-square w-full rounded-md object-cover"
-                    height="300"
-                    src="/placeholder.svg"
-                    width="300"
-                    />
-                    <div className="grid grid-cols-3 gap-2">
-                    <button>
-                        <Image
-                        alt="Product image"
-                        className="aspect-square w-full rounded-md object-cover"
-                        height="84"
-                        src="/placeholder.svg"
-                        width="84"
-                        />
-                    </button>
-                    <button>
-                        <Image
-                        alt="Product image"
-                        className="aspect-square w-full rounded-md object-cover"
-                        height="84"
-                        src="/placeholder.svg"
-                        width="84"
-                        />
-                    </button>
-                    <button className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
-                        <Upload className="h-4 w-4 text-muted-foreground" />
-                        <span className="sr-only">Upload</span>
-                    </button>
-                    </div>
-                </div>
-                </CardContent>
-            </Card>
-            <Card x-chunk="dashboard-07-chunk-5">
-                <CardHeader>
-                <CardTitle>Archive Product</CardTitle>
-                <CardDescription>
-                    Lipsum dolor sit amet, consectetur adipiscing elit.
-                </CardDescription>
-                </CardHeader>
-                <CardContent>
-                <div></div>
-                <Button size="sm" variant="secondary">
-                    Archive Product
-                </Button>
-                </CardContent>
-            </Card>
-            </div> */}
-          </div>
-          <div className="flex items-center justify-center gap-2 md:hidden">
-            <Button variant="outline" size="sm">
-              Discard
-            </Button>
-            <Button size="sm">Save Product</Button>
-          </div>
+
+            <div className="grid gap-3">
+              <Label htmlFor="logo">Logo</Label>
+              <Input id="logo" type="file" name="image" accept="image/*" />
+              <p className="text-sm text-muted-foreground">
+                {type === "EDIT"
+                  ? "Leave empty to keep the current logo."
+                  : "Use a square or transparent PNG logo when possible."}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="grid gap-6">
+          <Card className="border-border/70 bg-card/95 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ImagePlus className="h-5 w-5 text-[#d99000]" />
+                Logo Preview
+              </CardTitle>
+              <CardDescription>
+                Current logo preview for edit mode.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex min-h-44 items-center justify-center rounded-2xl border bg-muted/40 p-6">
+                {data?.logo ? (
+                  <Image
+                    src={getImageUrl(data.logo, "brands")}
+                    alt={data.name}
+                    width={180}
+                    height={120}
+                    className="max-h-28 w-auto object-contain"
+                  />
+                ) : (
+                  <div className="text-center text-sm text-muted-foreground">
+                    Logo preview will appear after upload.
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/70 bg-card/95 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                Best Practice
+              </CardTitle>
+              <CardDescription>
+                Keep brand logos lightweight so catalog pages load faster.
+              </CardDescription>
+            </CardHeader>
+          </Card>
         </div>
       </div>
     </form>
-  );
+  )
 }

@@ -4,8 +4,19 @@ import { refreshAndRedirect } from "@/lib/nextjs";
 import { schemaBrand } from "@/lib/schema";
 import { checkFileExists, deleteFile, uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/app/(admin)/types";
+import { Prisma } from "@prisma/client";
 import { prisma } from "lib/prisma";
 import { redirect } from "next/navigation";
+
+function handleBrandError(error: unknown) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === "P2003") {
+            return "This brand is still used by products. Move those products first.";
+        }
+    }
+
+    return "Failed to save brand. Please try again.";
+}
 
 export async function postBrand(
     _: unknown,
@@ -32,8 +43,8 @@ export async function postBrand(
             },
         });
     } catch (err) {
-        console.error(err);
-        return { error: "Failed to insert data" };
+        console.error("[brand:create]", err);
+        return { error: handleBrandError(err) };
     }
 
     redirect("/dashboard/brands");
@@ -86,8 +97,8 @@ export async function updateBrand(
             },
         });
     } catch (err) {
-        console.error(err);
-        return { error: "Failed to update data" };
+        console.error("[brand:update]", err);
+        return { error: handleBrandError(err) };
     }
 
     redirect("/dashboard/brands");
@@ -114,8 +125,8 @@ export async function deleteBrand(formData: FormData): Promise<void> {
             where: { id },
         });
     } catch (err) {
-        console.error("Delete brand error:", err);
-        throw new Error("Failed to delete brand");
+        console.error("[brand:delete]", err);
+        throw new Error(handleBrandError(err));
     }
 
     refreshAndRedirect("/dashboard/brands");
