@@ -40,6 +40,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import NavigationLoading from "@/components/navigation-loading";
 import { cn } from "@/lib/utils";
 import FormLogout from "./logout-button";
 
@@ -237,6 +238,7 @@ function DashboardHeader() {
 export default function DashboardShell({ children }: AdminDashboardShellProps) {
   return (
     <SidebarProvider>
+      <NavigationLoading />
       <DashboardSidebar />
       <SidebarInset>
         <DashboardHeader />
