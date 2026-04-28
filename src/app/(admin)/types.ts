@@ -19,6 +19,45 @@ export type Tedit = {
   params: Tparams;
 };
 
+export type AdminCategoryTableItem = import("@prisma/client").Category & {
+  _count: {
+    products: number;
+  };
+};
+
+export type AdminCategoryFormData = import("@prisma/client").Category | null;
+
+export type AdminLocationTableItem = import("@prisma/client").Location & {
+  _count: {
+    products: number;
+  };
+};
+
+export type AdminLocationFormData = import("@prisma/client").Location | null;
+
+export type AdminBrandTableItem = import("@prisma/client").Brand & {
+  _count: {
+    products: number;
+  };
+};
+
+export type AdminBrandFormData = import("@prisma/client").Brand | null;
+
+export type AdminProductTableItem = {
+  id: number;
+  name: string;
+  image_url: string;
+  category: string;
+  brand: string;
+  location: string;
+  price: number;
+  total_sales: number;
+  stock: import("@prisma/client").ProductStock;
+  createdAt: Date;
+};
+
+export type AdminProductFormData = import("@prisma/client").Product | null;
+
 export type AdminNavItem = {
   title: string;
   href: string;
@@ -92,9 +131,38 @@ export type AdminOrderProductColumn = {
 
 export type AdminOrderColumn = {
   id: number;
+  code: string;
+  createdAt: Date;
   products: AdminOrderProductColumn[];
   customer_name: string | undefined;
+  customer_email: string | undefined;
+  total_items: number;
   price: number;
   status: import("@prisma/client").StatusOrder;
 };
+
+export type AdminCustomerColumn = {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: Date;
+  total_transactions: number;
+};
+
+export type AdminConfigurationColumn = {
+  id: number;
+  webname: string;
+  language: import("@prisma/client").Language;
+  tagline: string | null;
+  website: string | null;
+  email: string | null;
+  description: string | null;
+  address: string | null;
+  facebook: string | null;
+  twitter: string | null;
+  instagram: string | null;
+  date: Date;
+};
+
+export type AdminConfigurationFormData = AdminConfigurationColumn | null;
 

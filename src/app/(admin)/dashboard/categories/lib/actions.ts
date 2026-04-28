@@ -13,8 +13,12 @@ function handlePrismaError(err: unknown): string {
     if (err.code === "P2002") {
       return "Category name or slug already exists.";
     }
+
+    if (err.code === "P2003") {
+      return "This category is still used by products. Move or delete those products first.";
+    }
   }
-  return "Failed to create category.";
+  return "Failed to save category.";
 }
 
 export async function postCategory(
@@ -39,7 +43,7 @@ export async function postCategory(
       },
     });
   } catch (err) {
-    console.error("Prisma error:", err);
+    console.error("[category:create]", err);
     const message = handlePrismaError(err);
     return { error: message };
   }
@@ -76,8 +80,8 @@ export async function updateCategory(
     });
 
   } catch (err) {
-    console.error(err);
-    return { error: "Failed to update data" };
+    console.error("[category:update]", err);
+    return { error: handlePrismaError(err) };
   }
 
   redirect("/dashboard/categories");
@@ -90,9 +94,14 @@ export async function deleteCategory(formData: FormData): Promise<void> {
     throw new Error("Invalid category ID");
   }
 
-  await prisma.category.delete({
-    where: { id },
-  });
+  try {
+    await prisma.category.delete({
+      where: { id },
+    });
+  } catch (err) {
+    console.error("[category:delete]", err);
+    throw new Error(handlePrismaError(err));
+  }
 
   refreshAndRedirect("/dashboard/categories");
 }

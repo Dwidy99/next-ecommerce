@@ -7,7 +7,18 @@ function warnCategoryFallback(source: string, error: unknown) {
 
 export async function getCategories() {
   try {
-    return await prisma.category.findMany();
+    return await prisma.category.findMany({
+      orderBy: {
+        created_at: "desc",
+      },
+      include: {
+        _count: {
+          select: {
+            products: true,
+          },
+        },
+      },
+    });
   } catch (error) {
     warnCategoryFallback("Categories", error);
     return [];

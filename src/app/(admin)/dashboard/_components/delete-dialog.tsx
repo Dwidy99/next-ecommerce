@@ -9,11 +9,12 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogCancel,
+  AlertDialogMedia,
 } from "@/components/ui/alert-dialog";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { Trash } from "lucide-react";
+import { AlertTriangle, Trash } from "lucide-react";
 import { useFormStatus } from "react-dom";
 
 interface DeleteDialogProps {
@@ -35,7 +36,7 @@ function SubmitButton() {
         </>
       ) : (
         <>
-          <Trash className="w-4 h-4 mr-2" />
+          <Trash className="mr-2 h-4 w-4" />
           Delete
         </>
       )}
@@ -52,14 +53,21 @@ export default function DeleteDialog({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size="sm">
-          <Trash className="w-4 h-4 mr-2" />
+        <Button
+          variant="destructive"
+          size="sm"
+          className="bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100 hover:text-red-800"
+        >
+          <Trash className="mr-2 h-4 w-4" />
           Delete
         </Button>
       </AlertDialogTrigger>
 
-      <AlertDialogContent size="sm">
+      <AlertDialogContent>
         <AlertDialogHeader>
+          <AlertDialogMedia className="bg-red-50 text-red-600">
+            <AlertTriangle className="h-6 w-6" />
+          </AlertDialogMedia>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>

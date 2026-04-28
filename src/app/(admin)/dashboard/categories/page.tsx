@@ -1,4 +1,9 @@
-import React from "react";
+import Link from "next/link";
+import { FolderTree, Package, PlusCircle, Sparkles } from "lucide-react";
+
+import { DataTable } from "@/components/ui/data-table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -6,36 +11,79 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
-import { getCategories } from "./lib/data";
-import Link from "next/link";
 import { columns } from "./columns";
-import { DataTable } from "../../../../components/ui/data-table";
+import { getCategories } from "./lib/data";
 
 export default async function CategoriesPage() {
   const data = await getCategories();
+  const totalProducts = data.reduce(
+    (total, category) => total + category._count.products,
+    0,
+  );
 
   return (
-    <div className="space-y-4">
-      <div className="text-right">
-        <Button size="sm" className="h-8 gap-1" asChild>
-          <Link href="/dashboard/categories/create">
-            <PlusCircle className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+    <div className="flex flex-col gap-6">
+      <section className="overflow-hidden rounded-3xl border bg-[#110843] p-6 text-white shadow-sm md:p-8">
+        <div className="grid gap-6 lg:grid-cols-[1.4fr_0.6fr] lg:items-center">
+          <div>
+            <Badge className="bg-[#FFC736] text-[#110843] hover:bg-[#FFC736]">
+              Catalog Management
+            </Badge>
+
+            <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+              Organize product categories with a cleaner workflow.
+            </h1>
+
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75 md:text-base">
+              Create, edit, and maintain categories that help customers browse
+              your catalog faster.
+            </p>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+              <div className="flex items-center gap-3">
+                <FolderTree className="h-5 w-5 text-[#FFC736]" />
+                <div>
+                  <p className="text-2xl font-bold">{data.length}</p>
+                  <p className="text-xs text-white/65">Total Categories</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+              <div className="flex items-center gap-3">
+                <Package className="h-5 w-5 text-[#FFC736]" />
+                <div>
+                  <p className="text-2xl font-bold">{totalProducts}</p>
+                  <p className="text-xs text-white/65">Assigned Products</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Card className="border-border/70 bg-card/95 shadow-sm">
+        <CardHeader className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-[#d99000]" />
+              Categories
+            </CardTitle>
+            <CardDescription>
+              Manage category names, slugs, and product grouping.
+            </CardDescription>
+          </div>
+
+          <Button asChild>
+            <Link href="/dashboard/categories/create">
+              <PlusCircle className="mr-2 h-4 w-4" />
               Add Category
-            </span>
-          </Link>
-        </Button>
-      </div>
-      <Card x-chunk="dashboard-06-chunk-0">
-        <CardHeader>
-          <CardTitle>Categories</CardTitle>
-          <CardDescription>
-            Manage your categories and view their sales performance.
-          </CardDescription>
+            </Link>
+          </Button>
         </CardHeader>
+
         <CardContent>
           <DataTable columns={columns} data={data} />
         </CardContent>
