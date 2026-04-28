@@ -1,52 +1,154 @@
-"use client";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+"use client"
+
+import React, { ChangeEvent, ReactNode, startTransition, useActionState, useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { useFormStatus } from "react-dom"
+import {
+  AlertCircle,
+  ArrowLeft,
+  CheckCircle2,
+  ImagePlus,
+  Loader2,
+  Package,
+  Save,
+  Settings2,
+  Sparkles,
+  Upload,
+} from "lucide-react"
+
+import type { ActionResult, AdminProductFormData } from "@/app/(admin)/types"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
-import { AlertCircle, ChevronLeft } from "lucide-react";
-import Link from "next/link";
-import React, { ReactNode, startTransition, useActionState } from "react";
-import { ActionResult } from "@/app/(admin)/types";
-import { useFormStatus } from "react-dom";
-import { Textarea } from "@/components/ui/textarea";
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import UploadImages from "./upload-images";
-import { storeProduct, updateProduct } from "../lib/actions";
-import { Product } from "@prisma/client";
-import { validateFiles } from "@/lib/utils";
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { validateFiles } from "@/lib/utils"
+import { storeProduct, updateProduct } from "../lib/actions"
 
 const initialState: ActionResult = {
   error: "",
-};
-
-interface FormProductProps {
-  children: ReactNode;
-  type: "ADD" | "EDIT";
-  data: Product | null;
-  defaultImages?: string[];
 }
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
+interface FormProductProps {
+  children: ReactNode
+  type: "ADD" | "EDIT"
+  data: AdminProductFormData
+  defaultImages?: string[]
+}
+
+function SubmitButton({ type }: { type: "ADD" | "EDIT" }) {
+  const { pending } = useFormStatus()
 
   return (
-    <Button type="submit" size="sm" disabled={pending}>
-      {pending ? "Loading..." : "Save Product"}
+    <Button
+      type="submit"
+      disabled={pending}
+      className="w-full gap-2 bg-[#FFC736] font-bold text-[#110843] hover:bg-[#ffda63] sm:w-auto"
+    >
+      {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+      {pending
+        ? type === "ADD"
+          ? "Creating..."
+          : "Saving..."
+        : type === "ADD"
+          ? "Create Product"
+          : "Save Changes"}
     </Button>
-  );
+  )
+}
+
+function ProductImagePicker({ defaultImages = [] }: { defaultImages?: string[] }) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const placeholder = "/assets/products/placeholder.svg"
+  const [previewImages, setPreviewImages] = useState<string[]>([
+    placeholder,
+    placeholder,
+    placeholder,
+  ])
+
+  useEffect(() => {
+    if (defaultImages.length > 0) {
+      setPreviewImages([
+        defaultImages[0] || placeholder,
+        defaultImages[1] || placeholder,
+        defaultImages[2] || placeholder,
+      ])
+    }
+  }, [defaultImages])
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files
+    if (!files) return
+
+    const urls = Array.from(files)
+      .slice(0, 3)
+      .map((file) => URL.createObjectURL(file))
+
+    setPreviewImages((current) => {
+      current.forEach((url) => {
+        if (url.startsWith("blob:")) URL.revokeObjectURL(url)
+      })
+
+      return [urls[0] || current[0], urls[1] || current[1], urls[2] || current[2]]
+    })
+  }
+
+  return (
+    <div className="grid gap-3">
+      <div className="overflow-hidden rounded-2xl border bg-muted/40">
+        <img
+          src={previewImages[0]}
+          alt="Product main preview"
+          className="aspect-square w-full object-contain p-4"
+        />
+      </div>
+
+      <div className="grid grid-cols-3 gap-2">
+        {previewImages.slice(1).map((src, index) => (
+          <img
+            key={`${src}-${index}`}
+            src={src}
+            alt={`Product preview ${index + 2}`}
+            className="aspect-square w-full rounded-xl border bg-muted/40 object-contain p-2"
+          />
+        ))}
+
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="flex aspect-square w-full items-center justify-center rounded-xl border border-dashed bg-background transition hover:border-[#FFC736] hover:bg-[#FFF4CC]"
+        >
+          <Upload className="h-5 w-5 text-muted-foreground" />
+          <span className="sr-only">Upload images</span>
+        </button>
+      </div>
+
+      <input
+        ref={inputRef}
+        type="file"
+        name="images"
+        multiple
+        accept="image/*"
+        className="hidden"
+        onChange={handleChange}
+      />
+    </div>
+  )
 }
 
 export default function FormProduct({
@@ -55,180 +157,224 @@ export default function FormProduct({
   data,
   defaultImages,
 }: FormProductProps) {
-  const [clientError, setClientError] = React.useState("");
+  const [clientError, setClientError] = useState("")
 
   const updateProductWithId = (_: unknown, formData: FormData) =>
-    updateProduct(_, formData, data?.id ?? 0);
+    updateProduct(_, formData, data?.id ?? 0)
 
   const [state, formAction] = useActionState(
     type === "ADD" ? storeProduct : updateProductWithId,
-    initialState
-  );
+    initialState,
+  )
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
 
-    const form = e.currentTarget as HTMLFormElement;
-    const formData = new FormData(form);
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    const files = formData.getAll("images") as File[]
+    const uploadedFiles = files.filter(
+      (file) => file instanceof File && file.size > 0,
+    )
+    const hasNewImage = uploadedFiles.length > 0
 
-    const files = formData.getAll("images") as File[];
-
-    const hasNewImage = files.some(
-      (file) => file instanceof File && file.size > 0
-    );
-
-    // Hanya validasi jika type === "ADD" atau user upload gambar baru
-    if ((type === "ADD" || hasNewImage) && files.length > 0) {
-      const error = validateFiles(files);
+    if (hasNewImage) {
+      const error = validateFiles(uploadedFiles)
       if (error) {
-        setClientError(error);
-        return;
+        setClientError(error)
+        return
       }
     }
 
-    setClientError("");
+    setClientError("")
 
     startTransition(() => {
-      formAction(formData); // ✅ panggil manual
-    });
-  };
+      formAction(formData)
+    })
+  }
+
+  const title = type === "ADD" ? "Create Product" : "Edit Product"
+  const description =
+    type === "ADD"
+      ? "Add a product with images, pricing, stock, and catalog grouping."
+      : "Update product details while keeping existing images if no new image is uploaded."
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-        <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" className="h-7 w-7" asChild>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <section className="rounded-3xl border bg-[#110843] p-6 text-white shadow-sm md:p-8">
+        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <Badge className="bg-[#FFC736] text-[#110843] hover:bg-[#FFC736]">
+              {type === "ADD" ? "New Product" : "Product Editor"}
+            </Badge>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+              {title}
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75 md:text-base">
+              {description}
+            </p>
+          </div>
+
+          <div className="grid gap-2 sm:flex sm:flex-wrap">
+            <Button
+              asChild
+              variant="outline"
+              className="w-full border-white/30 bg-white text-[#110843] hover:bg-white/90 sm:w-auto"
+            >
               <Link href="/dashboard/products">
-                <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Back</span>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back
               </Link>
             </Button>
-            <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-              Product Controller
-            </h1>
-            <div className="hidden items-center gap-2 md:ml-auto md:flex">
-              <Button variant="outline" size="sm">
-                Discard
-              </Button>
-              <SubmitButton />
+            <div className="hidden sm:block">
+              <SubmitButton type={type} />
             </div>
-          </div>
-          <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
-            <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-              <Card
-                x-chunk="dashboard-07-chunk-0"
-                // className="w-[500px]"
-              >
-                <CardHeader>
-                  <CardTitle>Product Details</CardTitle>
-                  <CardDescription>
-                    Lipsum dolor sit amet, consectetur adipiscing elit
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {state.error !== "" && (
-                    <Alert variant="destructive" className="mb-4">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertTitle>Error</AlertTitle>
-                      <AlertDescription>{state.error}</AlertDescription>
-                    </Alert>
-                  )}
-                  {clientError && (
-                    <Alert variant="destructive" className="mb-4">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertTitle>File Error</AlertTitle>
-                      <AlertDescription>{clientError}</AlertDescription>
-                    </Alert>
-                  )}
-
-                  <div className="grid gap-6">
-                    <div className="grid gap-3">
-                      <Label htmlFor="name">Name</Label>
-                      <Input
-                        id="name"
-                        type="text"
-                        name="name"
-                        className="w-full"
-                        defaultValue={data?.name}
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="price">Price</Label>
-                      <Input
-                        id="price"
-                        type="number"
-                        name="price"
-                        className="w-full"
-                        defaultValue={Number(data?.price ?? 0)}
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="description">Description</Label>
-                      <Textarea
-                        name="description"
-                        id="description"
-                        className="min-h-32"
-                        defaultValue={data?.description}
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card x-chunk="dashboard-07-chunk-2">
-                <CardHeader>
-                  <CardTitle>Product Product</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-6 sm:grid-cols-3">{children}</div>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-              <Card x-chunk="dashboard-07-chunk-3">
-                <CardHeader>
-                  <CardTitle>Product Status</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-6">
-                    <div className="grid gap-3">
-                      <Label htmlFor="status">Status</Label>
-                      <Select name="stock" defaultValue={data?.stock}>
-                        <SelectTrigger id="status" aria-label="Select status">
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="ready">Ready</SelectItem>
-                          <SelectItem value="preorder">Pre-Order</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card x-chunk="dashboard-07-chunk-4">
-                <CardHeader>
-                  <CardTitle>Product Images</CardTitle>
-                  <CardDescription>
-                    Upload or preview up to 3 images
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <UploadImages defaultImages={defaultImages ?? []} />
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-          <div className="flex items-center justify-center gap-2 md:hidden">
-            <Button variant="outline" size="sm">
-              Discard
-            </Button>
-            <Button size="sm">Save Product</Button>
           </div>
         </div>
+      </section>
+
+      {(state.error || clientError) && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Unable to save product</AlertTitle>
+          <AlertDescription>{state.error || clientError}</AlertDescription>
+        </Alert>
+      )}
+
+      <div className="grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
+        <div className="grid gap-6">
+          <Card className="border-border/70 bg-card/95 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Package className="h-5 w-5 text-[#d99000]" />
+                Product Details
+              </CardTitle>
+              <CardDescription>
+                Basic product information shown in the customer catalog.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-6">
+              <div className="grid gap-3">
+                <Label htmlFor="name">Product Name</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="Example: Wireless Headphone X200"
+                  defaultValue={data?.name ?? ""}
+                  required
+                />
+              </div>
+
+              <div className="grid gap-3">
+                <Label htmlFor="price">Price</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  name="price"
+                  placeholder="Example: 250000"
+                  defaultValue={Number(data?.price ?? 0)}
+                  required
+                />
+              </div>
+
+              <div className="grid gap-3">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  name="description"
+                  className="min-h-36"
+                  placeholder="Write a short but helpful product description."
+                  defaultValue={data?.description ?? ""}
+                  required
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/70 bg-card/95 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings2 className="h-5 w-5 text-[#d99000]" />
+                Product Grouping
+              </CardTitle>
+              <CardDescription>
+                Choose category, brand, and location for this product.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6 md:grid-cols-3">{children}</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid gap-6">
+          <Card className="border-border/70 bg-card/95 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-[#d99000]" />
+                Product Status
+              </CardTitle>
+              <CardDescription>
+                Control whether this product is ready or pre-order.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3">
+                <Label htmlFor="stock">Stock Status</Label>
+                <Select
+                  name="stock"
+                  defaultValue={data?.stock ?? "ready"}
+                  required
+                >
+                  <SelectTrigger
+                    id="stock"
+                    aria-label="Select stock status"
+                    className="w-full"
+                  >
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent position="popper" align="start">
+                    <SelectItem value="ready">Ready</SelectItem>
+                    <SelectItem value="preorder">Pre-Order</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/70 bg-card/95 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ImagePlus className="h-5 w-5 text-[#d99000]" />
+                Product Images
+              </CardTitle>
+              <CardDescription>
+                Upload or preview up to 3 images.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ProductImagePicker defaultImages={defaultImages ?? []} />
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/70 bg-card/95 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                Best Practice
+              </CardTitle>
+              <CardDescription>
+                Use square images and clear names to improve catalog readability.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </div>
+
+      <div className="sticky bottom-4 z-20 flex justify-end rounded-2xl border bg-background/95 p-3 shadow-lg backdrop-blur md:hidden">
+        <SubmitButton type={type} />
       </div>
     </form>
-  );
+  )
 }

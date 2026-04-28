@@ -1,72 +1,85 @@
-import React from "react";
-import { Label } from "@/components/ui/label";
+import { redirect } from "next/navigation"
+
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import FormProduct from "../../_components/form-product";
-import { getBrands } from "../../../brands/lib/data";
-import { getCategories } from "../../../categories/lib/data";
-import { getLocations } from "../../../locations/lib/data";
-import { getProductById } from "../../lib/data";
-import { redirect } from "next/navigation";
+} from "@/components/ui/select"
+import { getImageUrl } from "@/lib/supabase"
+import { getBrands } from "../../../brands/lib/data"
+import { getCategories } from "../../../categories/lib/data"
+import { getLocations } from "../../../locations/lib/data"
+import FormProduct from "../../_components/form-product"
+import { getProductById } from "../../lib/data"
 
-export default async function EditPage({ params }: { params: { id: string } }) {
-  const resolvedParams = await Promise.resolve(params); // ✅ paksa resolve Proxy
-  const id = Number(resolvedParams.id);
+type EditProductPageProps = {
+  params: Promise<{ id: string }> | { id: string }
+}
 
-  if (!resolvedParams.id || isNaN(id)) {
-    console.error("Invalid product ID:", resolvedParams.id);
-    throw new Error("Invalid product ID");
+export default async function EditProductPage({ params }: EditProductPageProps) {
+  const { id } = await params
+  const productId = Number(id)
+
+  if (!id || Number.isNaN(productId)) {
+    redirect("/dashboard/products")
   }
 
-  const product = await getProductById(id);
-  const brands = await getBrands();
-  const categories = await getCategories();
-  const locations = await getLocations();
+  const product = await getProductById(productId)
+  const brands = await getBrands()
+  const categories = await getCategories()
+  const locations = await getLocations()
 
   if (!product) {
-    return redirect("/dashboard/products");
+    redirect("/dashboard/products")
   }
 
-  const imageBaseUrl =
-    "https://hflpwvrqggxhoadtwvte.supabase.co/storage/v1/object/public/e-commerce/";
-  const defaultImages =
-    product.images?.map((img) => `${imageBaseUrl}${img}`) ?? [];
+  const defaultImages = product.images?.map((image) => getImageUrl(image, "products")) ?? []
 
   return (
     <FormProduct type="EDIT" data={product} defaultImages={defaultImages}>
       <div className="grid gap-3">
         <Label htmlFor="category_id">Category</Label>
-
         <Select
           name="category_id"
-          defaultValue={product?.category_id.toString()}
+          defaultValue={product.category_id.toString()}
+          required
         >
-          <SelectTrigger id="category" aria-label="Select category">
+          <SelectTrigger
+            id="category_id"
+            aria-label="Select category"
+            className="w-full"
+          >
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
-          <SelectContent>
-            {categories?.map((cat) => (
-              <SelectItem key={cat.id} value={`${cat.id}`}>
-                {cat.name}
+          <SelectContent position="popper" align="start">
+            {categories.map((category) => (
+              <SelectItem key={category.id} value={`${category.id}`}>
+                {category.name}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
-      <div className="grid gap-3">
-        <Label htmlFor="brand">Brand</Label>
 
-        <Select name="brand_id" defaultValue={product?.brand_id.toString()}>
-          <SelectTrigger id="brand" aria-label="Select Brand">
-            <SelectValue placeholder="Select Brand" />
+      <div className="grid gap-3">
+        <Label htmlFor="brand_id">Brand</Label>
+        <Select
+          name="brand_id"
+          defaultValue={product.brand_id.toString()}
+          required
+        >
+          <SelectTrigger
+            id="brand_id"
+            aria-label="Select brand"
+            className="w-full"
+          >
+            <SelectValue placeholder="Select brand" />
           </SelectTrigger>
-          <SelectContent>
-            {brands?.map((brand) => (
+          <SelectContent position="popper" align="start">
+            {brands.map((brand) => (
               <SelectItem key={brand.id} value={`${brand.id}`}>
                 {brand.name}
               </SelectItem>
@@ -74,18 +87,23 @@ export default async function EditPage({ params }: { params: { id: string } }) {
           </SelectContent>
         </Select>
       </div>
-      <div className="grid gap-3">
-        <Label htmlFor="location">Location</Label>
 
+      <div className="grid gap-3">
+        <Label htmlFor="location_id">Location</Label>
         <Select
           name="location_id"
-          defaultValue={product?.location_id.toString()}
+          defaultValue={product.location_id.toString()}
+          required
         >
-          <SelectTrigger id="location" aria-label="Select location">
-            <SelectValue placeholder="Select Location" />
+          <SelectTrigger
+            id="location_id"
+            aria-label="Select location"
+            className="w-full"
+          >
+            <SelectValue placeholder="Select location" />
           </SelectTrigger>
-          <SelectContent>
-            {locations?.map((location) => (
+          <SelectContent position="popper" align="start">
+            {locations.map((location) => (
               <SelectItem key={location.id} value={`${location.id}`}>
                 {location.name}
               </SelectItem>
@@ -94,5 +112,5 @@ export default async function EditPage({ params }: { params: { id: string } }) {
         </Select>
       </div>
     </FormProduct>
-  );
+  )
 }

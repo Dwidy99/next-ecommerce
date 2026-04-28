@@ -1,47 +1,55 @@
-import React from "react";
-import FormProduct from "../_components/form-product";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { getBrands } from "../../brands/lib/data";
-import { getCategories } from "../../categories/lib/data";
-import { getLocations } from "../../locations/lib/data";
+} from "@/components/ui/select"
+import FormProduct from "../_components/form-product"
+import { getBrands } from "../../brands/lib/data"
+import { getCategories } from "../../categories/lib/data"
+import { getLocations } from "../../locations/lib/data"
 
-export default async function CreatePage() {
-  const brands = await getBrands();
-  const categories = await getCategories();
-  const locations = await getLocations();
+export default async function CreateProductPage() {
+  const brands = await getBrands()
+  const categories = await getCategories()
+  const locations = await getLocations()
 
   return (
     <FormProduct type="ADD" data={null}>
       <div className="grid gap-3">
         <Label htmlFor="category_id">Category</Label>
-        <Select name="category_id">
-          <SelectTrigger id="category" aria-label="Select category">
+        <Select name="category_id" required>
+          <SelectTrigger
+            id="category_id"
+            aria-label="Select category"
+            className="w-full"
+          >
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
-          <SelectContent>
-            {categories?.map((cat) => (
-              <SelectItem key={cat.id} value={`${cat.id}`}>
-                {cat.name}
+          <SelectContent position="popper" align="start">
+            {categories.map((category) => (
+              <SelectItem key={category.id} value={`${category.id}`}>
+                {category.name}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
+
       <div className="grid gap-3">
-        <Label htmlFor="brand">Brand</Label>
-        <Select name="brand_id">
-          <SelectTrigger id="brand" aria-label="Select Brand">
-            <SelectValue placeholder="Select Brand" />
+        <Label htmlFor="brand_id">Brand</Label>
+        <Select name="brand_id" required>
+          <SelectTrigger
+            id="brand_id"
+            aria-label="Select brand"
+            className="w-full"
+          >
+            <SelectValue placeholder="Select brand" />
           </SelectTrigger>
-          <SelectContent>
-            {brands?.map((brand) => (
+          <SelectContent position="popper" align="start">
+            {brands.map((brand) => (
               <SelectItem key={brand.id} value={`${brand.id}`}>
                 {brand.name}
               </SelectItem>
@@ -49,14 +57,19 @@ export default async function CreatePage() {
           </SelectContent>
         </Select>
       </div>
+
       <div className="grid gap-3">
-        <Label htmlFor="location">Location</Label>
-        <Select name="location_id">
-          <SelectTrigger id="location" aria-label="Select location">
-            <SelectValue placeholder="Select Location" />
+        <Label htmlFor="location_id">Location</Label>
+        <Select name="location_id" required>
+          <SelectTrigger
+            id="location_id"
+            aria-label="Select location"
+            className="w-full"
+          >
+            <SelectValue placeholder="Select location" />
           </SelectTrigger>
-          <SelectContent>
-            {locations?.map((location) => (
+          <SelectContent position="popper" align="start">
+            {locations.map((location) => (
               <SelectItem key={location.id} value={`${location.id}`}>
                 {location.name}
               </SelectItem>
@@ -65,5 +78,5 @@ export default async function CreatePage() {
         </Select>
       </div>
     </FormProduct>
-  );
+  )
 }
