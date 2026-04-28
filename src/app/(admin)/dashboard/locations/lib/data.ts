@@ -7,11 +7,25 @@ function warnLocationFallback(source: string, error: unknown) {
 
 export async function getLocations() {
   try {
-    return await prisma.location.findMany({
+    const locations = await prisma.location.findMany({
       orderBy: {
-        id: "desc",
+        created_at: "desc",
+      },
+      include: {
+        _count: {
+          select: {
+            Product: true,
+          },
+        },
       },
     })
+
+    return locations.map((location) => ({
+      ...location,
+      _count: {
+        products: location._count.Product,
+      },
+    }))
   } catch (error) {
     warnLocationFallback("Locations", error)
     return []

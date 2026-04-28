@@ -1,9 +1,21 @@
 "use server"
 
-import { prisma } from "lib/prisma"
-import { ActionResult } from "@/app/(admin)/types"
-import { redirect } from "next/navigation"
+import type { ActionResult } from "@/app/(admin)/types"
+import { refreshAndRedirect } from "@/lib/nextjs"
 import { schemaLocation as locationSchema } from "@/lib/schema"
+import { Prisma } from "@prisma/client"
+import { prisma } from "lib/prisma"
+import { redirect } from "next/navigation"
+
+function handleLocationError(error: unknown) {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === "P2003") {
+      return "This location is still used by products. Move those products first."
+    }
+  }
+
+  return "Failed to save location. Please try again."
+}
 
 export async function createLocation(
   _: unknown,
@@ -26,9 +38,9 @@ export async function createLocation(
       },
     })
   } catch (error) {
-    console.error("Create location error:", error)
+    console.error("[location:create]", error)
     return {
-      error: "Failed to create location",
+      error: handleLocationError(error),
     }
   }
 
@@ -66,9 +78,9 @@ export async function updateLocation(
       },
     })
   } catch (error) {
-    console.error("Update location error:", error)
+    console.error("[location:update]", error)
     return {
-      error: "Failed to update location",
+      error: handleLocationError(error),
     }
   }
 
@@ -89,11 +101,9 @@ export async function deleteLocation(formData: FormData): Promise<void> {
       },
     })
   } catch (error) {
-    console.error("Delete location error:", error)
-    throw new Error(
-      "Location could not be deleted. It may be linked to other data.",
-    )
+    console.error("[location:delete]", error)
+    throw new Error(handleLocationError(error))
   }
 
-  redirect("/dashboard/locations")
+  refreshAndRedirect("/dashboard/locations")
 }

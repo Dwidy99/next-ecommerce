@@ -1,6 +1,21 @@
 "use client"
 
+import { useActionState } from "react"
+import Link from "next/link"
+import { useFormStatus } from "react-dom"
+import {
+  AlertCircle,
+  ArrowLeft,
+  CheckCircle2,
+  Loader2,
+  MapPin,
+  Save,
+  Sparkles,
+} from "lucide-react"
+
+import type { ActionResult, AdminLocationFormData } from "@/app/(admin)/types"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -10,13 +25,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { ActionResult } from "@/app/(admin)/types"
-import { Location } from "@prisma/client"
-import { Label } from "@radix-ui/react-label"
-import { AlertCircle, ChevronLeft, Loader2Icon } from "lucide-react"
-import Link from "next/link"
-import React, { useActionState } from "react"
-import { useFormStatus } from "react-dom"
+import { Label } from "@/components/ui/label"
 import { createLocation, updateLocation } from "../lib/actions"
 
 const initialState: ActionResult = {
@@ -25,16 +34,22 @@ const initialState: ActionResult = {
 
 type LocationFormProps = {
   type?: "ADD" | "EDIT"
-  data?: Location | null
+  data?: AdminLocationFormData
 }
 
-function SubmitButton() {
+function SubmitButton({ type }: { type: "ADD" | "EDIT" }) {
   const { pending } = useFormStatus()
 
   return (
-    <Button type="submit" size="sm" disabled={pending}>
-      {pending && <Loader2Icon className="size-3" data-icon="inline-start" />}
-      {pending ? "Saving..." : "Save Location"}
+    <Button type="submit" disabled={pending} className="gap-2">
+      {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+      {pending
+        ? type === "ADD"
+          ? "Creating..."
+          : "Saving..."
+        : type === "ADD"
+          ? "Create Location"
+          : "Save Changes"}
     </Button>
   )
 }
@@ -48,69 +63,111 @@ export function LocationForm({ data = null, type = "ADD" }: LocationFormProps) {
     initialState,
   )
 
+  const title = type === "ADD" ? "Create Location" : "Edit Location"
+  const description =
+    type === "ADD"
+      ? "Add a product location for stock or shipping organization."
+      : "Update this location while keeping product data consistent."
+
   return (
-    <form action={formAction}>
-      <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-        <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" className="h-7 w-7" asChild>
+    <form action={formAction} className="flex flex-col gap-6">
+      <section className="rounded-3xl border bg-[#110843] p-6 text-white shadow-sm md:p-8">
+        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <Badge className="bg-[#FFC736] text-[#110843] hover:bg-[#FFC736]">
+              {type === "ADD" ? "New Location" : "Location Editor"}
+            </Badge>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+              {title}
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75 md:text-base">
+              {description}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline" className="bg-white text-[#110843]">
               <Link href="/dashboard/locations">
-                <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Back</span>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back
               </Link>
             </Button>
-            <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-              Location Controller
-            </h1>
-            <div className="hidden items-center gap-2 md:ml-auto md:flex">
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/dashboard/locations">Discard</Link>
-              </Button>
-              <SubmitButton />
+            <SubmitButton type={type} />
+          </div>
+        </div>
+      </section>
+
+      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+        <Card className="border-border/70 bg-card/95 shadow-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-[#d99000]" />
+              Location Details
+            </CardTitle>
+            <CardDescription>
+              Use a clear name that your team can recognize quickly.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-6">
+            {state.error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Unable to save location</AlertTitle>
+                <AlertDescription>{state.error}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="grid gap-3">
+              <Label htmlFor="name">Location Name</Label>
+              <Input
+                id="name"
+                type="text"
+                name="name"
+                placeholder="Example: Jakarta Warehouse"
+                defaultValue={data?.name ?? ""}
+                required
+              />
+              <p className="text-sm text-muted-foreground">
+                This location can be assigned to products in the product form.
+              </p>
             </div>
-          </div>
+          </CardContent>
+        </Card>
 
-          <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
-            <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-              <Card x-chunk="dashboard-location-form" className="w-[500px]">
-                <CardHeader>
-                  <CardTitle>Location Details</CardTitle>
-                  <CardDescription>
-                    Create and update product shipping or stock locations.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {state.error !== "" && (
-                    <Alert variant="destructive" className="mb-4">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertTitle>Error</AlertTitle>
-                      <AlertDescription>{state.error}</AlertDescription>
-                    </Alert>
-                  )}
+        <div className="grid gap-6">
+          <Card className="border-border/70 bg-card/95 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-[#d99000]" />
+                Usage Preview
+              </CardTitle>
+              <CardDescription>
+                Products can use this value as their stock or shipping location.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-2xl border bg-muted/40 p-4">
+                <p className="text-sm font-medium text-muted-foreground">
+                  Location Label
+                </p>
+                <p className="mt-2 font-semibold text-[#110843]">
+                  {data?.name ?? "Your new location"}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-                  <div className="grid gap-6">
-                    <div className="grid gap-3">
-                      <Label htmlFor="name">Name</Label>
-                      <Input
-                        id="name"
-                        type="text"
-                        name="name"
-                        className="w-full"
-                        defaultValue={data?.name}
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-center gap-2 md:hidden">
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/dashboard/locations">Discard</Link>
-            </Button>
-            <SubmitButton />
-          </div>
+          <Card className="border-border/70 bg-card/95 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                Best Practice
+              </CardTitle>
+              <CardDescription>
+                Use simple names like “Jakarta”, “Bandung”, or “Main Warehouse”.
+              </CardDescription>
+            </CardHeader>
+          </Card>
         </div>
       </div>
     </form>
