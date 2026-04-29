@@ -1,5 +1,5 @@
 import FormBrand from "../../_components/form-brand"
-import { getBrandById } from "../../lib/data"
+import { getBrandById } from "../../lib/actions"
 import { redirect } from "next/navigation"
 
 type EditBrandPageProps = {

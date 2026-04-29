@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
-import { getBrands } from "./lib/data"
+import { getBrands } from "./lib/actions"
 
 export default async function BrandPage() {
   const brands = await getBrands()
