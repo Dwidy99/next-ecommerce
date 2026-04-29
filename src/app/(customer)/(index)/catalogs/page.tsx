@@ -5,6 +5,11 @@ import Navbar from "../_components/navbar";
 import SearchBar from "../_components/search-bar";
 import FilterSidebar from "./_components/filter/filter-sidebar";
 import ProductListing from "./_components/product-listing";
+import {
+  getFilterBrands,
+  getFilterCategories,
+  getFilterLocations,
+} from "./lib/data";
 
 export async function generateMetadata() {
   return await generatePageSEO({
@@ -15,7 +20,13 @@ export async function generateMetadata() {
   });
 }
 
-export default function CatalogPage() {
+export default async function CatalogPage() {
+  const [brands, categories, locations] = await Promise.all([
+    getFilterBrands(),
+    getFilterCategories(),
+    getFilterLocations(),
+  ]);
+
   return (
     <main className="min-h-screen bg-[#edf2f6] pb-12">
       {/* Top strip */}
@@ -72,7 +83,11 @@ export default function CatalogPage() {
       <section className="container mx-auto mt-8 max-w-7xl px-4 pb-[100px] md:px-6">
         <div className="grid gap-6 lg:grid-cols-4">
           <aside className="hidden h-fit rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm ring-1 ring-white lg:col-span-1 lg:block">
-            <FilterSidebar />
+            <FilterSidebar
+              brands={brands}
+              categories={categories}
+              locations={locations}
+            />
           </aside>
 
           <details className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm lg:hidden">
@@ -82,7 +97,11 @@ export default function CatalogPage() {
             </summary>
 
             <div className="mt-5">
-              <FilterSidebar />
+              <FilterSidebar
+                brands={brands}
+                categories={categories}
+                locations={locations}
+              />
             </div>
           </details>
 
