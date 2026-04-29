@@ -13,7 +13,7 @@ import { getBrands } from "../../../brands/lib/actions"
 import { getCategories } from "../../../categories/lib/actions"
 import { getLocations } from "../../../locations/lib/actions"
 import FormProduct from "../../_components/form-product"
-import { getProductById } from "../../lib/actions"
+import { getProductById } from "../../lib/data"
 
 type EditProductPageProps = {
   params: Promise<{ id: string }> | { id: string }
