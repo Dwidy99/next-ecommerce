@@ -54,69 +54,7 @@ const statusMap: Record<TOrder["status"], OrderStatusConfig> = {
   },
 };
 
-function formatOrderDate(value: string) {
-  return new Date(value).toLocaleString("en-US", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  });
-}
-
-function getProductCount(order: TOrder) {
-  return (order.products ?? []).reduce(
-    (total, item) => total + (Number(item.quantity) || 0),
-    0,
-  );
-}
-
-function escapeReceiptValue(value: unknown) {
-  return String(value ?? "-")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function buildReceiptHtml(order: TOrder) {
-  const items = order.products ?? [];
-  const status = statusMap[order.status] ?? statusMap.pending;
-  const detail = order.detail;
-  const itemRows =
-    items.length > 0
-      ? items
-          .map((item, index) => {
-            const productName = escapeReceiptValue(item.product.name);
-            const price = rupiahFormat(Number(item.product.price));
-            const subtotal = rupiahFormat(Number(item.subtotal));
-
-            return `
-              <tr>
-                <td>${index + 1}</td>
-                <td class="product-name">${productName}</td>
-                <td class="text-center">${escapeReceiptValue(item.quantity)}</td>
-                <td class="text-right">Rp ${price}</td>
-                <td class="text-right">Rp ${subtotal}</td>
-              </tr>
-            `;
-          })
-          .join("")
-      : `
-        <tr>
-          <td colspan="5" class="empty-row">No product data available.</td>
-        </tr>
-      `;
-
-  return `
-    <!doctype html>
-    <html lang="en">
-      <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Receipt #${escapeReceiptValue(order.code)}</title>
-        <style>
+const receiptPrintStyles = `
           * {
             box-sizing: border-box;
           }
@@ -535,7 +473,77 @@ function buildReceiptHtml(order: TOrder) {
               display: none;
             }
           }
-        </style>
+
+`;
+
+function formatOrderDate(value: string) {
+  return new Date(value).toLocaleString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function getProductCount(order: TOrder) {
+  return (order.products ?? []).reduce(
+    (total, item) => total + (Number(item.quantity) || 0),
+    0,
+  );
+}
+
+function escapeReceiptValue(value: unknown) {
+  return String(value ?? "-")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function buildReceiptItemRows(items: NonNullable<TOrder["products"]>) {
+  if (items.length === 0) {
+    return `
+      <tr>
+        <td colspan="5" class="empty-row">No product data available.</td>
+      </tr>
+    `;
+  }
+
+  return items
+    .map((item, index) => {
+      const productName = escapeReceiptValue(item.product.name);
+      const price = rupiahFormat(Number(item.product.price));
+      const subtotal = rupiahFormat(Number(item.subtotal));
+
+      return `
+        <tr>
+          <td>${index + 1}</td>
+          <td class="product-name">${productName}</td>
+          <td class="text-center">${escapeReceiptValue(item.quantity)}</td>
+          <td class="text-right">Rp ${price}</td>
+          <td class="text-right">Rp ${subtotal}</td>
+        </tr>
+      `;
+    })
+    .join("");
+}
+
+function buildReceiptHtml(order: TOrder) {
+  const items = order.products ?? [];
+  const status = statusMap[order.status] ?? statusMap.pending;
+  const detail = order.detail;
+  const itemRows = buildReceiptItemRows(items);
+
+  return `
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Receipt #${escapeReceiptValue(order.code)}</title>
+        <style>${receiptPrintStyles}</style>
       </head>
       <body>
         <main class="receipt-page">
