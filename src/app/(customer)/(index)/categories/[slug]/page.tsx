@@ -36,7 +36,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               Category not found
             </h1>
             <p className="mt-3 text-sm leading-6 text-slate-500 sm:text-base">
-              The category you're looking for doesn't exist or is no longer
+              The category you are looking for does not exist or is no longer
               available.
             </p>
             <Link

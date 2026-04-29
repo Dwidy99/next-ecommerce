@@ -22,7 +22,7 @@ export default function ForgotPasswordForm() {
         Forgot Password
       </h1>
       <p className="text-sm text-gray-500 text-center">
-        Enter your registered email and we'll send a reset link.
+        Enter your registered email and we will send a reset link.
       </p>
 
       {state.error && (

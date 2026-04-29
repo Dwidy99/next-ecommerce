@@ -15,11 +15,11 @@ export default function VerifyEmailSentPage() {
             Verify Your Email
           </h1>
           <p className="text-sm leading-6 text-gray-600">
-            We've sent a verification link to your email address. Please check
+            We have sent a verification link to your email address. Please check
             your inbox to complete your registration.
           </p>
           <p className="text-xs text-gray-500">
-            Didn't receive it? Try checking your spam folder.
+            Did not receive it? Try checking your spam folder.
           </p>
         </div>
 

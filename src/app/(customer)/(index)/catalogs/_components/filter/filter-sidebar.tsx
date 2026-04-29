@@ -63,15 +63,14 @@ function FilterPrice() {
 
   useEffect(() => {
     const debounceInput = setTimeout(() => {
-      setFilter({
-        ...filter,
+      setFilter(() => ({
         minPrice: minPrice > 0 ? minPrice : undefined,
         maxPrice: maxPrice > 0 ? maxPrice : undefined,
-      });
+      }));
     }, 1000);
 
     return () => clearTimeout(debounceInput);
-  }, [minPrice, maxPrice]);
+  }, [maxPrice, minPrice, setFilter]);
 
   return (
     <div className="flex flex-col gap-3.5">

@@ -14,7 +14,7 @@ export default function ForgotPasswordSentPage() {
             Check Your Email
           </h1>
           <p className="text-sm leading-6 text-gray-600">
-            We've sent you a link to reset your password. Please check your
+            We have sent you a link to reset your password. Please check your
             inbox and follow the instructions.
           </p>
         </div>
@@ -27,7 +27,7 @@ export default function ForgotPasswordSentPage() {
         </Link>
 
         <p className="text-xs leading-5 text-gray-500">
-          Didn't receive the email? Check your spam folder or{" "}
+          Did not receive the email? Check your spam folder or{" "}
           <Link
             href="/forgot-password"
             className="text-[#110843] underline hover:text-[#FFC736]"
