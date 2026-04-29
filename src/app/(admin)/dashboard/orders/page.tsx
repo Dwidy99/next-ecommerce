@@ -9,8 +9,51 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
+import type { AdminOrderColumn } from "@/app/(admin)/types"
+import { getErrorMessage, warnOnce } from "@/lib/error-message"
+import { getImageUrl } from "@/lib/supabase"
+import { prisma } from "lib/prisma"
 import { columns } from "./columns"
-import { getOrders } from "./lib/data"
+
+function warnOrderFallback(source: string, error: unknown) {
+  warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`)
+}
+
+async function getOrders(): Promise<AdminOrderColumn[]> {
+  try {
+    const orders = await prisma.order.findMany({
+      orderBy: {
+        created_at: "desc",
+      },
+      include: {
+        user: true,
+        products: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    })
+
+    return orders.map((order) => ({
+      id: order.id,
+      code: order.code,
+      createdAt: order.created_at,
+      customer_name: order.user?.name,
+      customer_email: order.user?.email,
+      price: Number(order.total),
+      status: order.status,
+      total_items: order.products.reduce((total, item) => total + item.quantity, 0),
+      products: order.products.map((item) => ({
+        name: item.product.name,
+        image: getImageUrl(item.product.images[0] ?? "", "products"),
+      })),
+    }))
+  } catch (error) {
+    warnOrderFallback("Orders", error)
+    return []
+  }
+}
 
 export default async function OrderPage() {
   const orders = await getOrders()
