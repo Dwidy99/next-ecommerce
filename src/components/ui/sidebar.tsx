@@ -64,7 +64,7 @@ function SidebarProvider({
       value={{ open, openMobile, toggleSidebar, setOpenMobile }}
     >
       <div
-        data-sidebar-state={open ? "expanded" : "collapsed"}
+        data-sidebar-state={open || openMobile ? "expanded" : "collapsed"}
         className={cn("group/sidebar flex min-h-screen w-full bg-background", className)}
         {...props}
       >
@@ -81,13 +81,33 @@ function Sidebar({
 }: React.ComponentProps<"aside">) {
   const { open, openMobile, setOpenMobile } = useSidebar();
 
+  React.useEffect(() => {
+    if (!openMobile) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [openMobile]);
+
   return (
     <>
+      {openMobile && (
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          className="fixed inset-0 z-40 bg-slate-950/45 backdrop-blur-sm md:hidden"
+          onClick={() => setOpenMobile(false)}
+        />
+      )}
+
       <aside
         data-slot="sidebar"
-        data-state={open ? "expanded" : "collapsed"}
+        data-state={open || openMobile ? "expanded" : "collapsed"}
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r bg-sidebar text-sidebar-foreground transition-transform duration-300 md:sticky md:top-0 md:h-screen md:translate-x-0 md:transition-[width] md:duration-200",
+          "fixed inset-y-0 left-0 z-50 flex w-[min(84vw,20rem)] flex-col border-r bg-white text-sidebar-foreground shadow-2xl transition-transform duration-300 md:sticky md:top-0 md:h-screen md:w-72 md:translate-x-0 md:bg-sidebar md:shadow-none md:transition-[width] md:duration-200",
           open ? "md:w-72" : "md:w-20",
           openMobile ? "translate-x-0" : "-translate-x-full",
           className,
@@ -96,15 +116,6 @@ function Sidebar({
       >
         {children}
       </aside>
-
-      {openMobile && (
-        <button
-          type="button"
-          aria-label="Close sidebar"
-          className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm md:hidden"
-          onClick={() => setOpenMobile(false)}
-        />
-      )}
     </>
   );
 }

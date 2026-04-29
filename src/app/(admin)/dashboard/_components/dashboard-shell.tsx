@@ -129,7 +129,8 @@ function DashboardBreadcrumb() {
 
 function DashboardSidebar() {
   const pathname = usePathname();
-  const { open, setOpenMobile } = useSidebar();
+  const { open, openMobile, setOpenMobile } = useSidebar();
+  const showLabels = open || openMobile;
   const [openSections, setOpenSections] = React.useState<Record<string, boolean>>({
     Overview: true,
     Catalog: true,
@@ -144,7 +145,7 @@ function DashboardSidebar() {
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#110843] text-sm font-black text-[#FFC736]">
             S
           </div>
-          {open && (
+          {showLabels && (
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold text-foreground">
                 Shopverse
@@ -159,7 +160,7 @@ function DashboardSidebar() {
 
       <SidebarContent>
         {navSections.map((section) => {
-          const isOpen = !open || openSections[section.title];
+          const isOpen = !showLabels || openSections[section.title];
 
           return (
             <SidebarGroup key={section.title}>
@@ -191,14 +192,14 @@ function DashboardSidebar() {
                         <SidebarMenuButton
                           asChild
                           isActive={isActive}
-                          title={!open ? item.title : undefined}
+                          title={!showLabels ? item.title : undefined}
                         >
                           <Link
                             href={item.href}
                             onClick={() => setOpenMobile(false)}
                           >
                             <Icon className="h-5 w-5 shrink-0" />
-                            {open && <span>{item.title}</span>}
+                            {showLabels && <span>{item.title}</span>}
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
