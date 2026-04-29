@@ -1,6 +1,6 @@
 "use server";
 
-import { getUser } from "@/lib/auth";
+import { getCustomerUser } from "@/lib/auth";
 import {
   checkFileExists,
   deleteFile,
@@ -24,7 +24,7 @@ const profileSchema = z.object({
 
 // UPDATE
 export async function updateProfile(formData: FormData): Promise<ActionResult> {
-  const { user } = await getUser();
+  const { user } = await getCustomerUser();
   if (!user) return { error: "Unauthorized" };
 
   const parsed = profileSchema.safeParse({

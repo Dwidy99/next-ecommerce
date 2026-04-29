@@ -1,12 +1,12 @@
 "use server";
 
-import { getUser } from "@/lib/auth";
+import { getCustomerUser } from "@/lib/auth";
 import type { ProfileResult } from "@/app/(customer)/types";
 import { prisma } from "lib/prisma";
 
 // READ DETAIL
 export async function getProfile(): Promise<ProfileResult> {
-  const { user } = await getUser();
+  const { user } = await getCustomerUser();
   if (!user) return { error: "Unauthorized" };
 
   try {

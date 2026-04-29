@@ -1,6 +1,6 @@
 "use server";
 
-import { getUser } from "@/lib/auth";
+import { getCustomerUser } from "@/lib/auth";
 import { getImageUrl } from "@/lib/supabase";
 import type { StatusOrder } from "@prisma/client";
 import { prisma } from "lib/prisma";
@@ -9,7 +9,7 @@ const SIMULATED_PAYMENT_SUCCESS_DELAY_MS = 9000;
 
 // READ LIST
 export async function getPurchaseHistory() {
-  const { user } = await getUser();
+  const { user } = await getCustomerUser();
   if (!user) return { error: "Unauthorized", orders: [] };
 
   try {

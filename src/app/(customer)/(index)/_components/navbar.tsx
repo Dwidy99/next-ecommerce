@@ -1,4 +1,4 @@
-import { getUser } from "@/lib/auth";
+import { getCustomerUser } from "@/lib/auth";
 import { getSiteConfig } from "@/lib/seo/config";
 import { getCategories } from "../lib/data";
 import NavbarClient from "./navbar-client";
@@ -26,7 +26,7 @@ function mapNavbarCategories(
   }));
 }
 
-function mapNavbarUser(user: Awaited<ReturnType<typeof getUser>>["user"]): NavbarUser {
+function mapNavbarUser(user: Awaited<ReturnType<typeof getCustomerUser>>["user"]): NavbarUser {
   if (!user) return null;
 
   return {
@@ -39,7 +39,7 @@ function mapNavbarUser(user: Awaited<ReturnType<typeof getUser>>["user"]): Navba
 }
 
 export default async function Navbar() {
-  const { user } = await getUser();
+  const { user } = await getCustomerUser();
   const categoriesData = await getCategories();
   const siteConfig = await getSiteConfig("ID");
   const site = mapNavbarSite(siteConfig);

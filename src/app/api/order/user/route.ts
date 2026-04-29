@@ -1,11 +1,11 @@
 // app/api/order/user/route.ts
-import { getUser } from "@/lib/auth";
+import { getCustomerUser } from "@/lib/auth";
 
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../../lib/prisma";
 
 export async function GET() {
-    const { user } = await getUser();
+    const { user } = await getCustomerUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const orders = await prisma.order.findMany({

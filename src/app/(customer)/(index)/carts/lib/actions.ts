@@ -1,6 +1,6 @@
 "use server";
 
-import { getUser } from "@/lib/auth";
+import { getCustomerUser } from "@/lib/auth";
 import { schemaShippingAddress } from "@/lib/schema";
 import { generateRandomString } from "@/lib/utils";
 import xenditClient from "@/lib/xendit";
@@ -26,7 +26,7 @@ export async function storeOrder(
     };
   }
 
-  const { session, user } = await getUser();
+  const { session, user } = await getCustomerUser();
   if (!session) redirect("/");
 
   const parsed = schemaShippingAddress.safeParse({

@@ -1,7 +1,7 @@
 import { Poppins } from "next/font/google";
 import React, { ReactNode } from "react";
 import { Toaster } from "sonner";
-import { getUser } from "@/lib/auth";
+import { getCustomerUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import NavigationLoading from "../_components/navigation-loading";
 
@@ -32,7 +32,7 @@ export const metadata = {
 export default async function AuthRootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
-  const { session, user } = await getUser();
+  const { session, user } = await getCustomerUser();
   if (session && user.role === "customer") {
     return redirect("/catalogs");
   }

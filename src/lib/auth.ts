@@ -10,6 +10,8 @@ import { getErrorMessage, warnOnce } from "@/lib/error-message";
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user)
 
+type AuthResult = { user: User; session: Session } | { user: null; session: null };
+
 export const lucia = new Lucia(adapter, {
     sessionCookie: {
         expires: false,
@@ -29,7 +31,7 @@ export const lucia = new Lucia(adapter, {
 })
 
 export const getUser = cache(
-    async (): Promise<{ user: User; session: Session } | { user: null; session: null }> => {
+    async (): Promise<AuthResult> => {
         const sessionId = (await cookies()).get(lucia.sessionCookieName)?.value ?? null;
         if (!sessionId) {
             return {
@@ -61,6 +63,27 @@ export const getUser = cache(
         }
     }
 );
+
+// Use these helpers when a route must belong to one side of the app.
+// Admin sessions should not be treated as customer sessions, and vice versa.
+function getRoleUser(result: AuthResult, role: RoleUser): AuthResult {
+    if (!result.user || result.user.role !== role) {
+        return {
+            user: null,
+            session: null
+        };
+    }
+
+    return result;
+}
+
+export async function getCustomerUser(): Promise<AuthResult> {
+    return getRoleUser(await getUser(), "customer");
+}
+
+export async function getAdminUser(): Promise<AuthResult> {
+    return getRoleUser(await getUser(), "superadmin");
+}
 
 declare module "lucia" {
     interface Register {

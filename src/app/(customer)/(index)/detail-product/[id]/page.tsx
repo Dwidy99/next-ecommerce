@@ -7,7 +7,7 @@ import PriceInfo from "./_components/price-info";
 import CustomerLoading from "@/app/(customer)/_components/customer-loading";
 import ListProduct from "../../_components/list-product";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
-import { getUser } from "@/lib/auth";
+import { getCustomerUser } from "@/lib/auth";
 import { getProductById } from "../lib/data";
 import type { DetailProductPageProps } from "@/app/(customer)/types";
 
@@ -40,7 +40,7 @@ export default async function DetailProduct({ params }: DetailProductPageProps) 
   const product = await getProductById(id);
   if (!product) redirect("/catalogs");
 
-  const { session } = await getUser();
+  const { session } = await getCustomerUser();
   const categoryName = product.category?.name ?? "Product";
   const brandName = product.brand?.name ?? "Shopverse";
   const locationName = product.location?.name ?? "Online";
