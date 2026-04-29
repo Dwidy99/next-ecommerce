@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useFilter } from "@/hooks/useFilter";
-import { fetchProduct } from "../lib/data";
+import { fetchCatalogProducts } from "../lib/client";
 import CardProduct from "../../_components/card-product";
 import NoData from "../../_components/no-data";
 import CustomerLoading from "@/app/(customer)/loading";
@@ -28,7 +28,7 @@ function ProductListingContent(): JSX.Element {
     isError,
   } = useQuery<TProduct[]>({
     queryKey: ["product-listing", filter],
-    queryFn: () => fetchProduct(filter),
+    queryFn: () => fetchCatalogProducts(filter),
   });
 
   if (isLoading) {
