@@ -1,6 +1,6 @@
 "use server";
 
-import { lucia } from "@/lib/auth";
+import { getUser, lucia } from "@/lib/auth";
 import { schemaSignIn } from "@/lib/schema";
 import { ActionResult } from "@/app/(customer)/types";
 import bcrypt from "bcrypt";
@@ -20,6 +20,19 @@ export async function SignIn(
 
   if (!parsed.success) {
     return { error: getFirstValidationError(parsed.error) };
+  }
+
+  const currentAuth = await getUser();
+
+  if (currentAuth.user?.role === "customer") {
+    redirect("/catalogs");
+  }
+
+  if (currentAuth.user?.role === "superadmin") {
+    return {
+      error:
+        "You are currently signed in as an admin. Please logout from the admin dashboard before signing in as customer.",
+    };
   }
 
   const user = await prisma.user.findFirst({

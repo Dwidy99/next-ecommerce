@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { ActionResult } from "@/app/(admin)/types";
-import { lucia } from "@/lib/auth";
+import { getUser, lucia } from "@/lib/auth";
 import { getErrorMessage } from "@/lib/error-message";
 import { schemaSignIn } from "@/lib/schema";
 import { prisma } from "lib/prisma";
@@ -29,6 +29,19 @@ export async function SignIn(
   if (!validate.success) {
     const firstError = validate.error.issues?.[0]?.message ?? "Invalid input";
     return { error: firstError };
+  }
+
+  const currentAuth = await getUser();
+
+  if (currentAuth.user?.role === "superadmin") {
+    redirect("/dashboard");
+  }
+
+  if (currentAuth.user?.role === "customer") {
+    return {
+      error:
+        "You are currently signed in as a customer. Please logout from the customer account before signing in as admin.",
+    };
   }
 
   try {
