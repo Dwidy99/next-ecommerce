@@ -4,7 +4,9 @@ import { sendVerificationEmail } from "@/lib/mailer";
 import { ActionResult } from "@/app/(customer)/types";
 import { TokenType } from "@prisma/client";
 import { prisma } from "lib/prisma";
-import { createEmailVerificationToken } from "./data";
+import crypto from "crypto";
+
+const EMAIL_VERIFICATION_EXPIRES_IN_MS = 1000 * 60 * 60;
 
 // CREATE / SEND
 export async function sendEmailVerification(
@@ -81,4 +83,18 @@ export async function sendEmailVerificationDirect(
 ) {
   const token = await createEmailVerificationToken(userId);
   await sendVerificationEmail(email, token, name);
+}
+
+// CREATE TOKEN
+async function createEmailVerificationToken(userId: number): Promise<string> {
+  const token = crypto.randomBytes(32).toString("hex");
+  const expires = new Date(Date.now() + EMAIL_VERIFICATION_EXPIRES_IN_MS);
+
+  await prisma.userToken.upsert({
+    where: { userId_type: { userId, type: "EMAIL_VERIFICATION" } },
+    update: { token, expires },
+    create: { userId, token, type: "EMAIL_VERIFICATION", expires },
+  });
+
+  return token;
 }

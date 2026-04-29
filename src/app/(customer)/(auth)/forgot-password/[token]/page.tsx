@@ -1,5 +1,5 @@
 import ResetPasswordForm from "../_components/reset-password-form";
-import { verifyResetToken } from "./lib/data";
+import { verifyResetToken } from "./lib/actions";
 import type { ResetPasswordPageProps } from "@/app/(customer)/types";
 
 export default async function ResetPasswordPage({

@@ -1,6 +1,5 @@
 "use server";
 
-import { findUserByEmail } from "./data";
 import { prisma } from "lib/prisma";
 import crypto from "crypto";
 import { sendResetPasswordEmail } from "./email";
@@ -48,4 +47,12 @@ export async function ForgotPasswordAction(_: unknown, formData: FormData) {
   }
 
   redirect("/forgot-password/sent");
+}
+
+// READ DETAIL
+async function findUserByEmail(email: string) {
+  return prisma.user.findUnique({
+    where: { email },
+    select: { id: true, email: true, name: true },
+  });
 }
