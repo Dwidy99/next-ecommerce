@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { Toaster } from "sonner";
 import { getCustomerUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import NavigationLoading from "../_components/navigation-loading";
+import CustomerNavigationLoading from "../_components/customer-navigation-loading";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +39,7 @@ export default async function AuthRootLayout({
 
   return (
     <div className={poppins.className}>
-      <NavigationLoading />
+      <CustomerNavigationLoading />
       {children}
       <Toaster richColors position="top-center" />
     </div>

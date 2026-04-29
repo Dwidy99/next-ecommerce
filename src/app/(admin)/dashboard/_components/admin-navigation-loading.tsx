@@ -3,15 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-type NavigationLoadingProps = {
-  accentClassName?: string;
-  trackClassName?: string;
-};
-
-export default function NavigationLoading({
-  accentClassName = "bg-[#FFC736] shadow-[0_0_18px_rgba(255,199,54,0.85)]",
-  trackClassName = "bg-[#110843]/10",
-}: NavigationLoadingProps) {
+export default function AdminNavigationLoading() {
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -67,14 +59,12 @@ export default function NavigationLoading({
 
   return (
     <div className="pointer-events-none fixed inset-x-0 top-0 z-[9999]">
-      <div className={`h-1 w-full overflow-hidden ${trackClassName}`}>
-        <div
-          className={`h-full w-1/2 animate-[navigation-progress_1.1s_ease-in-out_infinite] rounded-r-full ${accentClassName}`}
-        />
+      <div className="h-1 w-full overflow-hidden bg-[#110843]/10">
+        <div className="h-full w-1/2 animate-[admin-navigation-progress_1.1s_ease-in-out_infinite] rounded-r-full bg-[#110843] shadow-[0_0_18px_rgba(17,8,67,0.65)]" />
       </div>
 
       <style jsx>{`
-        @keyframes navigation-progress {
+        @keyframes admin-navigation-progress {
           0% {
             transform: translateX(-110%);
           }
