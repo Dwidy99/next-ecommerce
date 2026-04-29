@@ -1,6 +1,6 @@
 import React from "react";
 import FormLocation from "../../_components/form-location";
-import { getLocationById } from "../../lib/data";
+import { getLocationById } from "../../lib/actions";
 import { redirect } from "next/navigation";
 
 type EditPageProps = {

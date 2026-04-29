@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
-import { getLocations } from "./lib/data"
+import { getLocations } from "./lib/actions"
 
 export default async function LocationsPage() {
   const data = await getLocations()
