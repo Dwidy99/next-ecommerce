@@ -629,217 +629,235 @@ function buildReceiptHtml(order: TOrder) {
   `;
 }
 
+function printReceipt(order: TOrder) {
+  const newWindow = window.open("", "_blank");
+  if (!newWindow) return;
+
+  newWindow.document.write(buildReceiptHtml(order));
+  newWindow.document.close();
+  newWindow.focus();
+
+  newWindow.addEventListener("load", () => {
+    newWindow.print();
+  });
+}
+
+function EmptyOrders() {
+  return (
+    <div className="rounded-3xl border border-dashed border-[#dccfa2] bg-[#fffdf6] px-6 py-12 text-center text-[#5f6480]">
+      <p>No orders found.</p>
+    </div>
+  );
+}
+
+function OrderMetricCard({
+  icon,
+  label,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  title: string;
+  description?: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-[#ece7d6] bg-white p-4">
+      <div className="flex items-center gap-2 text-[#d99000]">
+        {icon}
+        <p className="text-xs font-semibold uppercase tracking-[0.22em]">
+          {label}
+        </p>
+      </div>
+      <p className="mt-3 text-sm font-semibold text-[#110843] md:text-base">
+        {title}
+      </p>
+      {description && (
+        <p className="mt-1 text-sm text-[#5f6480]">{description}</p>
+      )}
+    </div>
+  );
+}
+
+function OrderProductSnapshot({ order }: { order: TOrder }) {
+  const items = order.products ?? [];
+  if (items.length === 0) return null;
+
+  return (
+    <div className="rounded-3xl border border-[#ece7d6] bg-white p-4 md:p-5">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#d99000]">
+            Product Snapshot
+          </p>
+          <p className="mt-1 text-sm text-[#5f6480]">
+            A quick look at the products included in this checkout.
+          </p>
+        </div>
+        <span className="rounded-full bg-[#f8f4e4] px-3 py-1 text-xs font-medium text-[#6b623f]">
+          {items.length} line item{items.length > 1 ? "s" : ""}
+        </span>
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        {items.slice(0, 2).map((item) => {
+          const imageUrl = item.product.images?.[0] || "/assets/icons/no-data.svg";
+
+          return (
+            <div
+              key={item.id}
+              className="flex items-center gap-3 rounded-2xl border border-[#f0ead8] bg-[#fffdfa] p-3"
+            >
+              <div className="relative h-16 w-16 overflow-hidden rounded-2xl bg-[#f7f4ea]">
+                <Image
+                  src={imageUrl}
+                  alt={item.product.name}
+                  fill
+                  className="object-cover"
+                  sizes="64px"
+                />
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-[#110843] md:text-base">
+                  {item.product.name}
+                </p>
+                <p className="mt-1 text-sm text-[#5f6480]">
+                  Qty {item.quantity} - Rp {rupiahFormat(Number(item.subtotal))}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function OrderActions({ order }: { order: TOrder }) {
+  return (
+    <div className="flex flex-col gap-4 border-t border-[#ece7d6] pt-5 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center gap-2 text-sm font-medium text-[#110843]">
+          <ReceiptText className="h-4 w-4 text-[#d99000]" />
+          Ready to review this order again anytime.
+        </div>
+        <p className="text-sm text-[#5f6480]">
+          Keep this page for payment follow-up, receipt printing, and quick
+          order recall.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <Link href="/catalogs">
+          <Button
+            variant="outline"
+            className="h-11 rounded-full border-[#110843]/15 px-5 text-[#110843] hover:bg-[#110843]/5"
+          >
+            Shop Again
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </Link>
+
+        {order.status === "success" && (
+          <Button
+            onClick={() => printReceipt(order)}
+            className="h-11 rounded-full bg-[#110843] px-5 text-white hover:bg-[#24105f]"
+          >
+            <Printer className="mr-2 h-4 w-4" />
+            Print Receipt
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function OrderCard({ order }: { order: TOrder }) {
+  const status = statusMap[order.status] ?? statusMap.pending;
+  const StatusIcon = status.icon;
+  const items = order.products ?? [];
+  const primaryProduct = items[0]?.product;
+  const extraProducts = Math.max(items.length - 1, 0);
+  const productCount = getProductCount(order);
+
+  return (
+    <article className="overflow-hidden rounded-3xl border border-[#ece7d6] bg-[#fffdfa] shadow-lg transition-transform duration-300 hover:-translate-y-1">
+      <div className="flex flex-col gap-6 p-6 md:p-7">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center rounded-full bg-[#fff1b8] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#8b6500]">
+                Order #{order.code}
+              </span>
+              <span
+                className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${status.badgeClassName}`}
+              >
+                <StatusIcon className="h-3.5 w-3.5" />
+                {status.label}
+              </span>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-bold text-[#110843] md:text-2xl">
+                {primaryProduct?.name ?? "Order summary"}
+              </h3>
+              <p className="mt-2 max-w-2xl text-sm leading-7 text-[#5f6480] md:text-base">
+                {extraProducts > 0
+                  ? `Includes ${extraProducts} more product${extraProducts > 1 ? "s" : ""} from the same checkout.`
+                  : "Single-product checkout with clear payment tracking."}
+              </p>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-[#efe3b8] bg-[#fff8de] px-4 py-3 text-left lg:min-w-56">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b28700]">
+              Grand Total
+            </p>
+            <p className="mt-2 text-2xl font-bold text-[#110843]">
+              Rp {rupiahFormat(Number(order.total))}
+            </p>
+            <p className="mt-1 text-sm text-[#7a6f48]">{status.description}</p>
+          </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          <OrderMetricCard
+            icon={<CalendarDays className="h-4 w-4" />}
+            label="Placed On"
+            title={formatOrderDate(order.created_at)}
+          />
+          <OrderMetricCard
+            icon={<Package2 className="h-4 w-4" />}
+            label="Items"
+            title={`${productCount} item${productCount > 1 ? "s" : ""}`}
+            description={primaryProduct?.name ?? "Products unavailable"}
+          />
+          <OrderMetricCard
+            icon={<MapPin className="h-4 w-4" />}
+            label="Delivery"
+            title={order.detail?.name ?? "Recipient not available"}
+            description={order.detail?.city ?? "Location not recorded yet"}
+          />
+        </div>
+
+        <OrderProductSnapshot order={order} />
+        <OrderActions order={order} />
+      </div>
+    </article>
+  );
+}
+
 export default function OrdersList({ orders = [] }: OrdersListProps) {
   if (!Array.isArray(orders) || orders.length === 0) {
-    return (
-      <div className="rounded-3xl border border-dashed border-[#dccfa2] bg-[#fffdf6] px-6 py-12 text-center text-[#5f6480]">
-        <p>No orders found.</p>
-      </div>
-    );
+    return <EmptyOrders />;
   }
-
-  const handlePrint = (order: TOrder) => {
-    const newWindow = window.open("", "_blank");
-    if (!newWindow) return;
-
-    newWindow.document.write(buildReceiptHtml(order));
-    newWindow.document.close();
-    newWindow.focus();
-
-    newWindow.addEventListener("load", () => {
-      newWindow.print();
-    });
-  };
 
   return (
     <div className="flex flex-col gap-5">
-      {orders.map((order) => {
-        const status = statusMap[order.status] ?? statusMap.pending;
-        const StatusIcon = status.icon;
-        const items = order.products ?? [];
-        const primaryProduct = items[0]?.product;
-        const extraProducts = Math.max(items.length - 1, 0);
-        const productCount = getProductCount(order);
-
-        return (
-          <article
-            key={order.id}
-            className="overflow-hidden rounded-3xl border border-[#ece7d6] bg-[#fffdfa] shadow-lg transition-transform duration-300 hover:-translate-y-1"
-          >
-            <div className="flex flex-col gap-6 p-6 md:p-7">
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                <div className="flex flex-col gap-3">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <span className="inline-flex items-center rounded-full bg-[#fff1b8] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#8b6500]">
-                      Order #{order.code}
-                    </span>
-                    <span
-                      className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${status.badgeClassName}`}
-                    >
-                      <StatusIcon className="h-3.5 w-3.5" />
-                      {status.label}
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="text-xl font-bold text-[#110843] md:text-2xl">
-                      {primaryProduct?.name ?? "Order summary"}
-                    </h3>
-                    <p className="mt-2 max-w-2xl text-sm leading-7 text-[#5f6480] md:text-base">
-                      {extraProducts > 0
-                        ? `Includes ${extraProducts} more product${extraProducts > 1 ? "s" : ""} from the same checkout.`
-                        : "Single-product checkout with clear payment tracking."}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-[#efe3b8] bg-[#fff8de] px-4 py-3 text-left lg:min-w-56">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b28700]">
-                    Grand Total
-                  </p>
-                  <p className="mt-2 text-2xl font-bold text-[#110843]">
-                    Rp {rupiahFormat(Number(order.total))}
-                  </p>
-                  <p className="mt-1 text-sm text-[#7a6f48]">
-                    {status.description}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-3">
-                <div className="rounded-2xl border border-[#ece7d6] bg-white p-4">
-                  <div className="flex items-center gap-2 text-[#d99000]">
-                    <CalendarDays className="h-4 w-4" />
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em]">
-                      Placed On
-                    </p>
-                  </div>
-                  <p className="mt-3 text-sm font-semibold text-[#110843] md:text-base">
-                    {formatOrderDate(order.created_at)}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-[#ece7d6] bg-white p-4">
-                  <div className="flex items-center gap-2 text-[#d99000]">
-                    <Package2 className="h-4 w-4" />
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em]">
-                      Items
-                    </p>
-                  </div>
-                  <p className="mt-3 text-sm font-semibold text-[#110843] md:text-base">
-                    {productCount} item{productCount > 1 ? "s" : ""}
-                  </p>
-                  <p className="mt-1 text-sm text-[#5f6480]">
-                    {primaryProduct?.name ?? "Products unavailable"}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-[#ece7d6] bg-white p-4">
-                  <div className="flex items-center gap-2 text-[#d99000]">
-                    <MapPin className="h-4 w-4" />
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em]">
-                      Delivery
-                    </p>
-                  </div>
-                  <p className="mt-3 text-sm font-semibold text-[#110843] md:text-base">
-                    {order.detail?.name ?? "Recipient not available"}
-                  </p>
-                  <p className="mt-1 text-sm text-[#5f6480]">
-                    {order.detail?.city ?? "Location not recorded yet"}
-                  </p>
-                </div>
-              </div>
-
-              {items.length > 0 && (
-                <div className="rounded-3xl border border-[#ece7d6] bg-white p-4 md:p-5">
-                  <div className="mb-4 flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#d99000]">
-                        Product Snapshot
-                      </p>
-                      <p className="mt-1 text-sm text-[#5f6480]">
-                        A quick look at the products included in this checkout.
-                      </p>
-                    </div>
-                    <span className="rounded-full bg-[#f8f4e4] px-3 py-1 text-xs font-medium text-[#6b623f]">
-                      {items.length} line item{items.length > 1 ? "s" : ""}
-                    </span>
-                  </div>
-
-                  <div className="grid gap-3 md:grid-cols-2">
-                    {items.slice(0, 2).map((item) => {
-                      const imageUrl =
-                        item.product.images?.[0] || "/assets/icons/no-data.svg";
-
-                      return (
-                        <div
-                          key={item.id}
-                          className="flex items-center gap-3 rounded-2xl border border-[#f0ead8] bg-[#fffdfa] p-3"
-                        >
-                          <div className="relative h-16 w-16 overflow-hidden rounded-2xl bg-[#f7f4ea]">
-                            <Image
-                              src={imageUrl}
-                              alt={item.product.name}
-                              fill
-                              className="object-cover"
-                              sizes="64px"
-                            />
-                          </div>
-
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-[#110843] md:text-base">
-                              {item.product.name}
-                            </p>
-                            <p className="mt-1 text-sm text-[#5f6480]">
-                              Qty {item.quantity} - Rp{" "}
-                              {rupiahFormat(Number(item.subtotal))}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              <div className="flex flex-col gap-4 border-t border-[#ece7d6] pt-5 md:flex-row md:items-center md:justify-between">
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-center gap-2 text-sm font-medium text-[#110843]">
-                    <ReceiptText className="h-4 w-4 text-[#d99000]" />
-                    Ready to review this order again anytime.
-                  </div>
-                  <p className="text-sm text-[#5f6480]">
-                    Keep this page for payment follow-up, receipt printing, and
-                    quick order recall.
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <Link href="/catalogs">
-                    <Button
-                      variant="outline"
-                      className="h-11 rounded-full border-[#110843]/15 px-5 text-[#110843] hover:bg-[#110843]/5"
-                    >
-                      Shop Again
-                      <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-
-                  {order.status === "success" && (
-                    <Button
-                      onClick={() => handlePrint(order)}
-                      className="h-11 rounded-full bg-[#110843] px-5 text-white hover:bg-[#24105f]"
-                    >
-                      <Printer className="mr-2 h-4 w-4" />
-                      Print Receipt
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </article>
-        );
-      })}
+      {orders.map((order) => (
+        <OrderCard key={order.id} order={order} />
+      ))}
     </div>
   );
 }
