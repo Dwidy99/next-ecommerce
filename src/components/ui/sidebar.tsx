@@ -195,6 +195,16 @@ function SidebarGroup({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
+function SidebarGroupContent({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="sidebar-group-content"
+      className={cn("flex flex-col gap-1", className)}
+      {...props}
+    />
+  );
+}
+
 function SidebarGroupLabel({ className, ...props }: React.ComponentProps<"button">) {
   return (
     <button
@@ -279,6 +289,7 @@ export {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
