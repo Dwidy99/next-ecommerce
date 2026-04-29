@@ -1,6 +1,14 @@
+import { getAdminUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import AdminLoginForm from "./_components/login-form";
 
-export default function AdminLoginPage() {
+export const dynamic = "force-dynamic";
+
+export default async function AdminLoginPage() {
+  const { session } = await getAdminUser();
+
+  if (session) redirect("/dashboard");
+
   return (
     <main className="admin-auth-bg admin-auth-glow relative flex min-h-dvh w-full items-center justify-center overflow-hidden px-4 py-8 sm:px-6 lg:px-10">
       <section className="relative z-10 grid w-full max-w-5xl overflow-hidden rounded-3xl border border-white/60 bg-white/70 shadow-2xl backdrop-blur-xl lg:grid-cols-2">
