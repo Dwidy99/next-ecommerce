@@ -2,8 +2,10 @@ import React, { Suspense } from "react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Navbar from "../../_components/navbar";
-import CarouselImages from "./_components/carousel-images";
-import PriceInfo from "./_components/price-info";
+import {
+  ProductImageCarousel,
+  ProductPriceCard,
+} from "./_components/product-detail-client";
 import CustomerLoading from "@/app/(customer)/loading";
 import ListProduct from "../../_components/list-product";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
@@ -116,7 +118,7 @@ export default async function DetailProduct({ params }: DetailProductPageProps) 
             </div>
           </div>
 
-          <CarouselImages images={product.images} />
+          <ProductImageCarousel images={product.images} />
 
           <section className="mt-10 grid gap-8 lg:grid-cols-3">
             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 md:p-8 lg:col-span-2">
@@ -149,7 +151,7 @@ export default async function DetailProduct({ params }: DetailProductPageProps) 
               </div>
             </div>
 
-            <PriceInfo
+            <ProductPriceCard
               isLogIn={!!session}
               item={{
                 id: product.id,
