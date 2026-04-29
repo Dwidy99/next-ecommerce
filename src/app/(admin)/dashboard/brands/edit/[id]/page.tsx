@@ -1,5 +1,5 @@
-import FormBrand from "../../_components/form-brand"
-import { getBrandById } from "../../lib/actions"
+﻿import FormBrand from "../../_components/form-brand"
+import { getBrandById } from "../../lib/data"
 import { redirect } from "next/navigation"
 
 type EditBrandPageProps = {
@@ -16,3 +16,4 @@ export default async function EditBrandPage({ params }: EditBrandPageProps) {
 
   return <FormBrand type="EDIT" data={brand} />
 }
+

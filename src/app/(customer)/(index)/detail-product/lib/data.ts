@@ -3,7 +3,7 @@
 import { getImageUrl } from "@/lib/supabase";
 import { prisma } from "lib/prisma";
 
-// READ DETAIL
+// READ: Get one product for the product detail page.
 export async function getProductById(id: string | number) {
   const productId = Number(id);
   if (Number.isNaN(productId)) return null;

@@ -48,9 +48,7 @@ async function deleteImages(images: string[]) {
   }
 }
 
-// ============================
-// CREATE PRODUCT
-// ============================
+// CREATE: Store a new product with uploaded images.
 export async function storeProduct(
   _: unknown,
   formData: FormData
@@ -99,9 +97,7 @@ export async function storeProduct(
 }
 
 
-// ============================
-// UPDATE PRODUCT
-// ============================
+// UPDATE: Save product changes and replace images when new files are uploaded.
 export async function updateProduct(
   _: unknown,
   formData: FormData,
@@ -173,9 +169,7 @@ export async function updateProduct(
 }
 
 
-// ============================
-// DELETE PRODUCT
-// ============================
+// DELETE: Remove a product and its uploaded images.
 export async function deleteProduct(formData: FormData): Promise<void> {
   const id = Number(formData.get("id"));
   if (!id) throw new Error("Invalid product ID");

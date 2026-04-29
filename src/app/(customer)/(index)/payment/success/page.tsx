@@ -1,5 +1,5 @@
-import PaymentStatus from "../_components/payment-status";
-import { updateOrderStatusByCode } from "../lib/data";
+﻿import PaymentStatus from "../_components/payment-status";
+import { updateOrderStatusByCode } from "../lib/actions";
 import type { PaymentResultPageProps } from "@/app/(customer)/types";
 
 export default async function PaymentSuccessPage({
@@ -10,3 +10,4 @@ export default async function PaymentSuccessPage({
 
   return <PaymentStatus status="success" code={order?.code ?? params?.code} />;
 }
+

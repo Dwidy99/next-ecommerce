@@ -4,7 +4,7 @@ import { getCustomerUser } from "@/lib/auth";
 import type { ProfileResult } from "@/app/(customer)/types";
 import { prisma } from "lib/prisma";
 
-// READ DETAIL
+// READ: Get the logged-in customer's profile.
 export async function getProfile(): Promise<ProfileResult> {
   const { user } = await getCustomerUser();
   if (!user) return { error: "Unauthorized" };

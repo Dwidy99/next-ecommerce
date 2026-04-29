@@ -7,7 +7,7 @@ import type {
 } from "@/app/(customer)/types";
 import { prisma } from "lib/prisma";
 
-// READ LIST
+// READ: Get homepage category cards.
 export async function getCategories(): Promise<CustomerCategoryItem[]> {
   try {
     const categories = await prisma.category.findMany({
@@ -27,6 +27,7 @@ export async function getCategories(): Promise<CustomerCategoryItem[]> {
   }
 }
 
+// READ: Get homepage featured products.
 export async function getProducts(): Promise<CustomerProductItem[]> {
   try {
     const products = await prisma.product.findMany({
@@ -48,6 +49,7 @@ export async function getProducts(): Promise<CustomerProductItem[]> {
   }
 }
 
+// READ: Get homepage brand logos.
 export async function getBrands(): Promise<CustomerBrandItem[]> {
   try {
     const brands = await prisma.brand.findMany({

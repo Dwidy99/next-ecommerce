@@ -2,7 +2,7 @@ import { getErrorMessage, warnOnce } from "@/lib/error-message";
 import type { FilterOption, TFilter, TProduct } from "@/app/(customer)/types";
 import { prisma } from "lib/prisma";
 
-// READ LIST
+// READ: Fetch catalog products using the active filter values.
 export async function fetchProduct(body?: TFilter): Promise<TProduct[]> {
   try {
     const res = await fetch("/api/catalog", {
@@ -26,7 +26,7 @@ export async function fetchProduct(body?: TFilter): Promise<TProduct[]> {
   }
 }
 
-// READ FILTER OPTIONS
+// READ: Get brand options for catalog filters.
 export async function getFilterBrands(): Promise<FilterOption[]> {
   try {
     return await prisma.brand.findMany({
@@ -44,6 +44,7 @@ export async function getFilterBrands(): Promise<FilterOption[]> {
   }
 }
 
+// READ: Get category options for catalog filters.
 export async function getFilterCategories(): Promise<FilterOption[]> {
   try {
     return await prisma.category.findMany({
@@ -61,6 +62,7 @@ export async function getFilterCategories(): Promise<FilterOption[]> {
   }
 }
 
+// READ: Get location options for catalog filters.
 export async function getFilterLocations(): Promise<FilterOption[]> {
   try {
     return await prisma.location.findMany({

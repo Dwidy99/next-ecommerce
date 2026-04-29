@@ -1,5 +1,15 @@
+﻿import type {
+  Brand,
+  Category,
+  Language,
+  Location,
+  Product,
+  ProductStock,
+  StatusOrder,
+} from "@prisma/client";
 import type React from "react";
 
+// Shared server action response type.
 export interface ActionResult {
   error: string;
   redirectUrl?: string;
@@ -7,42 +17,34 @@ export interface ActionResult {
   message?: string;
 }
 
-export type AdminLoginFormProps = {
-  className?: string;
-};
-
-export type Tparams = {
-  id: string;
-};
-
-export type Tedit = {
-  params: Tparams;
-};
-
-export type AdminCategoryTableItem = import("@prisma/client").Category & {
+// CRUD: Category data.
+export type AdminCategoryTableItem = Category & {
   _count: {
     products: number;
   };
 };
 
-export type AdminCategoryFormData = import("@prisma/client").Category | null;
+export type AdminCategoryFormData = Category | null;
 
-export type AdminLocationTableItem = import("@prisma/client").Location & {
+// CRUD: Location data.
+export type AdminLocationTableItem = Location & {
   _count: {
     products: number;
   };
 };
 
-export type AdminLocationFormData = import("@prisma/client").Location | null;
+export type AdminLocationFormData = Location | null;
 
-export type AdminBrandTableItem = import("@prisma/client").Brand & {
+// CRUD: Brand data.
+export type AdminBrandTableItem = Brand & {
   _count: {
     products: number;
   };
 };
 
-export type AdminBrandFormData = import("@prisma/client").Brand | null;
+export type AdminBrandFormData = Brand | null;
 
+// CRUD: Product data.
 export type AdminProductTableItem = {
   id: number;
   name: string;
@@ -52,27 +54,58 @@ export type AdminProductTableItem = {
   location: string;
   price: number;
   total_sales: number;
-  stock: import("@prisma/client").ProductStock;
+  stock: ProductStock;
   createdAt: Date;
 };
 
-export type AdminProductFormData = import("@prisma/client").Product | null;
+export type AdminProductFormData = Product | null;
 
-export type AdminNavItem = {
-  title: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
+// CRUD: Order data.
+export type AdminOrderProductColumn = {
+  name: string;
+  image: string;
 };
 
-export type AdminNavSection = {
-  title: string;
-  items: AdminNavItem[];
+export type AdminOrderColumn = {
+  id: number;
+  code: string;
+  createdAt: Date;
+  products: AdminOrderProductColumn[];
+  customer_name: string | undefined;
+  customer_email: string | undefined;
+  total_items: number;
+  price: number;
+  status: StatusOrder;
 };
 
-export type AdminDashboardShellProps = {
-  children: React.ReactNode;
+// CRUD: Customer data.
+export type AdminCustomerColumn = {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: Date;
+  total_transactions: number;
 };
 
+// CRUD: Website configuration data.
+export type AdminConfigurationColumn = {
+  id: number;
+  webname: string;
+  language: Language;
+  tagline: string | null;
+  website: string | null;
+  email: string | null;
+  description: string | null;
+  address: string | null;
+  facebook: string | null;
+  twitter: string | null;
+  instagram: string | null;
+  date: Date;
+};
+
+export type AdminConfigurationFormData = AdminConfigurationColumn | null;
+
+// Dashboard summary data.
 export type AdminDashboardStats = {
   totalOrders: number;
   newUsers: number;
@@ -94,19 +127,19 @@ export type AdminDashboardRecentOrder = {
   id: number;
   code: string;
   customerName: string;
-  status: import("@prisma/client").StatusOrder;
+  status: StatusOrder;
   total: number;
   itemCount: number;
   createdAt: Date;
 };
 
 export type AdminDashboardStatusCount = {
-  status: import("@prisma/client").StatusOrder;
+  status: StatusOrder;
   count: number;
 };
 
 export type AdminDashboardStockCount = {
-  stock: import("@prisma/client").ProductStock;
+  stock: ProductStock;
   count: number;
 };
 
@@ -124,45 +157,31 @@ export type AdminDashboardRawChartItem = {
   revenue: number | bigint;
 };
 
-export type AdminOrderProductColumn = {
-  name: string;
-  image: string;
+// Admin auth and page props.
+export type AdminLoginFormProps = {
+  className?: string;
 };
 
-export type AdminOrderColumn = {
-  id: number;
-  code: string;
-  createdAt: Date;
-  products: AdminOrderProductColumn[];
-  customer_name: string | undefined;
-  customer_email: string | undefined;
-  total_items: number;
-  price: number;
-  status: import("@prisma/client").StatusOrder;
+export type Tparams = {
+  id: string;
 };
 
-export type AdminCustomerColumn = {
-  id: number;
-  name: string;
-  email: string;
-  createdAt: Date;
-  total_transactions: number;
+export type Tedit = {
+  params: Promise<Tparams> | Tparams;
 };
 
-export type AdminConfigurationColumn = {
-  id: number;
-  webname: string;
-  language: import("@prisma/client").Language;
-  tagline: string | null;
-  website: string | null;
-  email: string | null;
-  description: string | null;
-  address: string | null;
-  facebook: string | null;
-  twitter: string | null;
-  instagram: string | null;
-  date: Date;
+// Admin dashboard navigation props.
+export type AdminNavItem = {
+  title: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
 };
 
-export type AdminConfigurationFormData = AdminConfigurationColumn | null;
+export type AdminNavSection = {
+  title: string;
+  items: AdminNavItem[];
+};
 
+export type AdminDashboardShellProps = {
+  children: React.ReactNode;
+};

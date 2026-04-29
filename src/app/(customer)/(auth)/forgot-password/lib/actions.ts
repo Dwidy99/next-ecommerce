@@ -5,7 +5,7 @@ import crypto from "crypto";
 import { sendResetPasswordEmail } from "./email";
 import { redirect } from "next/navigation";
 
-// CREATE RESET TOKEN
+// CREATE: Generate a password reset token and send it by email.
 export async function ForgotPasswordAction(_: unknown, formData: FormData) {
   const email = String(formData.get("email") ?? "").trim();
   if (!email) return { error: "Email is required" };
@@ -49,7 +49,7 @@ export async function ForgotPasswordAction(_: unknown, formData: FormData) {
   redirect("/forgot-password/sent");
 }
 
-// READ DETAIL
+// HELPER: Find the account that requested a reset link.
 async function findUserByEmail(email: string) {
   return prisma.user.findUnique({
     where: { email },

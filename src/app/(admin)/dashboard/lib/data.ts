@@ -4,6 +4,7 @@ import type {
 } from "@/app/(admin)/types";
 import { prisma } from "lib/prisma";
 
+// READ: Get dashboard summary cards, chart data, and recent activity.
 export async function getDashboardData(): Promise<AdminDashboardData> {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);

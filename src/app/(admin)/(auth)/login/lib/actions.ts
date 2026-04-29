@@ -17,6 +17,7 @@ function isDatabaseConnectionError(message: string) {
   );
 }
 
+// CREATE: Sign in an admin user and create an admin session.
 export async function SignIn(
   _: unknown,
   formData: FormData,

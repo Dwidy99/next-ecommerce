@@ -6,6 +6,7 @@ function warnProductFallback(source: string, error: unknown) {
   warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`)
 }
 
+// READ: Get all products for the admin table.
 export async function getProducts(): Promise<AdminProductTableItem[]> {
   try {
     const products = await prisma.product.findMany({
@@ -58,6 +59,7 @@ export async function getProducts(): Promise<AdminProductTableItem[]> {
   }
 }
 
+// READ: Get one product for the edit page.
 export async function getProductById(id: number) {
   try {
     return await prisma.product.findUnique({

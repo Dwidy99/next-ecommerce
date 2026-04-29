@@ -2,12 +2,11 @@
 
 import { getCustomerUser } from "@/lib/auth";
 import { getImageUrl } from "@/lib/supabase";
-import type { StatusOrder } from "@prisma/client";
 import { prisma } from "lib/prisma";
 
 const SIMULATED_PAYMENT_SUCCESS_DELAY_MS = 9000;
 
-// READ LIST
+// READ: Get the logged-in customer's purchase history.
 export async function getPurchaseHistory() {
   const { user } = await getCustomerUser();
   if (!user) return { error: "Unauthorized", orders: [] };
@@ -61,7 +60,7 @@ export async function getPurchaseHistory() {
   }
 }
 
-// READ DETAIL
+// READ: Get one order status from the payment code.
 export async function getOrderStatusByCode(code: string) {
   try {
     const order = await prisma.order.findUnique({
@@ -115,27 +114,4 @@ async function syncSimulatedSuccessfulOrders(userId: number) {
       status: "success",
     },
   });
-}
-
-// UPDATE
-export async function updateOrderStatusByCode(
-  code: string | undefined,
-  status: StatusOrder,
-) {
-  if (!code) return null;
-
-  try {
-    return await prisma.order.update({
-      where: { code },
-      data: { status },
-      select: {
-        id: true,
-        code: true,
-        status: true,
-      },
-    });
-  } catch (error) {
-    console.error("Failed to update order status:", error);
-    return null;
-  }
 }

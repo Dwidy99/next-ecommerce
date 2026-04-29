@@ -7,6 +7,7 @@ function warnOrderFallback(source: string, error: unknown) {
   warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`)
 }
 
+// READ: Get all orders for the admin orders table.
 export async function getOrders(): Promise<AdminOrderColumn[]> {
   try {
     const orders = await prisma.order.findMany({

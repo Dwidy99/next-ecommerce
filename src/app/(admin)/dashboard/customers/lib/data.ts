@@ -6,6 +6,7 @@ function warnCustomerFallback(source: string, error: unknown) {
   warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`)
 }
 
+// READ: Get all customer users for the admin customers table.
 export async function getCustomers(): Promise<AdminCustomerColumn[]> {
   try {
     const customers = await prisma.user.findMany({

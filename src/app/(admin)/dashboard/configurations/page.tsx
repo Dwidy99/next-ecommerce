@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
-import { getConfigurations } from "./lib/actions"
+import { getConfigurations } from "./lib/data"
 
 export default async function ConfigurationsPage() {
   const configs = await getConfigurations()
@@ -88,3 +88,4 @@ export default async function ConfigurationsPage() {
     </div>
   )
 }
+

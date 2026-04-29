@@ -1,4 +1,4 @@
-import { Label } from "@/components/ui/label"
+﻿import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -7,9 +7,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import FormProduct from "../_components/form-product"
-import { getBrands } from "../../brands/lib/actions"
-import { getCategories } from "../../categories/lib/actions"
-import { getLocations } from "../../locations/lib/actions"
+import { getBrands } from "../../brands/lib/data"
+import { getCategories } from "../../categories/lib/data"
+import { getLocations } from "../../locations/lib/data"
 
 export default async function CreateProductPage() {
   const brands = await getBrands()
@@ -80,3 +80,4 @@ export default async function CreateProductPage() {
     </FormProduct>
   )
 }
+

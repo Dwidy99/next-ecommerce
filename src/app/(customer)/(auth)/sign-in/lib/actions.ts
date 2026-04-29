@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "lib/prisma";
 
-// CREATE SESSION
+// CREATE: Sign in a customer and create a customer session.
 export async function SignIn(
   _: unknown,
   formData: FormData,
@@ -60,7 +60,7 @@ export async function SignIn(
   redirect("/");
 }
 
-// DELETE SESSION
+// DELETE: Sign out the current customer session.
 export async function SignOut(): Promise<ActionResult> {
   try {
     const cookieStore = await cookies();

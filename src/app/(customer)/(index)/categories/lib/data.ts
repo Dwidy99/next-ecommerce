@@ -7,7 +7,7 @@ import type {
   CustomerProductItem,
 } from "@/app/(customer)/types";
 
-// READ LIST
+// READ: Get every category with products for the category landing page.
 export async function fetchCategoriesWithProducts(): Promise<CategoryWithProductsItem[]> {
   try {
     const categories = await prisma.category.findMany({
@@ -41,7 +41,7 @@ export async function fetchCategoriesWithProducts(): Promise<CategoryWithProduct
   }
 }
 
-// READ DETAIL
+// READ: Get one category with products by slug.
 export async function getCategoryBySlug(slug: string) {
   try {
     return await prisma.category.findUnique({
@@ -69,7 +69,7 @@ export async function getCategoryBySlug(slug: string) {
   }
 }
 
-// READ STATIC PARAMS
+// READ: Get category slugs for static params.
 export async function getAllCategorySlugs() {
   try {
     const categories = await prisma.category.findMany({
@@ -83,7 +83,7 @@ export async function getAllCategorySlugs() {
   }
 }
 
-// READ METADATA
+// READ: Get category metadata for SEO.
 export async function getCategoryMeta(slug: string) {
   try {
     return await prisma.category.findUnique({

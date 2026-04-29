@@ -13,7 +13,7 @@ import { prisma } from "lib/prisma";
 const MIN_CHECKOUT_TOTAL = 100;
 const MAX_CHECKOUT_TOTAL = 20_000_000;
 
-// CREATE
+// CREATE: Create an order and payment redirect from the cart.
 export async function storeOrder(
   _: unknown,
   formData: FormData,

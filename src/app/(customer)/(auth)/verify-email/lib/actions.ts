@@ -8,7 +8,7 @@ import crypto from "crypto";
 
 const EMAIL_VERIFICATION_EXPIRES_IN_MS = 1000 * 60 * 60;
 
-// CREATE / SEND
+// CREATE: Send the first email verification link.
 export async function sendEmailVerification(
   _: unknown,
   formData: FormData,
@@ -29,7 +29,7 @@ export async function sendEmailVerification(
   }
 }
 
-// CREATE / RESEND
+// CREATE: Resend an email verification link.
 export async function resendEmailVerification(
   _: unknown,
   formData: FormData,
@@ -50,7 +50,7 @@ export async function resendEmailVerification(
   }
 }
 
-// UPDATE / VERIFY
+// UPDATE: Mark the user's email as verified when the token is valid.
 export async function verifyEmailToken(token: string) {
   try {
     const record = await prisma.userToken.findUnique({
@@ -75,7 +75,7 @@ export async function verifyEmailToken(token: string) {
   }
 }
 
-// SHARED ACTION HELPER
+// HELPER: Shared sender used by sign-up and resend flows.
 export async function sendEmailVerificationDirect(
   userId: number,
   email: string,
@@ -85,7 +85,7 @@ export async function sendEmailVerificationDirect(
   await sendVerificationEmail(email, token, name);
 }
 
-// CREATE TOKEN
+// CREATE: Store the email verification token.
 async function createEmailVerificationToken(userId: number): Promise<string> {
   const token = crypto.randomBytes(32).toString("hex");
   const expires = new Date(Date.now() + EMAIL_VERIFICATION_EXPIRES_IN_MS);

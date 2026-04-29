@@ -1,4 +1,4 @@
-import Link from "next/link"
+﻿import Link from "next/link"
 import { MapPin, Package, PlusCircle, Sparkles } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
-import { getLocations } from "./lib/actions"
+import { getLocations } from "./lib/data"
 
 export default async function LocationsPage() {
   const data = await getLocations()
@@ -86,3 +86,4 @@ export default async function LocationsPage() {
     </div>
   )
 }
+

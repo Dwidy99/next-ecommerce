@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "lib/prisma";
 import { sendEmailVerificationDirect } from "../../verify-email/lib/actions";
 
-// CREATE USER
+// CREATE: Register a new customer account.
 export async function SignUp(
   _: unknown,
   formData: FormData,

@@ -1,6 +1,6 @@
-import React from "react";
+﻿import React from "react";
 import FormLocation from "../../_components/form-location";
-import { getLocationById } from "../../lib/actions";
+import { getLocationById } from "../../lib/data";
 import { redirect } from "next/navigation";
 
 type EditPageProps = {
@@ -17,3 +17,4 @@ export default async function EditPage({ params }: EditPageProps) {
 
   return <FormLocation type="EDIT" data={data} />;
 }
+

@@ -7,44 +7,6 @@ import { prisma } from "../../../../../../lib/prisma";
 import { slugify } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import { refreshAndRedirect } from "@/lib/nextjs";
-import { getErrorMessage, warnOnce } from "@/lib/error-message";
-
-function warnCategoryFallback(source: string, error: unknown) {
-  warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`);
-}
-
-export async function getCategories() {
-  try {
-    return await prisma.category.findMany({
-      orderBy: {
-        created_at: "desc",
-      },
-      include: {
-        _count: {
-          select: {
-            products: true,
-          },
-        },
-      },
-    });
-  } catch (error) {
-    warnCategoryFallback("Categories", error);
-    return [];
-  }
-}
-
-export async function getCategoryById(id: string) {
-  try {
-    return await prisma.category.findFirst({
-      where: {
-        id: Number.parseInt(id),
-      },
-    });
-  } catch (error) {
-    warnCategoryFallback("Category", error);
-    return null;
-  }
-}
 
 function handlePrismaError(err: unknown): string {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -58,6 +20,8 @@ function handlePrismaError(err: unknown): string {
   }
   return "Failed to save category.";
 }
+
+/* CREATE */
 
 export async function postCategory(
   _: unknown,
@@ -88,6 +52,8 @@ export async function postCategory(
 
   redirect("/dashboard/categories");
 }
+
+/* UPDATE */
 
 export async function updateCategory(
   _: unknown,
@@ -124,6 +90,8 @@ export async function updateCategory(
 
   redirect("/dashboard/categories");
 }
+
+/* DELETE */
 
 export async function deleteCategory(formData: FormData): Promise<void> {
   const id = Number(formData.get("id"));

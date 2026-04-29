@@ -1,35 +1,8 @@
 ﻿"use server"
 
 import type { ActionResult } from "@/app/(admin)/types"
-import { getErrorMessage, warnOnce } from "@/lib/error-message"
 import { refreshAndRedirect } from "@/lib/nextjs"
 import { prisma } from "lib/prisma"
-
-function warnConfigurationFallback(source: string, error: unknown) {
-  warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`)
-}
-
-export async function getConfigurations() {
-  try {
-    return await prisma.configuration.findMany({
-      orderBy: { id: "asc" },
-    })
-  } catch (error) {
-    warnConfigurationFallback("Configurations", error)
-    return []
-  }
-}
-
-export async function getConfigurationById(id: number) {
-  try {
-    return await prisma.configuration.findUnique({
-      where: { id },
-    })
-  } catch (error) {
-    warnConfigurationFallback("Configuration", error)
-    return null
-  }
-}
 
 function getOptionalString(data: FormData, key: string) {
   const value = data.get(key)
@@ -37,6 +10,8 @@ function getOptionalString(data: FormData, key: string) {
 
   return value.trim() === "" ? null : value.trim()
 }
+
+/* CREATE */
 
 export async function createConfiguration(
   _: unknown,
@@ -77,6 +52,8 @@ export async function createConfiguration(
   return { error: "" }
 }
 
+/* UPDATE */
+
 export async function updateConfiguration(
   _: unknown,
   data: FormData,
@@ -114,6 +91,8 @@ export async function updateConfiguration(
   refreshAndRedirect("/dashboard/configurations")
   return { error: "" }
 }
+
+/* DELETE */
 
 export async function deleteConfiguration(formData: FormData): Promise<void> {
   const id = Number(formData.get("id"))

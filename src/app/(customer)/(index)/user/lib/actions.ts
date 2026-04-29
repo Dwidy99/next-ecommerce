@@ -22,7 +22,7 @@ const profileSchema = z.object({
     ),
 });
 
-// UPDATE
+// UPDATE: Save the logged-in customer's profile changes.
 export async function updateProfile(formData: FormData): Promise<ActionResult> {
   const { user } = await getCustomerUser();
   if (!user) return { error: "Unauthorized" };

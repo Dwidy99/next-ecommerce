@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { FolderTree, Package, PlusCircle, Sparkles } from "lucide-react";
 
 import { DataTable } from "@/components/ui/data-table";
@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { columns } from "./columns";
-import { getCategories } from "./lib/actions";
+import { getCategories } from "./lib/data";
 
 export default async function CategoriesPage() {
   const data = await getCategories();
@@ -91,3 +91,4 @@ export default async function CategoriesPage() {
     </div>
   );
 }
+

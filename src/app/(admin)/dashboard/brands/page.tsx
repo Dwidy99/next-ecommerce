@@ -1,4 +1,4 @@
-import Link from "next/link"
+﻿import Link from "next/link"
 import { Building2, Package, PlusCircle, Sparkles } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
-import { getBrands } from "./lib/actions"
+import { getBrands } from "./lib/data"
 
 export default async function BrandPage() {
   const brands = await getBrands()
@@ -86,3 +86,4 @@ export default async function BrandPage() {
     </div>
   )
 }
+

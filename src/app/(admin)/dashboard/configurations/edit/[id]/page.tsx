@@ -1,7 +1,7 @@
 ﻿import { notFound } from "next/navigation"
 
 import { FormConfiguration } from "../../_components/form-configuration"
-import { getConfigurationById } from "../../lib/actions"
+import { getConfigurationById } from "../../lib/data"
 
 interface EditConfigurationPageProps {
   params: Promise<{ id: string }> | { id: string }
@@ -21,3 +21,4 @@ export default async function EditConfigurationPage({
 
   return <FormConfiguration config={config} />
 }
+
