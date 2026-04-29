@@ -1,8 +1,8 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 import Link from "next/link";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { ActionResult } from "@/app/(customer)/types";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { SignUp } from "../lib/actions";
@@ -24,7 +24,7 @@ function SubmitButton() {
 }
 
 export default function SignUpForm() {
-  const [state, formAction] = useFormState(SignUp, initialState);
+  const [state, formAction] = useActionState(SignUp, initialState);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -159,13 +159,6 @@ export default function SignUpForm() {
           className="rounded-full border border-[#E5E5E5] bg-white px-6 py-3 font-semibold transition hover:bg-[#FFF2B3] hover:text-[#110843]"
         >
           Sign In Instead
-        </Link>
-
-        <Link
-          href="/catalogs"
-          className="font-semibold text-[#110843] underline underline-offset-4 transition hover:text-[#FFC736]"
-        >
-          Go to shop
         </Link>
       </div>
     </form>

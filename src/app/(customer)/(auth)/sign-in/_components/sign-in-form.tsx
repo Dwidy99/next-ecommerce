@@ -63,7 +63,6 @@ export default function SignInForm() {
           type="email"
           name="email"
           required
-          defaultValue="guest@gmail.com"
           placeholder="Write your email address"
           className="w-full appearance-none bg-transparent text-sm font-semibold text-black outline-none placeholder:text-[#616369] sm:text-base"
         />
@@ -75,7 +74,6 @@ export default function SignInForm() {
           type={showPassword ? "text" : "password"}
           name="password"
           required
-          defaultValue="qwerty12"
           placeholder="Write your password"
           className="w-full appearance-none bg-transparent text-sm font-semibold text-black outline-none placeholder:text-[#616369] sm:text-base"
         />
