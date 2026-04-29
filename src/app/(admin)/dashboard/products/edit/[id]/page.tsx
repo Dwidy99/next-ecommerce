@@ -9,9 +9,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { getImageUrl } from "@/lib/supabase"
-import { getBrands } from "../../../brands/lib/data"
-import { getCategories } from "../../../categories/lib/data"
-import { getLocations } from "../../../locations/lib/data"
+import { getBrands } from "../../../brands/lib/actions"
+import { getCategories } from "../../../categories/lib/actions"
+import { getLocations } from "../../../locations/lib/actions"
 import FormProduct from "../../_components/form-product"
 import { getProductById } from "../../lib/data"
 
