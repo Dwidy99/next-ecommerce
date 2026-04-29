@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getSiteConfig } from "@/lib/seo/config";
 import { defaultMetadata } from "@/lib/seo/default-metadata";
-import CustomerNavigationLoading from "../_components/customer-navigation-loading";
+import { CustomerNavigationLoading } from "../loading";
 
 export const dynamic = "force-dynamic";
 

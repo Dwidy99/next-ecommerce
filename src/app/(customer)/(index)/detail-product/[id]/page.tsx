@@ -4,7 +4,7 @@ import Link from "next/link";
 import Navbar from "../../_components/navbar";
 import CarouselImages from "./_components/carousel-images";
 import PriceInfo from "./_components/price-info";
-import CustomerLoading from "@/app/(customer)/_components/customer-loading";
+import CustomerLoading from "@/app/(customer)/loading";
 import ListProduct from "../../_components/list-product";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
 import { getCustomerUser } from "@/lib/auth";

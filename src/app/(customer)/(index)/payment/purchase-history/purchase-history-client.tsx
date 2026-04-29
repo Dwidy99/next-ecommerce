@@ -14,7 +14,7 @@ import {
   ShoppingCart,
   TriangleAlert,
 } from "lucide-react";
-import CustomerLoading from "@/app/(customer)/_components/customer-loading";
+import CustomerLoading from "@/app/(customer)/loading";
 import EmptyState from "../_components/empty-state";
 
 function formatShortDate(value: string) {

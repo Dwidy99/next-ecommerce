@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { Toaster } from "sonner";
 import { getCustomerUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import CustomerNavigationLoading from "../_components/customer-navigation-loading";
+import { CustomerNavigationLoading } from "../loading";
 
 export const dynamic = "force-dynamic";
 

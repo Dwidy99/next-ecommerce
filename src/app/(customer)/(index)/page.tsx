@@ -1,7 +1,7 @@
 import { generatePageSEO } from "@/lib/seo/seo-utils"
 import { Suspense } from "react"
 import Navbar from "./_components/navbar"
-import CustomerLoading from "@/app/(customer)/_components/customer-loading"
+import CustomerLoading from "@/app/(customer)/loading"
 import {
   ArticleSection,
   BenefitStrip,

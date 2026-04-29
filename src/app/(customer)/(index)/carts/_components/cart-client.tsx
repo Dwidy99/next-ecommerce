@@ -5,7 +5,7 @@ import { useCart } from "@/hooks/useCart";
 import CartProduct from "./cart-product";
 import CheckoutForm from "./checkout-form";
 import EmptyCartUI from "./cart-empty";
-import CustomerLoading from "@/app/(customer)/_components/customer-loading";
+import CustomerLoading from "@/app/(customer)/loading";
 
 export default function CartClient() {
   const { products } = useCart();

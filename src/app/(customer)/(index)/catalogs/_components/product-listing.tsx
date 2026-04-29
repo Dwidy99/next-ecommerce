@@ -6,7 +6,7 @@ import { useFilter } from "@/hooks/useFilter";
 import { fetchProduct } from "../lib/data";
 import CardProduct from "../../_components/card-product";
 import NoData from "../../_components/no-data";
-import CustomerLoading from "@/app/(customer)/_components/customer-loading";
+import CustomerLoading from "@/app/(customer)/loading";
 import type { TProduct } from "@/app/(customer)/types";
 
 export default function ProductListing(): JSX.Element {
