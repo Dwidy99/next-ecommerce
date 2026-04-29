@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
-import { getConfigurations } from "./lib/data"
+import { getConfigurations } from "./lib/actions"
 
 export default async function ConfigurationsPage() {
   const configs = await getConfigurations()

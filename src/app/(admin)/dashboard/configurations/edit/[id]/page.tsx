@@ -1,7 +1,7 @@
 ﻿import { notFound } from "next/navigation"
 
 import { FormConfiguration } from "../../_components/form-configuration"
-import { getConfigurationById } from "../../lib/data"
+import { getConfigurationById } from "../../lib/actions"
 
 interface EditConfigurationPageProps {
   params: Promise<{ id: string }> | { id: string }
