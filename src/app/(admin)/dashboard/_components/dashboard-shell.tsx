@@ -211,9 +211,7 @@ function DashboardSidebar() {
         })}
       </SidebarContent>
 
-      <SidebarFooter>
-        <FormLogout collapsed={!open} />
-      </SidebarFooter>
+      <SidebarFooter className="hidden" />
 
       <SidebarRail />
     </Sidebar>
@@ -222,14 +220,20 @@ function DashboardSidebar() {
 
 function DashboardHeader() {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b bg-background/95 px-4 backdrop-blur sm:px-6">
-      <SidebarTrigger />
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b bg-background/95 px-4 backdrop-blur sm:px-6">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
+        <SidebarTrigger />
 
-      <div className="flex min-w-0 flex-col">
-        <p className="text-sm font-semibold text-foreground md:hidden">
-          Dashboard
-        </p>
-        <DashboardBreadcrumb />
+        <div className="flex min-w-0 flex-col">
+          <p className="text-sm font-semibold text-foreground md:hidden">
+            Dashboard
+          </p>
+          <DashboardBreadcrumb />
+        </div>
+      </div>
+
+      <div className="ml-auto flex shrink-0 items-center">
+        <FormLogout variant="header" />
       </div>
     </header>
   );
