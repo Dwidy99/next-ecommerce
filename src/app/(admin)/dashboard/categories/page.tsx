@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { columns } from "./columns";
-import { getCategories } from "./lib/data";
+import { getCategories } from "./lib/actions";
 
 export default async function CategoriesPage() {
   const data = await getCategories();
