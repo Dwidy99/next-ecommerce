@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
-import { getProducts } from "./lib/data"
+import { getProducts } from "./lib/actions"
 
 export default async function ProductPage() {
   const products = await getProducts()
