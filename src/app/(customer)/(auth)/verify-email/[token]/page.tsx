@@ -1,62 +1,68 @@
-// src/app/(customer)/(auth)/verify-email/[token]/page.tsx
-import Link from "next/link";
+﻿import Link from "next/link";
 import { verifyEmailToken } from "../lib/actions";
+
+type VerifyEmailPageProps = {
+  params: Promise<{ token: string }>;
+};
 
 export default async function VerifyEmailPage({
   params,
-}: {
-  params: { token: string };
-}) {
+}: VerifyEmailPageProps) {
   const { token } = await params;
   const verified = await verifyEmailToken(token);
 
   if (!verified) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center bg-[#EFF3FA]">
-        <div className="w-full max-w-md bg-white border border-[#E5E5E5] rounded-2xl p-8 text-center">
+      <main className="flex min-h-screen items-center justify-center bg-[#EFF3FA] px-4 py-8 sm:px-6">
+        <section className="grid w-full max-w-md gap-6 rounded-3xl border border-[#E5E5E5] bg-white p-6 text-center shadow-sm sm:p-10">
           <img
             src="/assets/logos/logos-black.svg"
             alt="Logo"
-            className="max-h-10 mx-auto mb-4"
+            className="mx-auto max-h-12"
           />
-          <h1 className="text-2xl font-bold text-[#110843] mb-2">
-            Verification Failed ❌
-          </h1>
-          <p className="text-gray-600 text-sm mb-4">
-            The link is invalid or has expired.
-          </p>
+          <div className="grid gap-2">
+            <h1 className="text-2xl font-bold text-[#110843]">
+              Verification Failed
+            </h1>
+            <p className="text-sm leading-6 text-gray-600">
+              The link is invalid or has expired. Please request a new
+              verification email if needed.
+            </p>
+          </div>
           <Link
             href="/sign-in"
-            className="inline-block bg-[#110843] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#24105e]"
+            className="inline-flex justify-center rounded-full bg-[#110843] px-6 py-3 font-semibold text-white transition hover:bg-[#24105e]"
           >
             Back to Sign In
           </Link>
-        </div>
+        </section>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-[#EFF3FA]">
-      <div className="w-full max-w-md bg-white border border-[#E5E5E5] rounded-2xl p-8 text-center">
+    <main className="flex min-h-screen items-center justify-center bg-[#EFF3FA] px-4 py-8 sm:px-6">
+      <section className="grid w-full max-w-md gap-6 rounded-3xl border border-[#E5E5E5] bg-white p-6 text-center shadow-sm sm:p-10">
         <img
           src="/assets/logos/logos-black.svg"
           alt="Logo"
-          className="max-h-10 mx-auto mb-4"
+          className="mx-auto max-h-12"
         />
-        <h1 className="text-2xl font-bold text-[#110843] mb-2">
-          Email Verified ✅
-        </h1>
-        <p className="text-gray-600 text-sm mb-4">
-          Your email has been successfully verified. You can now sign in.
-        </p>
+        <div className="grid gap-2">
+          <h1 className="text-2xl font-bold text-[#110843]">
+            Email Verified
+          </h1>
+          <p className="text-sm leading-6 text-gray-600">
+            Your email has been successfully verified. You can now sign in.
+          </p>
+        </div>
         <Link
           href="/sign-in"
-          className="inline-block bg-[#110843] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#24105e]"
+          className="inline-flex justify-center rounded-full bg-[#110843] px-6 py-3 font-semibold text-white transition hover:bg-[#24105e]"
         >
           Go to Sign In
         </Link>
-      </div>
+      </section>
     </main>
   );
 }
