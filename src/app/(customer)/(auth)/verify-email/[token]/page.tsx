@@ -1,9 +1,6 @@
 ﻿import Link from "next/link";
 import { verifyEmailToken } from "../lib/actions";
-
-type VerifyEmailPageProps = {
-  params: Promise<{ token: string }>;
-};
+import type { VerifyEmailPageProps } from "@/app/(customer)/types";
 
 export default async function VerifyEmailPage({
   params,
@@ -66,3 +63,5 @@ export default async function VerifyEmailPage({
     </main>
   );
 }
+
+

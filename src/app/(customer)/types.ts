@@ -1,4 +1,4 @@
-import type { ProductStock } from "@prisma/client";
+﻿import type { ProductStock } from "@prisma/client";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -139,6 +139,10 @@ export type ResetPasswordPageProps = {
   params: Promise<{ token: string }>;
 };
 
+export type VerifyEmailPageProps = {
+  params: Promise<{ token: string }>;
+};
+
 export type CategoryPageProps = {
   params: Promise<{ slug: string }>;
 };
@@ -209,6 +213,12 @@ export type SearchBarProps = {
   title?: string;
 };
 
+export type CustomerLoadingProps = {
+  count?: number;
+  type?: "grid" | "list";
+  className?: string;
+};
+
 // Navbar data and props.
 export type NavbarUser = {
   id: number;
@@ -240,3 +250,5 @@ export type NavbarSiteConfigSource = {
   title?: string | null;
   logo?: string | null;
 };
+
+

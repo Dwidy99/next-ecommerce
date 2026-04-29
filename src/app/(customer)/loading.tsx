@@ -1,14 +1,9 @@
-"use client";
+﻿"use client";
 
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-
-type CustomerLoadingProps = {
-  count?: number;
-  type?: "grid" | "list";
-  className?: string;
-};
+import type { CustomerLoadingProps } from "./types";
 
 function SkeletonBlock({ className = "" }: { className?: string }) {
   return <div className={cn("animate-pulse rounded-xl bg-gray-200", className)} />;
@@ -130,3 +125,5 @@ export function CustomerNavigationLoading() {
     </div>
   );
 }
+
+
