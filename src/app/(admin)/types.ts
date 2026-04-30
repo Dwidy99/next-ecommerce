@@ -60,6 +60,17 @@ export type AdminProductTableItem = {
 
 export type AdminProductFormData = Product | null;
 
+export type AdminProductFormOption = {
+  id: number;
+  name: string;
+};
+
+export type AdminProductFormOptions = {
+  categories: AdminProductFormOption[];
+  brands: AdminProductFormOption[];
+  locations: AdminProductFormOption[];
+};
+
 // CRUD: Order data.
 export type AdminOrderProductColumn = {
   name: string;

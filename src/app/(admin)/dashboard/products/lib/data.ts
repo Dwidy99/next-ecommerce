@@ -1,6 +1,12 @@
-﻿import type { AdminProductTableItem } from "@/app/(admin)/types"
+﻿import type {
+  AdminProductFormOptions,
+  AdminProductTableItem,
+} from "@/app/(admin)/types"
 import { getErrorMessage, warnOnce } from "@/lib/error-message"
 import { prisma } from "lib/prisma"
+import { getBrands } from "../../brands/lib/data"
+import { getCategories } from "../../categories/lib/data"
+import { getLocations } from "../../locations/lib/data"
 
 function warnProductFallback(source: string, error: unknown) {
   warnOnce(`${source} unavailable, using fallback data. ${getErrorMessage(error, "Unknown database error")}`)
@@ -70,3 +76,19 @@ export async function getProductById(id: number) {
     return null
   }
 }
+
+// READ: Get relation options used by the create and edit product forms.
+export async function getProductFormOptions(): Promise<AdminProductFormOptions> {
+  const [categories, brands, locations] = await Promise.all([
+    getCategories(),
+    getBrands(),
+    getLocations(),
+  ])
+
+  return {
+    categories: categories.map(({ id, name }) => ({ id, name })),
+    brands: brands.map(({ id, name }) => ({ id, name })),
+    locations: locations.map(({ id, name }) => ({ id, name })),
+  }
+}
+

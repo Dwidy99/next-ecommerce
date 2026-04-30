@@ -1,6 +1,6 @@
 ﻿"use client"
 
-import React, { ChangeEvent, ReactNode, startTransition, useActionState, useEffect, useRef, useState } from "react"
+import React, { ChangeEvent, startTransition, useActionState, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { useFormStatus } from "react-dom"
 import {
@@ -16,7 +16,11 @@ import {
   Upload,
 } from "lucide-react"
 
-import type { ActionResult, AdminProductFormData } from "@/app/(admin)/types"
+import type {
+  ActionResult,
+  AdminProductFormData,
+  AdminProductFormOptions,
+} from "@/app/(admin)/types"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -45,9 +49,9 @@ const initialState: ActionResult = {
 }
 
 interface FormProductProps {
-  children: ReactNode
   type: "ADD" | "EDIT"
   data: AdminProductFormData
+  options: AdminProductFormOptions
   defaultImages?: string[]
 }
 
@@ -152,9 +156,9 @@ function ProductImagePicker({ defaultImages = [] }: { defaultImages?: string[] }
 }
 
 export default function FormProduct({
-  children,
   type,
   data,
+  options,
   defaultImages,
 }: FormProductProps) {
   const [clientError, setClientError] = useState("")
@@ -303,7 +307,29 @@ export default function FormProduct({
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-6 md:grid-cols-3">{children}</div>
+              <div className="grid gap-6 md:grid-cols-3">
+                <ProductSelectField
+                  label="Category"
+                  name="category_id"
+                  placeholder="Select category"
+                  options={options.categories}
+                  defaultValue={data?.category_id?.toString()}
+                />
+                <ProductSelectField
+                  label="Brand"
+                  name="brand_id"
+                  placeholder="Select brand"
+                  options={options.brands}
+                  defaultValue={data?.brand_id?.toString()}
+                />
+                <ProductSelectField
+                  label="Location"
+                  name="location_id"
+                  placeholder="Select location"
+                  options={options.locations}
+                  defaultValue={data?.location_id?.toString()}
+                />
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -376,6 +402,38 @@ export default function FormProduct({
         <SubmitButton type={type} />
       </div>
     </form>
+  )
+}
+
+function ProductSelectField({
+  label,
+  name,
+  placeholder,
+  options,
+  defaultValue,
+}: {
+  label: string
+  name: "category_id" | "brand_id" | "location_id"
+  placeholder: string
+  options: AdminProductFormOptions["categories"]
+  defaultValue?: string
+}) {
+  return (
+    <div className="grid gap-3">
+      <Label htmlFor={name}>{label}</Label>
+      <Select name={name} defaultValue={defaultValue} required>
+        <SelectTrigger id={name} aria-label={placeholder} className="w-full">
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent position="popper" align="start">
+          {options.map((option) => (
+            <SelectItem key={option.id} value={`${option.id}`}>
+              {option.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   )
 }
 
