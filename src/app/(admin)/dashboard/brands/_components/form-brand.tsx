@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useActionState } from "react"
 import Image from "next/image"
@@ -29,7 +29,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getImageUrl } from "@/lib/supabase"
-import { postBrand, updateBrand } from "../lib/actions"
+import { createBrand, updateBrand } from "../lib/actions"
 
 const initialState: ActionResult = {
   error: "",
@@ -62,7 +62,7 @@ export default function FormBrand({ data = null, type = "ADD" }: FormBrandProps)
     updateBrand(_, formData, data?.id ?? 0)
 
   const [state, formAction] = useActionState(
-    type === "ADD" ? postBrand : updateBrandWithId,
+    type === "ADD" ? createBrand : updateBrandWithId,
     initialState,
   )
 
@@ -190,3 +190,4 @@ export default function FormBrand({ data = null, type = "ADD" }: FormBrandProps)
     </form>
   )
 }
+

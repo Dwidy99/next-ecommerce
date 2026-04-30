@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 import { useCart } from "@/hooks/useCart";
 import { rupiahFormat } from "@/lib/utils";
 import React, { useActionState, useEffect, useMemo } from "react";
 import { useFormStatus } from "react-dom";
-import { storeOrder } from "../lib/actions";
+import { createOrder } from "../lib/actions";
 import { ActionResult } from "@/app/(customer)/types";
 
 const initialState: ActionResult = { error: "" };
@@ -34,10 +34,10 @@ export default function CheckoutForm() {
     [products]
   );
 
-  const storeOrderParams = (_: unknown, formData: FormData) =>
-    storeOrder(_, formData, grandTotal, products);
+  const createOrderParams = (_: unknown, formData: FormData) =>
+    createOrder(_, formData, grandTotal, products);
 
-  const [state, formAction] = useActionState(storeOrderParams, initialState);
+  const [state, formAction] = useActionState(createOrderParams, initialState);
 
   useEffect(() => {
     if (state?.redirectUrl) window.location.href = state.redirectUrl;
@@ -119,3 +119,4 @@ export default function CheckoutForm() {
     </form>
   );
 }
+

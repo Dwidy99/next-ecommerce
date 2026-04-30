@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { getCustomerUser } from "@/lib/auth";
 import { schemaShippingAddress } from "@/lib/schema";
@@ -14,7 +14,7 @@ const MIN_CHECKOUT_TOTAL = 100;
 const MAX_CHECKOUT_TOTAL = 20_000_000;
 
 // CREATE: Create an order and payment redirect from the cart.
-export async function storeOrder(
+export async function createOrder(
   _: unknown,
   formData: FormData,
   total: number,
@@ -132,3 +132,4 @@ function buildPaymentReturnUrl(code: string, status: "success" | "failed") {
 
   return url.toString();
 }
+

@@ -1,4 +1,4 @@
-'use server';
+﻿'use server';
 
 import { ActionResult } from "@/app/(admin)/types";
 import { redirect } from "next/navigation";
@@ -23,7 +23,7 @@ function handlePrismaError(err: unknown): string {
 
 /* CREATE */
 
-export async function postCategory(
+export async function createCategory(
   _: unknown,
   formData: FormData
 ): Promise<ActionResult> {
@@ -79,7 +79,7 @@ export async function updateCategory(
       where: { id },
       data: {
         name: validate.data.name,
-        slug, // 👈 update slug juga
+        slug, // ðŸ‘ˆ update slug juga
       },
     });
 
@@ -111,3 +111,4 @@ export async function deleteCategory(formData: FormData): Promise<void> {
 
   refreshAndRedirect("/dashboard/categories");
 }
+

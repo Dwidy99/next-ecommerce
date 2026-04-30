@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useActionState } from "react";
 import Link from "next/link";
@@ -27,7 +27,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { slugify } from "@/lib/utils";
-import { postCategory, updateCategory } from "../lib/actions";
+import { createCategory, updateCategory } from "../lib/actions";
 
 const initialState: ActionResult = {
   error: "",
@@ -67,7 +67,7 @@ export default function FormCategory({
     updateCategory(_, formData, data?.id);
 
   const [state, formAction] = useActionState(
-    type === "ADD" ? postCategory : updateCategoryWithId,
+    type === "ADD" ? createCategory : updateCategoryWithId,
     initialState,
   );
 
@@ -178,7 +178,7 @@ export default function FormCategory({
                 Best Practice
               </CardTitle>
               <CardDescription>
-                Use short names like “Phones”, “Accessories”, or “Gaming”.
+                Use short names like â€œPhonesâ€, â€œAccessoriesâ€, or â€œGamingâ€.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -187,3 +187,4 @@ export default function FormCategory({
     </form>
   );
 }
+

@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { refreshAndRedirect } from "@/lib/nextjs";
 import { schemaBrand } from "@/lib/schema";
@@ -20,7 +20,7 @@ function handleBrandError(error: unknown) {
 
 /* CREATE */
 
-export async function postBrand(
+export async function createBrand(
     _: unknown,
     formData: FormData
 ): Promise<ActionResult> {
@@ -135,3 +135,4 @@ export async function deleteBrand(formData: FormData): Promise<void> {
 
     refreshAndRedirect("/dashboard/brands");
 }
+

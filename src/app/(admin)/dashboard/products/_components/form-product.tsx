@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import React, { ChangeEvent, ReactNode, startTransition, useActionState, useEffect, useRef, useState } from "react"
 import Link from "next/link"
@@ -38,7 +38,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { validateFiles } from "@/lib/utils"
-import { storeProduct, updateProduct } from "../lib/actions"
+import { createProduct, updateProduct } from "../lib/actions"
 
 const initialState: ActionResult = {
   error: "",
@@ -163,7 +163,7 @@ export default function FormProduct({
     updateProduct(_, formData, data?.id ?? 0)
 
   const [state, formAction] = useActionState(
-    type === "ADD" ? storeProduct : updateProductWithId,
+    type === "ADD" ? createProduct : updateProductWithId,
     initialState,
   )
 
@@ -378,3 +378,4 @@ export default function FormProduct({
     </form>
   )
 }
+

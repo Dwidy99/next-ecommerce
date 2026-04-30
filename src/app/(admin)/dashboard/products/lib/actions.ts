@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { refreshAndRedirect } from "@/lib/nextjs";
 import { schemaProduct, schemaProductEdit } from "@/lib/schema";
@@ -49,7 +49,7 @@ async function deleteImages(images: string[]) {
 }
 
 // CREATE: Store a new product with uploaded images.
-export async function storeProduct(
+export async function createProduct(
   _: unknown,
   formData: FormData
 ): Promise<ActionResult> {
@@ -190,3 +190,4 @@ export async function deleteProduct(formData: FormData): Promise<void> {
   revalidatePath("/dashboard/products");
   redirect("/dashboard/products");
 }
+
