@@ -24,6 +24,9 @@ import type { ActionResult, AdminLoginFormProps } from "@/app/(admin)/types";
 import { cn } from "@/lib/utils";
 
 const initialState: ActionResult = { error: "" };
+const isDevelopment = process.env.NODE_ENV === "development";
+const defaultAdminEmail = isDevelopment ? "admin@example.com" : "";
+const defaultAdminPassword = isDevelopment ? "Admin123!" : "";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -81,7 +84,7 @@ export default function AdminLoginForm({ className }: AdminLoginFormProps) {
                   name="email"
                   type="email"
                   required
-                  defaultValue="guest.admin@gmail.com"
+                  defaultValue={defaultAdminEmail}
                   placeholder="admin@email.com"
                   className="h-11 rounded-xl pl-10"
                 />
@@ -97,7 +100,7 @@ export default function AdminLoginForm({ className }: AdminLoginFormProps) {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   required
-                  defaultValue="qwerty12"
+                  defaultValue={defaultAdminPassword}
                   placeholder="Password"
                   className="h-11 rounded-xl pl-10 pr-10"
                 />
@@ -119,7 +122,9 @@ export default function AdminLoginForm({ className }: AdminLoginFormProps) {
             <Field>
               <SubmitButton />
               <FieldDescription className="text-center">
-                This page is only for dashboard administrators.
+                {isDevelopment
+                  ? "Default local login: admin@example.com / Admin123!"
+                  : "This page is only for dashboard administrators."}
               </FieldDescription>
             </Field>
           </FieldGroup>
