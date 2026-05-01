@@ -114,16 +114,16 @@ function ActiveCheckbox({ isActive = true }: { isActive?: boolean }) {
 
 function DeleteButton({ action, id }: { action: (formData: FormData) => void | Promise<void>; id: number }) {
   return (
-    <form action={action}>
-      <input type="hidden" name="id" value={id} />
-      <Button
-        type="submit"
-        variant="destructive"
-        className="bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100 hover:text-red-800"
-      >
-        Delete
-      </Button>
-    </form>
+    <Button
+      type="submit"
+      formAction={action}
+      name="id"
+      value={id}
+      variant="destructive"
+      className="bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100 hover:text-red-800"
+    >
+      Delete
+    </Button>
   )
 }
 
