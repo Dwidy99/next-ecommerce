@@ -4,42 +4,20 @@ import Link from "next/link";
 import {
   getBrands,
   getCategories,
+  getHomeArticles,
+  getHomeBanners,
+  getHomeBenefits,
+  getHomePromos,
   getProducts,
 } from "../lib/data";
 import type {
   CustomerBrandItem,
   CustomerCategoryItem,
   CustomerProductItem,
+  HomeArticleItem,
+  HomePromoItem,
 } from "@/app/(customer)/types";
 import HomeHeroCarousel from "./home-hero-carousel";
-
-const benefits = [
-  {
-    icon: "/assets/icons/crown.svg",
-    title: "Quality",
-    description: "Curated gadgets",
-  },
-  {
-    icon: "/assets/icons/box.svg",
-    title: "Ready Stock",
-    description: "Fast processing",
-  },
-  {
-    icon: "/assets/icons/tick-circle.svg",
-    title: "Secure",
-    description: "Safe checkout",
-  },
-  {
-    icon: "/assets/icons/call.svg",
-    title: "Support",
-    description: "Friendly help",
-  },
-  {
-    icon: "/assets/icons/cart.svg",
-    title: "Delivery",
-    description: "Track orders",
-  },
-];
 
 const categoryIcons = [
   "/assets/icons/mobile.svg",
@@ -50,58 +28,6 @@ const categoryIcons = [
   "/assets/icons/lamp.svg",
   "/assets/icons/box.svg",
   "/assets/icons/tag.svg",
-];
-
-const promoTiles = [
-  {
-    title: "Custom Daily Driver",
-    subtitle: "Bundle laptop, phone, and accessories",
-    image: "/assets/banners/1.jpg",
-  },
-  {
-    title: "Office Setup",
-    subtitle: "Clean desk essentials for better focus",
-    image: "/assets/banners/2.jpg",
-  },
-  {
-    title: "Audio Collection",
-    subtitle: "Wireless sound for work and travel",
-    image: "/assets/banners/3.jpg",
-  },
-  {
-    title: "Smart Companion",
-    subtitle: "Devices that keep your day moving",
-    image: "/assets/banners/4.jpg",
-  },
-  {
-    title: "Accessories Drop",
-    subtitle: "Small upgrades, big daily impact",
-    image: "/assets/banners/5.jpg",
-  },
-  {
-    title: "Need a Bulk Order?",
-    subtitle: "Talk with us for team and community packages.",
-    image:
-      "/assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png",
-  },
-];
-
-const articles = [
-  {
-    title: "How to Choose a Laptop for Work and Study",
-    image: "/assets/banners/1.jpg",
-    meta: "Tips - 5 min read",
-  },
-  {
-    title: "Simple Ways to Build a Cleaner Desk Setup",
-    image: "/assets/banners/2.jpg",
-    meta: "Guide - 4 min read",
-  },
-  {
-    title: "Accessories That Make Checkout Worth It",
-    image: "/assets/banners/3.jpg",
-    meta: "Review - 3 min read",
-  },
 ];
 
 function SectionTitle({
@@ -142,11 +68,15 @@ export function HomeTopStrip() {
   );
 }
 
-export function HomeHero() {
-  return <HomeHeroCarousel />;
+export async function HomeHero() {
+  const banners = await getHomeBanners();
+
+  return <HomeHeroCarousel slides={banners} />;
 }
 
-export function BenefitStrip() {
+export async function BenefitStrip() {
+  const benefits = await getHomeBenefits();
+
   return (
     <section className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 py-5 md:grid-cols-5 md:px-6">
       {benefits.map((benefit) => (
@@ -225,14 +155,16 @@ export async function CompactCategoryGrid() {
   );
 }
 
-export function PromoMosaic() {
+export async function PromoMosaic() {
+  const promoTiles = await getHomePromos();
+
   return (
     <section className="mx-auto max-w-7xl px-4 py-6 md:px-6">
       <div className="grid gap-4 md:grid-cols-3">
-        {promoTiles.slice(0, 6).map((tile, index) => (
+        {promoTiles.slice(0, 6).map((tile: HomePromoItem, index) => (
           <Link
-            key={tile.title}
-            href="/catalogs"
+            key={tile.id}
+            href={tile.buttonHref}
             className={`group relative min-h-[190px] overflow-hidden rounded-xl bg-slate-900 shadow-sm ${
               index === 5 ? "md:col-span-3 md:min-h-[360px]" : ""
             }`}
@@ -247,7 +179,7 @@ export function PromoMosaic() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/25 to-transparent" />
             <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#FFC736]">
-                Custom
+                {tile.label}
               </p>
               <h3 className="mt-2 max-w-md text-2xl font-extrabold leading-none">
                 {tile.title}
@@ -257,7 +189,7 @@ export function PromoMosaic() {
               </p>
               {index === 5 && (
                 <span className="mt-5 w-fit rounded-md bg-[#FFC736] px-5 py-2 text-sm font-bold text-[#110843]">
-                  Learn More
+                  {tile.buttonText}
                 </span>
               )}
             </div>
@@ -330,16 +262,29 @@ export async function CollaborationSection() {
         description="Partners and brands available in the Shopverse catalog."
       />
       <div className="grid gap-4 md:grid-cols-3">
-        {["Collaboration", "Potential", "Benefits"].map((title, index) => (
+        {[
+          {
+            title: "Collaboration",
+            icon: "/assets/icons/crown.svg",
+          },
+          {
+            title: "Potential",
+            icon: "/assets/icons/box.svg",
+          },
+          {
+            title: "Benefits",
+            icon: "/assets/icons/tick-circle.svg",
+          },
+        ].map((item) => (
           <div
-            key={title}
+            key={item.title}
             className="rounded-xl bg-white p-7 text-center shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:ring-[#FFC736]"
           >
             <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#FFF4CC]">
-              <Image src={benefits[index].icon} alt="" width={18} height={18} />
+              <Image src={item.icon} alt="" width={18} height={18} />
             </div>
             <h3 className="font-bold uppercase tracking-wide text-slate-950">
-              {title}
+              {item.title}
             </h3>
             <p className="mt-2 text-sm leading-6 text-slate-500">
               Build a shopping experience that feels organized, fast, and easy
@@ -371,7 +316,9 @@ export async function CollaborationSection() {
   );
 }
 
-export function ArticleSection() {
+export async function ArticleSection() {
+  const articles = await getHomeArticles();
+
   return (
     <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
       <SectionTitle
@@ -380,9 +327,10 @@ export function ArticleSection() {
         description="Short inspiration to help customers choose products with more confidence."
       />
       <div className="grid gap-4 md:grid-cols-3">
-        {articles.map((article) => (
-          <article
-            key={article.title}
+        {articles.map((article: HomeArticleItem) => (
+          <Link
+            key={article.id}
+            href={article.href}
             className="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:ring-[#FFC736]"
           >
             <Image
@@ -400,7 +348,7 @@ export function ArticleSection() {
                 {article.title}
               </h3>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </section>

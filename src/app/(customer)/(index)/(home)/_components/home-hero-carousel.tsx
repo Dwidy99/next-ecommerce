@@ -3,75 +3,27 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { HomeBannerItem } from "@/app/(customer)/types";
 
-const heroSlides = [
-  {
-    eyebrow: "Shopverse Picks",
-    title: "Discover curated gadgets for work, study, and entertainment.",
-    description:
-      "Shop quality products with organized categories, fast checkout, and a smoother catalog experience.",
-    image: "/assets/banners/5.jpg",
-    primaryLabel: "Explore Now",
-    primaryHref: "/catalogs",
-    secondaryLabel: "View Cart",
-    secondaryHref: "/carts",
-  },
-  {
-    eyebrow: "Office Setup",
-    title: "Build a cleaner desk setup with everyday essentials.",
-    description:
-      "Find devices and accessories that help your workspace feel focused, practical, and ready to use.",
-    image: "/assets/banners/2.jpg",
-    primaryLabel: "Browse Catalog",
-    primaryHref: "/catalogs",
-    secondaryLabel: "See Categories",
-    secondaryHref: "/catalogs",
-  },
-  {
-    eyebrow: "Audio Collection",
-    title: "Upgrade your sound for work calls, travel, and downtime.",
-    description:
-      "Explore wireless audio picks, accessories, and companion gadgets in one simple shopping flow.",
-    image: "/assets/banners/3.jpg",
-    primaryLabel: "Shop Audio",
-    primaryHref: "/catalogs",
-    secondaryLabel: "Learn More",
-    secondaryHref: "/catalogs",
-  },
-  {
-    eyebrow: "Smart Companion",
-    title: "Keep your day moving with gadgets that match your routine.",
-    description:
-      "From daily drivers to smart accessories, find useful products without digging through noise.",
-    image: "/assets/banners/4.jpg",
-    primaryLabel: "Start Shopping",
-    primaryHref: "/catalogs",
-    secondaryLabel: "View Cart",
-    secondaryHref: "/carts",
-  },
-  {
-    eyebrow: "Bulk Orders",
-    title: "Need gadgets or bundles for a team, class, or community?",
-    description:
-      "Prepare larger orders with a cleaner catalog experience and simple checkout path.",
-    image: "/assets/banners/1.jpg",
-    primaryLabel: "Explore Products",
-    primaryHref: "/catalogs",
-    secondaryLabel: "Contact Support",
-    secondaryHref: "/catalogs",
-  },
-];
-
-export default function HomeHeroCarousel() {
+export default function HomeHeroCarousel({
+  slides,
+}: {
+  slides: HomeBannerItem[];
+}) {
   const [activeSlide, setActiveSlide] = useState(0);
+  const heroSlides = slides.length > 0 ? slides : [];
 
   useEffect(() => {
+    if (heroSlides.length <= 1) return;
+
     const interval = setInterval(() => {
       setActiveSlide((current) => (current + 1) % heroSlides.length);
     }, 4500);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [heroSlides.length]);
+
+  if (heroSlides.length === 0) return null;
 
   return (
     <section className="mx-auto max-w-7xl px-4 pt-4 md:px-6">

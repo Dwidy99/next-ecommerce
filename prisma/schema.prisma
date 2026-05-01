@@ -444,6 +444,111 @@ model Configuration {
 }
 
 // ============================================================
+// HOME CONTENT MODELS
+// ============================================================
+// Purpose:
+// Store editable Landing Page content without hardcoding every
+// banner, promo, benefit, and article inside React components.
+//
+// These models are intentionally simple so they are easy to
+// reuse in future projects and can be managed later from Admin.
+//
+// Code: by Dwi Y
+model HomeBanner {
+  id Int @id @default(autoincrement())
+
+  eyebrow String?
+
+  title String
+
+  description String?
+
+  image String
+
+  primary_label String?
+
+  primary_url String?
+
+  secondary_label String?
+
+  secondary_url String?
+
+  sort_order Int @default(0)
+
+  is_active Boolean @default(true)
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+}
+
+model HomeBenefit {
+  id Int @id @default(autoincrement())
+
+  title String
+
+  description String
+
+  icon String?
+
+  sort_order Int @default(0)
+
+  is_active Boolean @default(true)
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+}
+
+model HomePromo {
+  id Int @id @default(autoincrement())
+
+  title String
+
+  subtitle String?
+
+  label String?
+
+  image String
+
+  button_text String?
+
+  button_url String?
+
+  sort_order Int @default(0)
+
+  is_active Boolean @default(true)
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+}
+
+model Article {
+  id Int @id @default(autoincrement())
+
+  title String
+
+  slug String @unique
+
+  excerpt String?
+
+  content String?
+
+  image String?
+
+  meta String?
+
+  is_active Boolean @default(true)
+
+  published_at DateTime?
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+}
+
+// ============================================================
 // ENUM DEFINITIONS
 // ============================================================
 // Source: Prisma Enum Documentation
