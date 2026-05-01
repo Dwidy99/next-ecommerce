@@ -1,4 +1,4 @@
-﻿-- Add dynamic Home/Landing Page content tables.
+-- Add dynamic Home/Landing Page content tables.
 CREATE TABLE "HomeBanner" (
   "id" SERIAL NOT NULL,
   "eyebrow" TEXT,
