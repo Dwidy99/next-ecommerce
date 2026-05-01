@@ -118,6 +118,12 @@ export default function SignInForm() {
         >
           Create New Account
         </Link>
+        <Link
+          href="/"
+          className="rounded-full border border-transparent px-6 py-3 text-sm font-semibold text-[#616369] transition hover:bg-[#F8F8F8] hover:text-[#110843]"
+        >
+          Continue browsing without signing in
+        </Link>
       </div>
     </form>
   );
