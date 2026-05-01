@@ -8,6 +8,7 @@ import {
   Building,
   ChevronRight,
   Home,
+  LayoutTemplate,
   MapPin,
   Package,
   Settings,
@@ -73,6 +74,11 @@ const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
   {
     title: "System",
     items: [
+      {
+        href: "/dashboard/home-content",
+        icon: LayoutTemplate,
+        title: "Home Content",
+      },
       {
         href: "/dashboard/configurations",
         icon: Settings,
