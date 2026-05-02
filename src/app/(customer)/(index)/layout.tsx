@@ -1,12 +1,12 @@
 // app/layout.tsx
 import { Poppins } from "next/font/google";
-import { Toaster } from "sonner";
 import Footer from "./_components/footer";
 import Link from "next/link";
 import Image from "next/image";
 import { getSiteConfig } from "@/lib/seo/config";
 import { defaultMetadata } from "@/lib/seo/default-metadata";
 import { CustomerNavigationLoading } from "../loading";
+import CustomerAuthAlert from "../_components/customer-auth-alert";
 
 export const dynamic = "force-dynamic";
 
@@ -58,9 +58,9 @@ export default async function CustomerLayout({
         </div>
       </div>
       <CustomerNavigationLoading />
+      <CustomerAuthAlert />
       {children}
       <Footer />
-      <Toaster richColors position="top-center" />
     </div>
   ); // jangan pakai <html> atau <body>
 }

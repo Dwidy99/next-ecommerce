@@ -18,7 +18,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-background antialiased">
         <TooltipProvider delayDuration={200}>
           {children}
-          <Toaster />
+          <Toaster richColors position="top-center" />
         </TooltipProvider>
       </body>
     </html>

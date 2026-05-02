@@ -57,7 +57,7 @@ export async function SignIn(
     sessionCookie.attributes,
   );
 
-  redirect("/");
+  redirect("/?login=success");
 }
 
 // DELETE: Sign out the current customer session.
@@ -79,12 +79,12 @@ export async function SignOut(): Promise<ActionResult> {
       blankSessionCookie.value,
       blankSessionCookie.attributes,
     );
-
-    return { error: "" };
   } catch (error) {
     console.error("Failed to sign out customer:", error);
     return { error: "Failed to sign out" };
   }
+
+  redirect("/?logout=success");
 }
 
 // VALIDATION HELPER

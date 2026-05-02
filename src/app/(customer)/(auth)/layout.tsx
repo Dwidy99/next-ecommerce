@@ -1,6 +1,5 @@
 import { Poppins } from "next/font/google";
 import React, { ReactNode } from "react";
-import { Toaster } from "sonner";
 import { getCustomerUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { CustomerNavigationLoading } from "../loading";
@@ -41,7 +40,6 @@ export default async function AuthRootLayout({
     <div className={poppins.className}>
       <CustomerNavigationLoading />
       {children}
-      <Toaster richColors position="top-center" />
     </div>
   );
 }

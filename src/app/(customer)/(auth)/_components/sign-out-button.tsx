@@ -19,8 +19,6 @@ export default function SignOutButton() {
           });
           return;
         }
-
-        toast.success("Signed out successfully");
       } catch (error) {
         console.error(error);
 
