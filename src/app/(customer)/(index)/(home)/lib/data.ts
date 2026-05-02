@@ -146,21 +146,21 @@ const fallbackHomeArticles: HomeArticleItem[] = [
     title: "How to Choose a Laptop for Work and Study",
     image: "/assets/banners/1.jpg",
     meta: "Tips - 5 min read",
-    href: "/catalogs",
+    href: "/articles/how-to-choose-a-laptop-for-work-and-study",
   },
   {
     id: 2,
     title: "Simple Ways to Build a Cleaner Desk Setup",
     image: "/assets/banners/2.jpg",
     meta: "Guide - 4 min read",
-    href: "/catalogs",
+    href: "/articles/simple-ways-to-build-a-cleaner-desk-setup",
   },
   {
     id: 3,
     title: "Accessories That Make Checkout Worth It",
     image: "/assets/banners/3.jpg",
     meta: "Review - 3 min read",
-    href: "/catalogs",
+    href: "/articles/accessories-that-make-checkout-worth-it",
   },
 ];
 
@@ -254,7 +254,7 @@ export async function getHomeArticles(): Promise<HomeArticleItem[]> {
       title: article.title,
       image: resolveHomeImage(article.image ?? "/assets/banners/1.jpg"),
       meta: article.meta ?? "Article",
-      href: "/catalogs",
+      href: `/articles/${article.slug}`,
     }));
   } catch (error) {
     warnDatabaseFallback("Home articles", error);

@@ -109,6 +109,17 @@ export type HomeArticleItem = {
   href: string;
 };
 
+export type CustomerArticleDetail = {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  image: string;
+  meta: string;
+  publishedAt: Date | null;
+};
+
 // CRUD: Order and payment data.
 export type TOrder = {
   id: number;
@@ -187,6 +198,10 @@ export type CategoryPageProps = {
 
 export type DetailProductPageProps = {
   params: Promise<{ id: string }>;
+};
+
+export type ArticleDetailPageProps = {
+  params: Promise<{ slug: string }>;
 };
 
 export type PaymentResultPageProps = {
