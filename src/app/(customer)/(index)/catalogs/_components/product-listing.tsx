@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useFilter } from "@/hooks/useFilter";
 import { fetchCatalogProducts } from "../lib/client";
 import CardProduct from "../../_components/card-product";
+import LoadMoreGrid from "../../_components/load-more-grid";
 import NoData from "../../_components/no-data";
 import CustomerLoading from "@/app/(customer)/loading";
 import type { TProduct } from "@/app/(customer)/types";
@@ -60,13 +61,17 @@ function ProductListingContent(): JSX.Element {
   }
 
   return (
-    <section
-      id="product-list"
-      className="grid w-full grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8"
-    >
-      {products.map((product) => (
-        <CardProduct key={`${product.id}-${product.name}`} item={product} />
-      ))}
+    <section id="product-list">
+      <LoadMoreGrid
+        initialCount={9}
+        incrementBy={9}
+        buttonLabel="Load More Products"
+        className="grid w-full grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8"
+      >
+        {products.map((product) => (
+          <CardProduct key={`${product.id}-${product.name}`} item={product} />
+        ))}
+      </LoadMoreGrid>
     </section>
   );
 }

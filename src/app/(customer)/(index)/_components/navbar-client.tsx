@@ -19,6 +19,7 @@ import {
   X,
   Home,
   Layers,
+  Newspaper,
   ReceiptText,
   ShoppingBag,
   ShoppingCart,
@@ -70,6 +71,11 @@ export default function NavbarClient({
             icon={<ShoppingBag className="h-6 w-6" />}
             label="Shop"
           />
+          <MobileNavItem
+            href="/articles"
+            icon={<Newspaper className="h-6 w-6" />}
+            label="Articles"
+          />
           <MobileCategoriesMenu categories={categories} />
           <MobileCartButton />
           <MobileAccountMenu
@@ -106,7 +112,10 @@ function NavbarLogo({ site }: { site: NavbarSite }) {
 }
 
 function NavbarLinks() {
-  const items = [{ label: "Catalogs", href: "/catalogs" }];
+  const items = [
+    { label: "Catalogs", href: "/catalogs" },
+    { label: "Articles", href: "/articles" },
+  ];
 
   return (
     <nav className="flex items-center gap-6 xl:gap-8">

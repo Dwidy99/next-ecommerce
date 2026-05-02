@@ -120,6 +120,16 @@ export type CustomerArticleDetail = {
   publishedAt: Date | null;
 };
 
+export type CustomerArticleItem = {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  image: string;
+  meta: string;
+  publishedAt: Date | null;
+};
+
 // CRUD: Order and payment data.
 export type TOrder = {
   id: number;
