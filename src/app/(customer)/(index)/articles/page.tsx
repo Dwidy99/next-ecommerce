@@ -6,17 +6,13 @@ import Navbar from "../_components/navbar";
 import NoData from "../_components/no-data";
 import LoadMoreGrid from "../_components/load-more-grid";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
-import type { CustomerArticleItem } from "@/app/(customer)/types";
+import type {
+  ArticlesPageProps,
+  CustomerArticleItem,
+} from "@/app/(customer)/types";
 import { getArticles } from "./lib/data";
 
 export const dynamic = "force-dynamic";
-
-type ArticlesPageProps = {
-  searchParams?: Promise<{
-    search?: string;
-    sort?: string;
-  }>;
-};
 
 export async function generateMetadata() {
   return await generatePageSEO({
@@ -110,7 +106,7 @@ export default async function ArticlesPage({
         ) : (
           <LoadMoreGrid
             initialCount={9}
-            incrementBy={9}
+            incrementBy={5}
             buttonLabel="Load More Articles"
           >
             {articles.map((article) => (

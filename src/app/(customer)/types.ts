@@ -214,6 +214,13 @@ export type ArticleDetailPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+export type ArticlesPageProps = {
+  searchParams?: Promise<{
+    search?: string;
+    sort?: string;
+  }>;
+};
+
 export type PaymentResultPageProps = {
   searchParams?: Promise<{
     code?: string;
@@ -281,6 +288,14 @@ export type CustomerLoadingProps = {
   type?: "grid" | "list";
   variant?: "page" | "section";
   className?: string;
+};
+
+export type LoadMoreGridProps = {
+  children: ReactNode;
+  initialCount?: number;
+  incrementBy?: number;
+  className?: string;
+  buttonLabel?: string;
 };
 
 // Navbar data and props.

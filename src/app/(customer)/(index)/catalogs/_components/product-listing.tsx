@@ -64,7 +64,7 @@ function ProductListingContent(): JSX.Element {
     <section id="product-list">
       <LoadMoreGrid
         initialCount={9}
-        incrementBy={9}
+        incrementBy={5}
         buttonLabel="Load More Products"
         className="grid w-full grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8"
       >

@@ -1,19 +1,12 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-
-type LoadMoreGridProps = {
-  children: React.ReactNode;
-  initialCount?: number;
-  incrementBy?: number;
-  className?: string;
-  buttonLabel?: string;
-};
+import type { LoadMoreGridProps } from "@/app/(customer)/types";
 
 export default function LoadMoreGrid({
   children,
   initialCount = 9,
-  incrementBy = 9,
+  incrementBy = 5,
   className = "grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3",
   buttonLabel = "Load More",
 }: LoadMoreGridProps) {

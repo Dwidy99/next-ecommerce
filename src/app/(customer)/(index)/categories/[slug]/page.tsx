@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../../_components/navbar";
 import CardProduct from "../../_components/card-product";
+import LoadMoreGrid from "../../_components/load-more-grid";
 import NoData from "../../_components/no-data";
 import { formatCategoryProducts, getCategoryBySlug } from "../lib/data";
 import { generatePageSEO } from "@/lib/seo/seo-utils";
@@ -128,11 +129,16 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               message="Please check another category or browse the full catalog."
             />
           ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+            <LoadMoreGrid
+              initialCount={9}
+              incrementBy={5}
+              buttonLabel="Load More Products"
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-6"
+            >
               {products.map((item) => (
                 <CardProduct key={item.id} item={item} />
               ))}
-            </div>
+            </LoadMoreGrid>
           )}
         </div>
       </section>
