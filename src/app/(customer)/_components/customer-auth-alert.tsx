@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 export default function CustomerAuthAlert() {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -37,8 +36,8 @@ export default function CustomerAuthAlert() {
       ? `${pathname}?${nextParams.toString()}`
       : pathname;
 
-    router.replace(nextUrl, { scroll: false });
-  }, [pathname, router, searchParams]);
+    window.history.replaceState(null, "", nextUrl);
+  }, [pathname, searchParams]);
 
   return null;
 }

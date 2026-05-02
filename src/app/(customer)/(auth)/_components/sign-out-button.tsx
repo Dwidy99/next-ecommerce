@@ -1,12 +1,14 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LogOut, Loader2 } from "lucide-react";
 import { SignOut } from "../sign-in/lib/actions";
 
 export default function SignOutButton() {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleSignOut = () => {
     startTransition(async () => {
@@ -19,6 +21,8 @@ export default function SignOutButton() {
           });
           return;
         }
+
+        router.replace("/?logout=success");
       } catch (error) {
         console.error(error);
 
