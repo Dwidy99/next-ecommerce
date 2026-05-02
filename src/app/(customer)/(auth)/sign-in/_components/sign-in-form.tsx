@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { ActionResult } from "@/app/(customer)/types";
 import { SignIn } from "../lib/actions";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 
 const initialState: ActionResult = { error: "" };
 const defaultCustomerEmail = "guest@gmail.com";
@@ -25,6 +25,26 @@ function SubmitButton() {
   );
 }
 
+function LoginLoadingOverlay() {
+  const { pending } = useFormStatus();
+
+  if (!pending) return null;
+
+  return (
+    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 rounded-3xl bg-white/85 px-6 text-center backdrop-blur-sm">
+      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#FFF4CC] text-[#110843]">
+        <Loader2 className="h-6 w-6 animate-spin" />
+      </span>
+      <div>
+        <p className="font-bold text-[#110843]">Signing you in...</p>
+        <p className="mt-1 text-sm text-gray-500">
+          Please wait while we prepare your account.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function SignInForm() {
   const [state, formAction] = useActionState(SignIn, initialState);
   const [showPassword, setShowPassword] = useState(false);
@@ -37,8 +57,10 @@ export default function SignInForm() {
   return (
     <form
       action={formAction}
-      className="flex flex-col gap-5 rounded-3xl border border-[#E5E5E5] bg-white px-6 py-8 shadow-sm transition-all sm:px-10 sm:py-10"
+      className="relative flex flex-col gap-5 rounded-3xl border border-[#E5E5E5] bg-white px-6 py-8 shadow-sm transition-all sm:px-10 sm:py-10"
     >
+      <LoginLoadingOverlay />
+
       <div className="flex flex-col items-center gap-2 text-center">
         <img
           src="/assets/logos/logos-black.svg"
