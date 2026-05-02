@@ -112,13 +112,15 @@ function ActiveCheckbox({ isActive = true }: { isActive?: boolean }) {
   )
 }
 
-function DeleteButton({ action, id }: { action: (formData: FormData) => void | Promise<void>; id: number }) {
+function DeleteButton({
+  action,
+}: {
+  action: (formData: FormData) => void | Promise<void>
+}) {
   return (
     <Button
       type="submit"
       formAction={action}
-      name="id"
-      value={id}
       variant="destructive"
       className="bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100 hover:text-red-800"
     >
@@ -167,7 +169,7 @@ function BannerForm({ banner }: { banner?: HomeBanner }) {
       </div>
       <ActiveAndOrder isActive={banner?.is_active ?? true} sortOrder={banner?.sort_order ?? 0} />
       <div className="flex flex-wrap justify-end gap-2">
-        {banner && <DeleteButton action={deleteHomeBanner} id={banner.id} />}
+        {banner && <DeleteButton action={deleteHomeBanner} />}
         <Button type="submit">{isEdit ? "Save Banner" : "Add Banner"}</Button>
       </div>
     </form>
@@ -187,7 +189,7 @@ function BenefitForm({ benefit }: { benefit?: HomeBenefit }) {
       </div>
       <ActiveAndOrder isActive={benefit?.is_active ?? true} sortOrder={benefit?.sort_order ?? 0} />
       <div className="flex flex-wrap justify-end gap-2">
-        {benefit && <DeleteButton action={deleteHomeBenefit} id={benefit.id} />}
+        {benefit && <DeleteButton action={deleteHomeBenefit} />}
         <Button type="submit">{isEdit ? "Save Benefit" : "Add Benefit"}</Button>
       </div>
     </form>
@@ -210,7 +212,7 @@ function PromoForm({ promo }: { promo?: HomePromo }) {
       </div>
       <ActiveAndOrder isActive={promo?.is_active ?? true} sortOrder={promo?.sort_order ?? 0} />
       <div className="flex flex-wrap justify-end gap-2">
-        {promo && <DeleteButton action={deleteHomePromo} id={promo.id} />}
+        {promo && <DeleteButton action={deleteHomePromo} />}
         <Button type="submit">{isEdit ? "Save Promo" : "Add Promo"}</Button>
       </div>
     </form>
@@ -233,7 +235,7 @@ function ArticleForm({ article }: { article?: Article }) {
       <Field label="Content" name="content" defaultValue={article?.content} textarea />
       <ActiveCheckbox isActive={article?.is_active ?? true} />
       <div className="flex flex-wrap justify-end gap-2">
-        {article && <DeleteButton action={deleteArticle} id={article.id} />}
+        {article && <DeleteButton action={deleteArticle} />}
         <Button type="submit">{isEdit ? "Save Article" : "Add Article"}</Button>
       </div>
     </form>
