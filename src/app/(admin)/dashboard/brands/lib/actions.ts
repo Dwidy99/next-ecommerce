@@ -2,7 +2,8 @@
 
 import { refreshAndRedirect } from "@/lib/nextjs";
 import { schemaBrand } from "@/lib/schema";
-import { checkFileExists, deleteFile, uploadFile } from "@/lib/supabase";
+import { checkFileExists, deleteFile } from "@/lib/supabase";
+import { uploadFile } from "@/lib/upload-image";
 import { ActionResult } from "@/app/(admin)/types";
 import { Prisma } from "@prisma/client";
 import { prisma } from "lib/prisma";

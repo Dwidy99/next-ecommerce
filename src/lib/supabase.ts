@@ -7,7 +7,7 @@ if (!supabaseUrl || !supabaseKey) {
   throw new Error("Missing Supabase environment variables")
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey)
+export const supabase = createClient(supabaseUrl, supabaseKey)
 
 const SUPABASE_BUCKET_PUBLIC_PREFIX = "/storage/v1/object/public/e-commerce/"
 const fallbackImageByPath = {
@@ -16,9 +16,11 @@ const fallbackImageByPath = {
   users: "/assets/icons/profile-circle.svg",
 } satisfies Record<"brands" | "products" | "users", string>
 
+export type UploadPath = "brands" | "products" | "users"
+
 function normalizeStoragePath(
   name: string,
-  path: "brands" | "products" | "users"
+  path: UploadPath
 ) {
   const value = name.trim()
 
@@ -67,7 +69,7 @@ function extractSupabaseStoragePath(value: string) {
 
 export const getImageUrl = (
   name: string,
-  path: "brands" | "products" | "users"
+  path: UploadPath
 ) => {
   if (!name) return "";
 
@@ -92,28 +94,7 @@ export const getImageUrl = (
   return data.publicUrl;
 };
 
-export const uploadFile = async (
-  file: File,
-  path: "brands" | "products" | "users" = "users"
-): Promise<string> => {
-  const fileType = file.type.split("/")[1];
-
-  const filename = `${path}-${Date.now()}.${fileType}`;
-
-  const { error } = await supabase.storage
-    .from("e-commerce")
-    .upload(`public/${path}/${filename}`, file, {
-      cacheControl: "3600",
-      upsert: false,
-    });
-
-  if (error) throw new Error(error.message);
-
-  return filename;
-};
-
-
-export async function checkFileExists(filename: string, path: "brands" | "products" | 'users' = "users"): Promise<boolean> {
+export async function checkFileExists(filename: string, path: UploadPath = "users"): Promise<boolean> {
   const { error } = await supabase
     .storage
     .from("e-commerce")
@@ -123,7 +104,7 @@ export async function checkFileExists(filename: string, path: "brands" | "produc
 
 export const deleteFile = async (
   filename: string,
-  path: "brands" | "products" | "users" = "users"
+  path: UploadPath = "users"
 ) => {
   if (!filename) return;
 

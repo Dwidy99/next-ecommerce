@@ -5,8 +5,8 @@ import {
   checkFileExists,
   deleteFile,
   getImageUrl,
-  uploadFile,
 } from "@/lib/supabase";
+import { uploadFile } from "@/lib/upload-image";
 import { ActionResult } from "@/app/(customer)/types";
 import { z } from "zod";
 import { prisma } from "lib/prisma";
