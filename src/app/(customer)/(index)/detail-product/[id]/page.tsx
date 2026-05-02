@@ -166,7 +166,7 @@ export default async function DetailProduct({ params }: DetailProductPageProps) 
 
         {/* Recommendation */}
         <section className="mt-10 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8 md:p-10">
-          <Suspense fallback={<CustomerLoading />}>
+          <Suspense fallback={<CustomerLoading variant="section" />}>
             <ListProduct
               title={
                 <>

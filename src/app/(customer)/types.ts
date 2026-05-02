@@ -279,6 +279,7 @@ export type SearchBarProps = {
 export type CustomerLoadingProps = {
   count?: number;
   type?: "grid" | "list";
+  variant?: "page" | "section";
   className?: string;
 };
 

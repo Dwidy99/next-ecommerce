@@ -25,17 +25,17 @@ export default function LandingPage() {
       <HomeHero />
       <BenefitStrip />
 
-      <Suspense fallback={<CustomerLoading />}>
+      <Suspense fallback={<CustomerLoading variant="section" />}>
         <CompactCategoryGrid />
       </Suspense>
 
       <PromoMosaic />
 
-      <Suspense fallback={<CustomerLoading />}>
+      <Suspense fallback={<CustomerLoading variant="section" />}>
         <ProductScroller />
       </Suspense>
 
-      <Suspense fallback={<CustomerLoading />}>
+      <Suspense fallback={<CustomerLoading variant="section" />}>
         <CollaborationSection />
       </Suspense>
 

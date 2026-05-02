@@ -35,7 +35,7 @@ function ProductListingContent(): JSX.Element {
   if (isLoading) {
     return (
       <div className="w-full">
-        <CustomerLoading count={6} type="grid" />
+        <CustomerLoading count={6} type="grid" variant="section" />
       </div>
     );
   }

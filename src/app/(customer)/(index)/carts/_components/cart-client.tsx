@@ -13,7 +13,7 @@ export default function CartClient() {
 
   useEffect(() => setIsMounted(true), []);
 
-  if (!isMounted) return <CustomerLoading />;
+  if (!isMounted) return <CustomerLoading variant="section" />;
 
   const isEmpty = products.length === 0;
 
