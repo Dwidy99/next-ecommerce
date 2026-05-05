@@ -1,47 +1,106 @@
-﻿import type {
-  Article,
-  HomeBanner,
-  HomeBenefit,
-  HomePromo,
-} from "@prisma/client"
-import { LayoutTemplate, Newspaper } from "lucide-react"
+import type { Article, ContentSection, ContentSectionItem } from "@prisma/client";
+import {
+  HelpCircle,
+  LayoutTemplate,
+  Newspaper,
+  Rows3,
+  Sparkles,
+} from "lucide-react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   createArticle,
-  createHomeBanner,
-  createHomeBenefit,
-  createHomePromo,
+  createContentItem,
+  createContentSection,
   deleteArticle,
-  deleteHomeBanner,
-  deleteHomeBenefit,
-  deleteHomePromo,
+  deleteContentItem,
+  deleteContentSection,
   updateArticle,
-  updateHomeBanner,
-  updateHomeBenefit,
-  updateHomePromo,
-} from "./lib/actions"
-import { getHomeContent } from "./lib/data"
+  updateContentItem,
+  updateContentSection,
+} from "./lib/actions";
+import { getHomeContent } from "./lib/data";
+
+type SectionWithItems = ContentSection & {
+  items: ContentSectionItem[];
+};
 
 type FieldProps = {
-  label: string
-  name: string
-  defaultValue?: string | number | null
-  placeholder?: string
-  textarea?: boolean
-  required?: boolean
-}
+  label: string;
+  name: string;
+  defaultValue?: string | number | null;
+  placeholder?: string;
+  textarea?: boolean;
+  required?: boolean;
+  helper?: string;
+};
+
+type SelectOption = {
+  label: string;
+  value: string;
+};
+
+const sectionTypeOptions: SelectOption[] = [
+  { label: "Hero Banner / Carousel", value: "hero_banner" },
+  { label: "Benefit Icon Strip", value: "benefit_strip" },
+  { label: "Promo Mosaic / Category Cards", value: "promo_mosaic" },
+  { label: "Catalog Hero Banner", value: "catalog_banner" },
+  { label: "Collaboration Section", value: "collaboration" },
+  { label: "Article Preview Section", value: "article_preview" },
+  { label: "Custom Section", value: "custom" },
+];
+
+const itemTypeOptions: SelectOption[] = [
+  { label: "Banner", value: "banner" },
+  { label: "Benefit", value: "benefit" },
+  { label: "Promo Card", value: "promo" },
+  { label: "Category Card", value: "category_card" },
+  { label: "Brand / Collaboration", value: "brand" },
+  { label: "Article Reference", value: "article" },
+  { label: "Custom Card", value: "card" },
+];
+
+const referenceTypeOptions: SelectOption[] = [
+  { label: "No Reference", value: "" },
+  { label: "Category", value: "category" },
+  { label: "Product", value: "product" },
+  { label: "Article", value: "article" },
+  { label: "Brand", value: "brand" },
+];
+
+const sectionGuide = [
+  {
+    key: "home_hero",
+    type: "hero_banner",
+    usage: "Banner carousel at the top of Home.",
+  },
+  {
+    key: "home_benefits",
+    type: "benefit_strip",
+    usage: "Small icon cards below the Home banner.",
+  },
+  {
+    key: "home_promos",
+    type: "promo_mosaic",
+    usage: "Marketing cards and secondary banners on Home.",
+  },
+  {
+    key: "catalog_hero",
+    type: "catalog_banner",
+    usage: "Large banner at the top of the Catalog page.",
+  },
+];
 
 function Field({
   label,
@@ -50,10 +109,12 @@ function Field({
   placeholder,
   textarea,
   required,
+  helper,
 }: FieldProps) {
   return (
     <div className="grid gap-2">
       <Label htmlFor={name}>{label}</Label>
+      {helper && <p className="text-xs text-muted-foreground">{helper}</p>}
       {textarea ? (
         <Textarea
           id={name}
@@ -72,15 +133,51 @@ function Field({
         />
       )}
     </div>
-  )
+  );
+}
+
+function SelectField({
+  label,
+  name,
+  defaultValue,
+  options,
+  helper,
+  required,
+}: {
+  label: string;
+  name: string;
+  defaultValue?: string | null;
+  options: SelectOption[];
+  helper?: string;
+  required?: boolean;
+}) {
+  return (
+    <div className="grid gap-2">
+      <Label htmlFor={name}>{label}</Label>
+      {helper && <p className="text-xs text-muted-foreground">{helper}</p>}
+      <select
+        id={name}
+        name={name}
+        defaultValue={defaultValue ?? ""}
+        required={required}
+        className="h-10 rounded-md border border-input bg-background px-3 text-sm text-foreground shadow-sm outline-none transition focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {options.map((option) => (
+          <option key={option.value || "empty"} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
 }
 
 function ActiveAndOrder({
   isActive = true,
   sortOrder = 0,
 }: {
-  isActive?: boolean
-  sortOrder?: number
+  isActive?: boolean;
+  sortOrder?: number;
 }) {
   return (
     <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
@@ -95,27 +192,13 @@ function ActiveAndOrder({
         Active
       </label>
     </div>
-  )
-}
-
-function ActiveCheckbox({ isActive = true }: { isActive?: boolean }) {
-  return (
-    <label className="flex items-center gap-2 rounded-lg border bg-white px-3 py-2 text-sm">
-      <input
-        type="checkbox"
-        name="is_active"
-        defaultChecked={isActive}
-        className="size-4"
-      />
-      Active
-    </label>
-  )
+  );
 }
 
 function DeleteButton({
   action,
 }: {
-  action: (formData: FormData) => void | Promise<void>
+  action: (formData: FormData) => void | Promise<void>;
 }) {
   return (
     <Button
@@ -126,7 +209,7 @@ function DeleteButton({
     >
       Delete
     </Button>
-  )
+  );
 }
 
 function SectionCard({
@@ -134,9 +217,9 @@ function SectionCard({
   description,
   children,
 }: {
-  title: string
-  description: string
-  children: React.ReactNode
+  title: string;
+  description: string;
+  children: React.ReactNode;
 }) {
   return (
     <Card className="border-border/70 bg-card/95 shadow-sm">
@@ -146,104 +229,237 @@ function SectionCard({
       </CardHeader>
       <CardContent className="grid gap-5">{children}</CardContent>
     </Card>
-  )
+  );
 }
 
-function BannerForm({ banner }: { banner?: HomeBanner }) {
-  const isEdit = Boolean(banner)
-
+function CmsGuide() {
   return (
-    <form action={isEdit ? updateHomeBanner : createHomeBanner} className="grid gap-4 rounded-2xl border bg-background p-4">
-      {banner && <input type="hidden" name="id" value={banner.id} />}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Eyebrow" name="eyebrow" defaultValue={banner?.eyebrow} placeholder="Smart Companion" />
-        <Field label="Image Path / URL" name="image" defaultValue={banner?.image} placeholder="/assets/banners/4.jpg" required />
-      </div>
-      <Field label="Title" name="title" defaultValue={banner?.title} placeholder="Hero title" required />
-      <Field label="Description" name="description" defaultValue={banner?.description} textarea />
-      <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Primary Label" name="primary_label" defaultValue={banner?.primary_label} placeholder="Start Shopping" />
-        <Field label="Primary URL" name="primary_url" defaultValue={banner?.primary_url} placeholder="/catalogs" />
-        <Field label="Secondary Label" name="secondary_label" defaultValue={banner?.secondary_label} placeholder="View Cart" />
-        <Field label="Secondary URL" name="secondary_url" defaultValue={banner?.secondary_url} placeholder="/carts" />
-      </div>
-      <ActiveAndOrder isActive={banner?.is_active ?? true} sortOrder={banner?.sort_order ?? 0} />
-      <div className="flex flex-wrap justify-end gap-2">
-        {banner && <DeleteButton action={deleteHomeBanner} />}
-        <Button type="submit">{isEdit ? "Save Banner" : "Add Banner"}</Button>
-      </div>
-    </form>
-  )
+    <Card className="border-[#FFE08A] bg-[#FFF9E8] shadow-sm">
+      <CardHeader>
+        <div className="flex items-start gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#FFC736] text-[#110843]">
+            <HelpCircle className="h-5 w-5" />
+          </span>
+          <div>
+            <CardTitle>CMS Usage Guide</CardTitle>
+            <CardDescription>
+              Keep these keys stable because customer pages use them to load
+              dynamic content.
+            </CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-3 md:grid-cols-2">
+          {sectionGuide.map((item) => (
+            <div
+              key={item.key}
+              className="rounded-2xl border border-[#FFE08A] bg-white p-4"
+            >
+              <p className="font-mono text-xs font-bold text-[#d99000]">
+                {item.key}
+              </p>
+              <p className="mt-1 text-sm font-semibold text-[#110843]">
+                {item.type}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                {item.usage}
+              </p>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
-function BenefitForm({ benefit }: { benefit?: HomeBenefit }) {
-  const isEdit = Boolean(benefit)
+function SectionForm({ section }: { section?: SectionWithItems }) {
+  const isEdit = Boolean(section);
 
   return (
-    <form action={isEdit ? updateHomeBenefit : createHomeBenefit} className="grid gap-4 rounded-2xl border bg-background p-4">
-      {benefit && <input type="hidden" name="id" value={benefit.id} />}
+    <form
+      action={isEdit ? updateContentSection : createContentSection}
+      className="grid gap-4 rounded-2xl border bg-background p-4"
+    >
+      {section && <input type="hidden" name="id" value={section.id} />}
+
       <div className="grid gap-4 md:grid-cols-3">
-        <Field label="Title" name="title" defaultValue={benefit?.title} placeholder="Quality" required />
-        <Field label="Description" name="description" defaultValue={benefit?.description} placeholder="Curated gadgets" required />
-        <Field label="Icon Path" name="icon" defaultValue={benefit?.icon} placeholder="/assets/icons/crown.svg" />
+        <Field
+          label="Section Key"
+          name="key"
+          defaultValue={section?.key}
+          placeholder="home_hero"
+          helper="Used by the code. Example: home_hero, home_benefits, catalog_hero."
+          required
+        />
+        <Field
+          label="Admin Name"
+          name="name"
+          defaultValue={section?.name}
+          placeholder="Home Hero"
+          helper="Only shown in Admin so you can recognize this section."
+          required
+        />
+        <SelectField
+          label="Section Type"
+          name="type"
+          defaultValue={section?.type}
+          options={sectionTypeOptions}
+          helper="Controls the intent of this section."
+          required
+        />
       </div>
-      <ActiveAndOrder isActive={benefit?.is_active ?? true} sortOrder={benefit?.sort_order ?? 0} />
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <Field label="Title" name="title" defaultValue={section?.title} />
+        <Field
+          label="Highlight"
+          name="highlight"
+          defaultValue={section?.highlight}
+          placeholder="Products"
+        />
+      </div>
+
+      <Field
+        label="Description"
+        name="description"
+        defaultValue={section?.description}
+        textarea
+      />
+
+      <ActiveAndOrder
+        isActive={section?.is_active ?? true}
+        sortOrder={section?.sort_order ?? 0}
+      />
+
       <div className="flex flex-wrap justify-end gap-2">
-        {benefit && <DeleteButton action={deleteHomeBenefit} />}
-        <Button type="submit">{isEdit ? "Save Benefit" : "Add Benefit"}</Button>
+        {section && <DeleteButton action={deleteContentSection} />}
+        <Button type="submit">{isEdit ? "Save Section" : "Add Section"}</Button>
       </div>
     </form>
-  )
+  );
 }
 
-function PromoForm({ promo }: { promo?: HomePromo }) {
-  const isEdit = Boolean(promo)
+function ItemForm({
+  sectionId,
+  item,
+}: {
+  sectionId: number;
+  item?: ContentSectionItem;
+}) {
+  const isEdit = Boolean(item);
 
   return (
-    <form action={isEdit ? updateHomePromo : createHomePromo} className="grid gap-4 rounded-2xl border bg-background p-4">
-      {promo && <input type="hidden" name="id" value={promo.id} />}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Title" name="title" defaultValue={promo?.title} placeholder="Custom Daily Driver" required />
-        <Field label="Image Path / URL" name="image" defaultValue={promo?.image} placeholder="/assets/banners/1.jpg" required />
-        <Field label="Subtitle" name="subtitle" defaultValue={promo?.subtitle} />
-        <Field label="Label" name="label" defaultValue={promo?.label} placeholder="Custom" />
-        <Field label="Button Text" name="button_text" defaultValue={promo?.button_text} placeholder="View Products" />
-        <Field label="Button URL" name="button_url" defaultValue={promo?.button_url} placeholder="/catalogs" />
+    <form
+      action={isEdit ? updateContentItem : createContentItem}
+      className="grid gap-4 rounded-2xl border bg-muted/20 p-4"
+    >
+      <input type="hidden" name="section_id" value={sectionId} />
+      {item && <input type="hidden" name="id" value={item.id} />}
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <SelectField
+          label="Item Type"
+          name="type"
+          defaultValue={item?.type}
+          options={itemTypeOptions}
+          helper="Choose what this item represents."
+          required
+        />
+        <Field label="Title" name="title" defaultValue={item?.title} />
+        <Field label="Subtitle" name="subtitle" defaultValue={item?.subtitle} />
       </div>
-      <ActiveAndOrder isActive={promo?.is_active ?? true} sortOrder={promo?.sort_order ?? 0} />
+
+      <Field
+        label="Description"
+        name="description"
+        defaultValue={item?.description}
+        textarea
+      />
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <Field label="Image Path / URL" name="image" defaultValue={item?.image} />
+        <Field label="Icon Path / URL" name="icon" defaultValue={item?.icon} />
+        <Field label="Label" name="label" defaultValue={item?.label} />
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <Field
+          label="Button Text"
+          name="button_text"
+          defaultValue={item?.button_text}
+        />
+        <Field
+          label="Button URL"
+          name="button_url"
+          defaultValue={item?.button_url}
+          placeholder="/catalogs"
+        />
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <SelectField
+          label="Reference Type"
+          name="reference_type"
+          defaultValue={item?.reference_type}
+          options={referenceTypeOptions}
+          helper="Optional. Use this if the item points to a master table."
+        />
+        <Field
+          label="Reference ID"
+          name="reference_id"
+          defaultValue={item?.reference_id}
+          placeholder="1"
+          helper="Optional ID from Category, Product, Article, or Brand."
+        />
+      </div>
+
+      <ActiveAndOrder
+        isActive={item?.is_active ?? true}
+        sortOrder={item?.sort_order ?? 0}
+      />
+
       <div className="flex flex-wrap justify-end gap-2">
-        {promo && <DeleteButton action={deleteHomePromo} />}
-        <Button type="submit">{isEdit ? "Save Promo" : "Add Promo"}</Button>
+        {item && <DeleteButton action={deleteContentItem} />}
+        <Button type="submit">{isEdit ? "Save Item" : "Add Item"}</Button>
       </div>
     </form>
-  )
+  );
 }
 
 function ArticleForm({ article }: { article?: Article }) {
-  const isEdit = Boolean(article)
+  const isEdit = Boolean(article);
 
   return (
-    <form action={isEdit ? updateArticle : createArticle} className="grid gap-4 rounded-2xl border bg-background p-4">
+    <form
+      action={isEdit ? updateArticle : createArticle}
+      className="grid gap-4 rounded-2xl border bg-background p-4"
+    >
       {article && <input type="hidden" name="id" value={article.id} />}
+
       <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Title" name="title" defaultValue={article?.title} placeholder="Article title" required />
-        <Field label="Slug" name="slug" defaultValue={article?.slug} placeholder="article-slug" />
-        <Field label="Image Path / URL" name="image" defaultValue={article?.image} placeholder="/assets/banners/1.jpg" />
-        <Field label="Meta" name="meta" defaultValue={article?.meta} placeholder="Tips - 5 min read" />
+        <Field label="Title" name="title" defaultValue={article?.title} required />
+        <Field label="Slug" name="slug" defaultValue={article?.slug} />
+        <Field label="Image Path / URL" name="image" defaultValue={article?.image} />
+        <Field label="Meta" name="meta" defaultValue={article?.meta} />
       </div>
+
       <Field label="Excerpt" name="excerpt" defaultValue={article?.excerpt} textarea />
       <Field label="Content" name="content" defaultValue={article?.content} textarea />
-      <ActiveCheckbox isActive={article?.is_active ?? true} />
+
+      <ActiveAndOrder isActive={article?.is_active ?? true} />
+
       <div className="flex flex-wrap justify-end gap-2">
         {article && <DeleteButton action={deleteArticle} />}
         <Button type="submit">{isEdit ? "Save Article" : "Add Article"}</Button>
       </div>
     </form>
-  )
+  );
 }
 
 export default async function HomeContentPage() {
-  const { banners, benefits, promos, articles } = await getHomeContent()
+  const { sections, articles } = await getHomeContent();
+  const itemCount = sections.reduce((total, section) => total + section.items.length, 0);
 
   return (
     <div className="flex flex-col gap-6">
@@ -251,22 +467,33 @@ export default async function HomeContentPage() {
         <div className="grid gap-6 lg:grid-cols-[1.4fr_0.6fr] lg:items-center">
           <div>
             <Badge className="bg-[#FFC736] text-[#110843] hover:bg-[#FFC736]">
-              Landing Page Content
+              Unified Content CMS
             </Badge>
             <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
-              Manage dynamic Home content in one simple place.
+              Manage Home, Catalog, Articles, and page sections from one place.
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75 md:text-base">
-              Update hero banners, benefit cards, promo sections, and article cards without editing code.
+              Use sections for page areas and items for banners, benefits, promo
+              cards, category cards, or references to existing master data.
             </p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+
+          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
             <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
               <div className="flex items-center gap-3">
                 <LayoutTemplate className="h-5 w-5 text-[#FFC736]" />
                 <div>
-                  <p className="text-2xl font-bold">{banners.length + promos.length}</p>
-                  <p className="text-xs text-white/65">Visual Sections</p>
+                  <p className="text-2xl font-bold">{sections.length}</p>
+                  <p className="text-xs text-white/65">Sections</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+              <div className="flex items-center gap-3">
+                <Rows3 className="h-5 w-5 text-[#FFC736]" />
+                <div>
+                  <p className="text-2xl font-bold">{itemCount}</p>
+                  <p className="text-xs text-white/65">Section Items</p>
                 </div>
               </div>
             </div>
@@ -283,25 +510,122 @@ export default async function HomeContentPage() {
         </div>
       </section>
 
-      <SectionCard title="Hero Banners" description="Carousel slides shown at the top of the Home page.">
-        <BannerForm />
-        {banners.map((banner) => <BannerForm key={banner.id} banner={banner} />)}
+      <SectionCard
+        title="Content Sections"
+        description="Create reusable page sections. Example keys: home_hero, home_benefits, home_promos, catalog_hero."
+      >
+        <CmsGuide />
+        <SectionForm />
+
+        {sections.map((section) => (
+          <div
+            key={section.id}
+            className="grid gap-4 rounded-3xl border bg-white p-4 shadow-sm"
+          >
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d99000]">
+                  {section.key}
+                </p>
+                <h3 className="text-xl font-bold">{section.name}</h3>
+              </div>
+              <Badge variant={section.is_active ? "default" : "secondary"}>
+                {section.type}
+              </Badge>
+            </div>
+
+            <div className="grid gap-3 rounded-2xl bg-slate-50 p-4 md:grid-cols-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                  Title
+                </p>
+                <p className="mt-1 font-semibold">{section.title ?? "-"}</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                  Description
+                </p>
+                <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                  {section.description ?? "-"}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                  Items
+                </p>
+                <p className="mt-1 font-semibold">
+                  {section.items.length} item(s)
+                </p>
+              </div>
+            </div>
+
+            <details className="group rounded-2xl border bg-background p-4">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-semibold">
+                <span>Edit Section Settings</span>
+                <span className="text-sm text-muted-foreground transition group-open:rotate-180">
+                  v
+                </span>
+              </summary>
+              <div className="mt-4">
+                <SectionForm section={section} />
+              </div>
+            </details>
+
+            <div className="grid gap-3 rounded-2xl bg-slate-50 p-4">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-[#d99000]" />
+                <p className="font-semibold">Manage Section Items</p>
+              </div>
+
+              <details className="group rounded-2xl border bg-white p-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-semibold">
+                  <span>Add New Item</span>
+                  <span className="text-sm text-muted-foreground transition group-open:rotate-180">
+                    v
+                  </span>
+                </summary>
+                <div className="mt-4">
+                  <ItemForm sectionId={section.id} />
+                </div>
+              </details>
+
+              {section.items.map((item) => (
+                <details
+                  key={item.id}
+                  className="group rounded-2xl border bg-white p-4"
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
+                    <span>
+                      <span className="font-semibold">
+                        {item.title ?? "Untitled Item"}
+                      </span>
+                      <span className="ml-2 rounded-full bg-[#FFF4CC] px-2 py-1 text-xs font-semibold text-[#110843]">
+                        {item.type}
+                      </span>
+                    </span>
+                    <span className="text-sm text-muted-foreground transition group-open:rotate-180">
+                      v
+                    </span>
+                  </summary>
+                  <div className="mt-4">
+                    <ItemForm sectionId={section.id} item={item} />
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        ))}
       </SectionCard>
 
-      <SectionCard title="Benefits" description="Small trust cards below the hero section.">
-        <BenefitForm />
-        {benefits.map((benefit) => <BenefitForm key={benefit.id} benefit={benefit} />)}
-      </SectionCard>
-
-      <SectionCard title="Promo Tiles" description="Marketing tiles shown in the Home promo mosaic.">
-        <PromoForm />
-        {promos.map((promo) => <PromoForm key={promo.id} promo={promo} />)}
-      </SectionCard>
-
-      <SectionCard title="Articles" description="Latest article cards shown near the bottom of Home.">
+      <SectionCard
+        title="Articles"
+        description="Master article data. Home article sections can still display these articles dynamically."
+      >
         <ArticleForm />
-        {articles.map((article) => <ArticleForm key={article.id} article={article} />)}
+        {articles.map((article) => (
+          <ArticleForm key={article.id} article={article} />
+        ))}
       </SectionCard>
     </div>
-  )
+  );
 }

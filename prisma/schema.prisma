@@ -443,87 +443,6 @@ model Configuration {
   @@map("configuration")
 }
 
-// ============================================================
-// HOME CONTENT MODELS
-// ============================================================
-// Purpose:
-// Store editable Landing Page content without hardcoding every
-// banner, promo, benefit, and article inside React components.
-//
-// These models are intentionally simple so they are easy to
-// reuse in future projects and can be managed later from Admin.
-//
-// Code: by Dwi Y
-model HomeBanner {
-  id Int @id @default(autoincrement())
-
-  eyebrow String?
-
-  title String
-
-  description String?
-
-  image String
-
-  primary_label String?
-
-  primary_url String?
-
-  secondary_label String?
-
-  secondary_url String?
-
-  sort_order Int @default(0)
-
-  is_active Boolean @default(true)
-
-  created_at DateTime @default(now())
-
-  updated_at DateTime @updatedAt
-}
-
-model HomeBenefit {
-  id Int @id @default(autoincrement())
-
-  title String
-
-  description String
-
-  icon String?
-
-  sort_order Int @default(0)
-
-  is_active Boolean @default(true)
-
-  created_at DateTime @default(now())
-
-  updated_at DateTime @updatedAt
-}
-
-model HomePromo {
-  id Int @id @default(autoincrement())
-
-  title String
-
-  subtitle String?
-
-  label String?
-
-  image String
-
-  button_text String?
-
-  button_url String?
-
-  sort_order Int @default(0)
-
-  is_active Boolean @default(true)
-
-  created_at DateTime @default(now())
-
-  updated_at DateTime @updatedAt
-}
-
 model Article {
   id Int @id @default(autoincrement())
 
@@ -546,6 +465,93 @@ model Article {
   created_at DateTime @default(now())
 
   updated_at DateTime @updatedAt
+}
+
+// ============================================================
+// UNIFIED CONTENT SECTION MODELS
+// ============================================================
+// Purpose:
+// Manage reusable page content from Admin with one simple CMS
+// pattern. This keeps product, category, article, and footer data
+// in their own master tables, while banners, cards, and section
+// settings can be reused across Home, Catalog, and other pages.
+//
+// Example section keys:
+// - home_hero
+// - home_benefits
+// - home_promos
+// - catalog_hero
+// - home_collaboration
+//
+// Code: by Dwi Y
+model ContentSection {
+  id Int @id @default(autoincrement())
+
+  // Unique key used by code to load a section.
+  key String @unique
+
+  // Human friendly section name for Admin.
+  name String
+
+  // Section type controls how customer UI renders this content.
+  type String
+
+  title String?
+
+  highlight String?
+
+  description String?
+
+  sort_order Int @default(0)
+
+  is_active Boolean @default(true)
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+
+  items ContentSectionItem[]
+}
+
+model ContentSectionItem {
+  id Int @id @default(autoincrement())
+
+  section_id Int
+
+  // Item type examples: banner, benefit, promo, category_card.
+  type String
+
+  title String?
+
+  subtitle String?
+
+  description String?
+
+  image String?
+
+  icon String?
+
+  label String?
+
+  button_text String?
+
+  button_url String?
+
+  // Optional loose reference to a master table item.
+  // Example: reference_type = "category", reference_id = 1.
+  reference_type String?
+
+  reference_id Int?
+
+  sort_order Int @default(0)
+
+  is_active Boolean @default(true)
+
+  created_at DateTime @default(now())
+
+  updated_at DateTime @updatedAt
+
+  section ContentSection @relation(fields: [section_id], references: [id], onDelete: Cascade)
 }
 
 // ============================================================

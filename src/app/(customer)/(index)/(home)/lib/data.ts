@@ -11,6 +11,18 @@ import type {
 } from "@/app/(customer)/types";
 import { prisma } from "lib/prisma";
 
+type ContentSectionItemSource = {
+  id: number;
+  title: string | null;
+  subtitle: string | null;
+  description: string | null;
+  image: string | null;
+  icon: string | null;
+  label: string | null;
+  button_text: string | null;
+  button_url: string | null;
+};
+
 const fallbackHomeBanners: HomeBannerItem[] = [
   {
     id: 1,
@@ -167,24 +179,22 @@ const fallbackHomeArticles: HomeArticleItem[] = [
 // READ: Get dynamic hero banners with static fallback content.
 export async function getHomeBanners(): Promise<HomeBannerItem[]> {
   try {
-    const banners = await prisma.homeBanner.findMany({
-      where: { is_active: true },
-      orderBy: [{ sort_order: "asc" }, { id: "asc" }],
-    });
+    const sectionItems = await getContentSectionItems("home_hero");
+    if (sectionItems.length > 0) {
+      return sectionItems.map((item) => ({
+        id: item.id,
+        eyebrow: item.label ?? "Shopverse Picks",
+        title: item.title ?? "Discover curated products for your routine.",
+        description: item.description ?? item.subtitle ?? "",
+        image: resolveHomeImage(item.image ?? "/assets/banners/5.jpg"),
+        primaryLabel: item.button_text ?? "Explore Now",
+        primaryHref: item.button_url ?? "/catalogs",
+        secondaryLabel: "View Cart",
+        secondaryHref: "/carts",
+      }));
+    }
 
-    if (banners.length === 0) return fallbackHomeBanners;
-
-    return banners.map((banner) => ({
-      id: banner.id,
-      eyebrow: banner.eyebrow ?? "Shopverse Picks",
-      title: banner.title,
-      description: banner.description ?? "",
-      image: resolveHomeImage(banner.image),
-      primaryLabel: banner.primary_label ?? "Explore Now",
-      primaryHref: banner.primary_url ?? "/catalogs",
-      secondaryLabel: banner.secondary_label ?? "View Cart",
-      secondaryHref: banner.secondary_url ?? "/carts",
-    }));
+    return fallbackHomeBanners;
   } catch (error) {
     warnDatabaseFallback("Home banners", error);
     return fallbackHomeBanners;
@@ -194,19 +204,17 @@ export async function getHomeBanners(): Promise<HomeBannerItem[]> {
 // READ: Get dynamic benefit cards with static fallback content.
 export async function getHomeBenefits(): Promise<HomeBenefitItem[]> {
   try {
-    const benefits = await prisma.homeBenefit.findMany({
-      where: { is_active: true },
-      orderBy: [{ sort_order: "asc" }, { id: "asc" }],
-    });
+    const sectionItems = await getContentSectionItems("home_benefits");
+    if (sectionItems.length > 0) {
+      return sectionItems.map((item) => ({
+        id: item.id,
+        title: item.title ?? "Benefit",
+        description: item.description ?? item.subtitle ?? "",
+        icon: resolveHomeImage(item.icon ?? "/assets/icons/box.svg"),
+      }));
+    }
 
-    if (benefits.length === 0) return fallbackHomeBenefits;
-
-    return benefits.map((benefit) => ({
-      id: benefit.id,
-      title: benefit.title,
-      description: benefit.description,
-      icon: resolveHomeImage(benefit.icon ?? "/assets/icons/box.svg"),
-    }));
+    return fallbackHomeBenefits;
   } catch (error) {
     warnDatabaseFallback("Home benefits", error);
     return fallbackHomeBenefits;
@@ -216,22 +224,20 @@ export async function getHomeBenefits(): Promise<HomeBenefitItem[]> {
 // READ: Get dynamic promo tiles with static fallback content.
 export async function getHomePromos(): Promise<HomePromoItem[]> {
   try {
-    const promos = await prisma.homePromo.findMany({
-      where: { is_active: true },
-      orderBy: [{ sort_order: "asc" }, { id: "asc" }],
-    });
+    const sectionItems = await getContentSectionItems("home_promos");
+    if (sectionItems.length > 0) {
+      return sectionItems.map((item) => ({
+        id: item.id,
+        title: item.title ?? "Promo",
+        subtitle: item.subtitle ?? item.description ?? "",
+        label: item.label ?? "Custom",
+        image: resolveHomeImage(item.image ?? "/assets/banners/1.jpg"),
+        buttonText: item.button_text ?? "Learn More",
+        buttonHref: item.button_url ?? "/catalogs",
+      }));
+    }
 
-    if (promos.length === 0) return fallbackHomePromos;
-
-    return promos.map((promo) => ({
-      id: promo.id,
-      title: promo.title,
-      subtitle: promo.subtitle ?? "",
-      label: promo.label ?? "Custom",
-      image: resolveHomeImage(promo.image),
-      buttonText: promo.button_text ?? "Learn More",
-      buttonHref: promo.button_url ?? "/catalogs",
-    }));
+    return fallbackHomePromos;
   } catch (error) {
     warnDatabaseFallback("Home promos", error);
     return fallbackHomePromos;
@@ -259,6 +265,41 @@ export async function getHomeArticles(): Promise<HomeArticleItem[]> {
   } catch (error) {
     warnDatabaseFallback("Home articles", error);
     return fallbackHomeArticles;
+  }
+}
+
+// READ: Get reusable CMS section items by section key.
+async function getContentSectionItems(
+  key: string,
+): Promise<ContentSectionItemSource[]> {
+  try {
+    const section = await prisma.contentSection.findFirst({
+      where: {
+        key,
+        is_active: true,
+      },
+      select: {
+        items: {
+          where: { is_active: true },
+          orderBy: [{ sort_order: "asc" }, { id: "asc" }],
+          select: {
+            id: true,
+            title: true,
+            subtitle: true,
+            description: true,
+            image: true,
+            icon: true,
+            label: true,
+            button_text: true,
+            button_url: true,
+          },
+        },
+      },
+    });
+
+    return section?.items ?? [];
+  } catch {
+    return [];
   }
 }
 

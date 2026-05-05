@@ -6,6 +6,7 @@ import SearchBar from "../_components/search-bar";
 import FilterSidebar from "./_components/filter/filter-sidebar";
 import ProductListing from "./_components/product-listing";
 import {
+  getCatalogHero,
   getFilterBrands,
   getFilterCategories,
   getFilterLocations,
@@ -21,7 +22,8 @@ export async function generateMetadata() {
 }
 
 export default async function CatalogPage() {
-  const [brands, categories, locations] = await Promise.all([
+  const [hero, brands, categories, locations] = await Promise.all([
+    getCatalogHero(),
     getFilterBrands(),
     getFilterCategories(),
     getFilterLocations(),
@@ -49,20 +51,19 @@ export default async function CatalogPage() {
 
             <div className="relative z-10 max-w-2xl text-white">
               <p className="mb-4 inline-flex rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-[#FFC736] backdrop-blur">
-                Product Catalog
+                {hero.label}
               </p>
               <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">
-                Find the right gadget without digging through noise.
+                {hero.title}
               </h1>
               <p className="mt-4 max-w-xl text-sm leading-7 text-white/75 md:text-base">
-                Filter by price, stock, brand, location, and category with a
-                cleaner catalog experience that still fits Shopverse.
+                {hero.description}
               </p>
             </div>
 
             <div className="absolute bottom-0 right-6 hidden w-96 opacity-90 lg:block">
               <Image
-                src="/assets/banners/mba13-m2-digitalmat-gallery-1-202402-Photoroom 2.png"
+                src={hero.image}
                 alt="Featured gadget"
                 width={580}
                 height={360}
