@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import { Lucia, Session } from "lucia";
+import { Lucia, Session, TimeSpan } from "lucia";
 import { RoleUser } from "@prisma/client";
 import { cache } from "react";
 import { cookies } from "next/headers";
@@ -10,11 +10,17 @@ import { getErrorMessage, warnOnce } from "@/lib/error-message";
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user)
 
+// Auth session lifetime.
+// A user must sign in again after 24 hours.
+// Keep this value small and obvious so it is easy to reuse in future projects.
+const SESSION_EXPIRES_IN = new TimeSpan(24, "h")
+
 type AuthResult = { user: User; session: Session } | { user: null; session: null };
 
 export const lucia = new Lucia(adapter, {
+    sessionExpiresIn: SESSION_EXPIRES_IN,
     sessionCookie: {
-        expires: false,
+        expires: true,
         attributes: {
             secure: process.env.NODE_ENV === "production"
         }
