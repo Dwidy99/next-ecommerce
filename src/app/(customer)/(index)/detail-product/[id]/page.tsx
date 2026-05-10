@@ -174,6 +174,7 @@ export default async function DetailProduct({ params }: DetailProductPageProps) 
                 </>
               }
               isShowDetail={false}
+              limit={5}
             />
           </Suspense>
         </section>

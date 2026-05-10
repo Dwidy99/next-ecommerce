@@ -235,6 +235,7 @@ export type CardProductProps = {
 export type ListProductProps = {
   title: ReactNode;
   isShowDetail: boolean;
+  limit?: number;
 };
 
 export type CarouselImagesProps = {

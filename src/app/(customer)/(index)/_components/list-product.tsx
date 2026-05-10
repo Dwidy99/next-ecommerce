@@ -6,8 +6,10 @@ import type { ListProductProps } from "@/app/(customer)/types";
 export default async function ListProduct({
   title,
   isShowDetail,
+  limit,
 }: ListProductProps) {
   const products = await getProducts();
+  const visibleProducts = typeof limit === "number" ? products.slice(0, limit) : products;
 
   return (
     <section id="picked" className="flex flex-col gap-6 sm:gap-8">
@@ -40,7 +42,7 @@ export default async function ListProduct({
           gap-4 sm:gap-6 lg:gap-8
         "
       >
-        {products.map((product) => (
+        {visibleProducts.map((product) => (
           <CardProduct
             key={`${product.name}-${product.id}`}
             item={{
