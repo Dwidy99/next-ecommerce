@@ -13,7 +13,8 @@ function isDatabaseConnectionError(message: string) {
   return (
     message.includes("Can't reach database server") ||
     message.includes("Tenant or user not found") ||
-    message.includes("Error querying the database")
+    message.includes("Error querying the database") ||
+    message.includes("Timed out fetching a new connection")
   );
 }
 

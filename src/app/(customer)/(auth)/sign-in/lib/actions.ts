@@ -7,6 +7,16 @@ import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "lib/prisma";
+import { getErrorMessage } from "@/lib/error-message";
+
+function isDatabaseConnectionError(message: string) {
+  return (
+    message.includes("Can't reach database server") ||
+    message.includes("Tenant or user not found") ||
+    message.includes("Error querying the database") ||
+    message.includes("Timed out fetching a new connection")
+  );
+}
 
 // CREATE: Sign in a customer and create a customer session.
 export async function SignIn(
@@ -35,27 +45,41 @@ export async function SignIn(
     };
   }
 
-  const user = await prisma.user.findFirst({
-    where: {
-      email: parsed.data.email,
-      role: "customer",
-    },
-  });
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        email: parsed.data.email,
+        role: "customer",
+      },
+    });
 
-  if (!user) return { error: "Email or Password is wrong" };
+    if (!user) return { error: "Email or Password is wrong" };
 
-  const isPasswordValid = await bcrypt.compare(parsed.data.password, user.password);
-  if (!isPasswordValid) return { error: "Email/password incorrect" };
+    const isPasswordValid = await bcrypt.compare(parsed.data.password, user.password);
+    if (!isPasswordValid) return { error: "Email/password incorrect" };
 
-  const session = await lucia.createSession(user.id, {});
-  const sessionCookie = lucia.createSessionCookie(session.id);
-  const cookieStore = await cookies();
+    const session = await lucia.createSession(user.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    const cookieStore = await cookies();
 
-  cookieStore.set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes,
-  );
+    cookieStore.set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
+  } catch (error) {
+    const message = getErrorMessage(error, "Failed to sign in");
+    console.error("[customer-login]", message);
+
+    if (isDatabaseConnectionError(message)) {
+      return {
+        error:
+          "Database connection is currently busy. Please wait a moment and try again.",
+      };
+    }
+
+    return { error: "Failed to sign in. Please try again." };
+  }
 
   redirect("/catalogs?login=success");
 }
