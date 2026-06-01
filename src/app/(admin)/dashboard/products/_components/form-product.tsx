@@ -376,7 +376,7 @@ export default function FormProduct({
                 Product Images
               </CardTitle>
               <CardDescription>
-                Upload or preview up to 3 images.
+                Upload exactly 3 product images at once.
               </CardDescription>
             </CardHeader>
             <CardContent>
