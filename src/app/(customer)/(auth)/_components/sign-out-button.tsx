@@ -6,11 +6,17 @@ import { toast } from "sonner";
 import { LogOut, Loader2 } from "lucide-react";
 import { SignOut } from "../sign-in/lib/actions";
 
-export default function SignOutButton() {
+type SignOutButtonProps = {
+  onSignOutStart?: () => void;
+};
+
+export default function SignOutButton({ onSignOutStart }: SignOutButtonProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
   const handleSignOut = () => {
+    onSignOutStart?.();
+
     startTransition(async () => {
       try {
         const res = await SignOut();
@@ -22,7 +28,8 @@ export default function SignOutButton() {
           return;
         }
 
-        router.replace("/?logout=success");
+        router.replace(res.redirectUrl ?? "/?logout=success");
+        router.refresh();
       } catch (error) {
         console.error(error);
 

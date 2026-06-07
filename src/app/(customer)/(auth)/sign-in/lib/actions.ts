@@ -5,6 +5,7 @@ import { schemaSignIn } from "@/lib/schema";
 import { ActionResult } from "@/app/(customer)/types";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "lib/prisma";
 import { getErrorMessage } from "@/lib/error-message";
@@ -81,6 +82,7 @@ export async function SignIn(
     return { error: "Failed to sign in. Please try again." };
   }
 
+  revalidatePath("/", "layout");
   redirect("/catalogs?login=success");
 }
 
@@ -108,7 +110,9 @@ export async function SignOut(): Promise<ActionResult> {
     return { error: "Failed to sign out" };
   }
 
-  return { error: "" };
+  revalidatePath("/", "layout");
+
+  return { error: "", redirectUrl: "/?logout=success" };
 }
 
 // VALIDATION HELPER
