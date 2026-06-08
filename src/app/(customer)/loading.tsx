@@ -4,10 +4,6 @@ import { cn } from "@/lib/utils";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CustomerLoadingProps } from "./types";
-import {
-  CUSTOMER_PAGE_LOADING_START_EVENT,
-  CUSTOMER_PAGE_LOADING_STOP_EVENT,
-} from "./_lib/page-loading-events";
 
 function SkeletonBlock({ className = "" }: { className?: string }) {
   return <div className={cn("animate-pulse rounded-xl bg-gray-200", className)} />;
@@ -152,16 +148,9 @@ export function CustomerNavigationLoading() {
     };
 
     document.addEventListener("click", startLoading, true);
-    window.addEventListener(CUSTOMER_PAGE_LOADING_START_EVENT, startPageLoading);
-    window.addEventListener(CUSTOMER_PAGE_LOADING_STOP_EVENT, stopLoading);
 
     return () => {
       document.removeEventListener("click", startLoading, true);
-      window.removeEventListener(
-        CUSTOMER_PAGE_LOADING_START_EVENT,
-        startPageLoading,
-      );
-      window.removeEventListener(CUSTOMER_PAGE_LOADING_STOP_EVENT, stopLoading);
       clearLoadingTimeout();
     };
   }, [clearLoadingTimeout, startPageLoading, stopLoading]);
