@@ -59,7 +59,7 @@ export default async function CustomerLayout({
       </div>
       <CustomerNavigationLoading />
       <CustomerAuthAlert />
-      {children}
+      <div className="min-h-screen">{children}</div>
       <Footer />
     </div>
   ); // jangan pakai <html> atau <body>

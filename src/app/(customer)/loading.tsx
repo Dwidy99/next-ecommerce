@@ -1,9 +1,13 @@
 ﻿"use client";
 
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { CustomerLoadingProps } from "./types";
+import {
+  CUSTOMER_PAGE_LOADING_START_EVENT,
+  CUSTOMER_PAGE_LOADING_STOP_EVENT,
+} from "./_lib/page-loading-events";
 
 function SkeletonBlock({ className = "" }: { className?: string }) {
   return <div className={cn("animate-pulse rounded-xl bg-gray-200", className)} />;
@@ -78,17 +82,49 @@ export default function CustomerLoading({
 
 export function CustomerNavigationLoading() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loadingStartedOnRouteRef = useRef<string | null>(null);
+  const routeKey = `${pathname}?${searchParams.toString()}`;
+
+  const clearLoadingTimeout = useCallback(() => {
+    if (!timeoutRef.current) return;
+
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = null;
+  }, []);
+
+  const stopLoading = useCallback(() => {
+    setIsLoading(false);
+    loadingStartedOnRouteRef.current = null;
+    clearLoadingTimeout();
+  }, [clearLoadingTimeout]);
+
+  const startPageLoading = useCallback(() => {
+    loadingStartedOnRouteRef.current = routeKey;
+    setIsLoading(true);
+    clearLoadingTimeout();
+    timeoutRef.current = setTimeout(stopLoading, 45000);
+  }, [clearLoadingTimeout, routeKey, stopLoading]);
 
   useEffect(() => {
-    setIsLoading(false);
+    if (!isLoading || loadingStartedOnRouteRef.current === routeKey) return;
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-  }, [pathname]);
+    const waitForPageContent = () => {
+      if (document.querySelector("main")) {
+        stopLoading();
+      }
+    };
+
+    const animationFrame = window.requestAnimationFrame(waitForPageContent);
+    const interval = window.setInterval(waitForPageContent, 150);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.clearInterval(interval);
+    };
+  }, [isLoading, routeKey, stopLoading]);
 
   useEffect(() => {
     const startLoading = (event: MouseEvent) => {
@@ -112,28 +148,95 @@ export function CustomerNavigationLoading() {
       const nextPath = nextUrl.pathname + nextUrl.search;
       if (currentPath === nextPath) return;
 
-      setIsLoading(true);
-
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      timeoutRef.current = setTimeout(() => {
-        setIsLoading(false);
-      }, 8000);
+      startPageLoading();
     };
 
     document.addEventListener("click", startLoading, true);
+    window.addEventListener(CUSTOMER_PAGE_LOADING_START_EVENT, startPageLoading);
+    window.addEventListener(CUSTOMER_PAGE_LOADING_STOP_EVENT, stopLoading);
 
     return () => {
       document.removeEventListener("click", startLoading, true);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      window.removeEventListener(
+        CUSTOMER_PAGE_LOADING_START_EVENT,
+        startPageLoading,
+      );
+      window.removeEventListener(CUSTOMER_PAGE_LOADING_STOP_EVENT, stopLoading);
+      clearLoadingTimeout();
     };
-  }, []);
+  }, [clearLoadingTimeout, startPageLoading, stopLoading]);
 
   if (!isLoading) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-0 z-[9999]">
+    <div
+      id="customer-page-transition-loading"
+      className="pointer-events-none fixed inset-0 z-[9998] overflow-hidden bg-[#edf2f6] text-[#110843]"
+    >
       <div className="h-1 w-full overflow-hidden bg-[#110843]/10">
         <div className="h-full w-1/2 animate-[customer-navigation-progress_1.1s_ease-in-out_infinite] rounded-r-full bg-[#FFC736] shadow-[0_0_18px_rgba(255,199,54,0.85)]" />
+      </div>
+
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-4 sm:px-8 lg:px-16">
+        <div className="hidden items-center justify-between rounded-b-2xl bg-[#07111f] px-6 py-2 text-white md:flex">
+          <SkeletonBlock className="h-3 w-32 bg-white/20" />
+          <SkeletonBlock className="h-3 w-72 bg-white/20" />
+          <SkeletonBlock className="h-3 w-24 bg-[#FFC736]/60" />
+        </div>
+
+        <div className="mt-4 rounded-[2rem] bg-[#FFC736] p-4 shadow-sm sm:p-6">
+          <div className="flex items-center justify-between rounded-2xl bg-[#110843] px-5 py-4">
+            <SkeletonBlock className="h-10 w-36 rounded-full bg-white/15" />
+            <div className="hidden items-center gap-3 md:flex">
+              <SkeletonBlock className="h-8 w-20 rounded-full bg-white/15" />
+              <SkeletonBlock className="h-8 w-24 rounded-full bg-white/15" />
+              <SkeletonBlock className="h-9 w-24 rounded-full bg-[#FFC736]/70" />
+            </div>
+            <SkeletonBlock className="h-10 w-10 rounded-full bg-white/15 md:hidden" />
+          </div>
+
+          <div className="mt-6 overflow-hidden rounded-3xl bg-[#110843] p-7 shadow-xl md:p-10">
+            <SkeletonBlock className="h-7 w-32 rounded-full bg-white/15" />
+            <SkeletonBlock className="mt-5 h-12 max-w-xl bg-white/20 md:h-16" />
+            <SkeletonBlock className="mt-4 h-4 max-w-2xl bg-white/15" />
+            <SkeletonBlock className="mt-3 h-4 max-w-lg bg-white/15" />
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-4">
+          <div className="hidden rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:block">
+            <SkeletonBlock className="h-5 w-28 bg-slate-200" />
+            <div className="mt-6 grid gap-3">
+              <SkeletonBlock className="h-10 bg-slate-200" />
+              <SkeletonBlock className="h-10 bg-slate-200" />
+              <SkeletonBlock className="h-10 bg-slate-200" />
+            </div>
+          </div>
+
+          <div className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-200 md:p-6 lg:col-span-3">
+            <div className="flex items-end justify-between border-b border-slate-200 pb-4">
+              <div>
+                <SkeletonBlock className="h-3 w-24 bg-[#FFC736]/60" />
+                <SkeletonBlock className="mt-3 h-7 w-36 bg-slate-200" />
+              </div>
+              <SkeletonBlock className="hidden h-4 w-56 bg-slate-200 sm:block" />
+            </div>
+
+            <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="rounded-2xl border border-slate-100 bg-white p-3 shadow-sm"
+                >
+                  <SkeletonBlock className="aspect-square w-full rounded-xl bg-slate-200" />
+                  <SkeletonBlock className="mt-4 h-4 w-3/4 bg-slate-200" />
+                  <SkeletonBlock className="mt-2 h-3 w-1/2 bg-slate-100" />
+                  <SkeletonBlock className="mt-4 h-8 w-full rounded-full bg-[#FFC736]/50" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       <style jsx>{`

@@ -2,10 +2,14 @@
 
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { ActionResult } from "@/app/(customer)/types";
 import { SignIn } from "../lib/actions";
 import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import {
+  CUSTOMER_PAGE_LOADING_START_EVENT,
+  CUSTOMER_PAGE_LOADING_STOP_EVENT,
+} from "@/app/(customer)/_lib/page-loading-events";
 
 const initialState: ActionResult = { error: "" };
 const defaultCustomerEmail = "guest@gmail.com";
@@ -27,6 +31,16 @@ function SubmitButton() {
 
 function LoginLoadingOverlay() {
   const { pending } = useFormStatus();
+
+  useEffect(() => {
+    window.dispatchEvent(
+      new Event(
+        pending
+          ? CUSTOMER_PAGE_LOADING_START_EVENT
+          : CUSTOMER_PAGE_LOADING_STOP_EVENT,
+      ),
+    );
+  }, [pending]);
 
   if (!pending) return null;
 
