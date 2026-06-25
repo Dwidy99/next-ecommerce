@@ -47,7 +47,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { AdminNavigationLoading } from "../loading";
 import FormLogout from "./logout-button";
 
 const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
@@ -325,7 +324,6 @@ function DashboardContent({ children }: AdminDashboardShellProps) {
 export default function DashboardShell({ children }: AdminDashboardShellProps) {
   return (
     <SidebarProvider>
-      <AdminNavigationLoading />
       <AppSidebar />
       <SidebarInset>
         <DashboardHeader />

@@ -11,8 +11,18 @@ import {
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
 import { getOrders } from "./lib/data"
+import { Suspense } from "react"
+import { AdminListPageLoading } from "../_components/admin-section-loading"
 
-export default async function OrderPage() {
+export default function OrderPage() {
+  return (
+    <Suspense fallback={<AdminListPageLoading stats={3} />}>
+      <OrderContent />
+    </Suspense>
+  )
+}
+
+async function OrderContent() {
   const orders = await getOrders()
   const successOrders = orders.filter((order) => order.status === "success").length
   const pendingOrders = orders.filter((order) => order.status === "pending").length

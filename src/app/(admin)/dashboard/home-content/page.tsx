@@ -1,4 +1,5 @@
 import type { Article, ContentSection, ContentSectionItem } from "@prisma/client";
+import { Suspense } from "react";
 import {
   HelpCircle,
   LayoutTemplate,
@@ -31,6 +32,7 @@ import {
   updateContentSection,
 } from "./lib/actions";
 import { getHomeContent } from "./lib/data";
+import { AdminListPageLoading } from "../_components/admin-section-loading";
 
 type SectionWithItems = ContentSection & {
   items: ContentSectionItem[];
@@ -457,7 +459,15 @@ function ArticleForm({ article }: { article?: Article }) {
   );
 }
 
-export default async function HomeContentPage() {
+export default function HomeContentPage() {
+  return (
+    <Suspense fallback={<AdminListPageLoading stats={3} />}>
+      <HomeContentData />
+    </Suspense>
+  );
+}
+
+async function HomeContentData() {
   const { sections, articles } = await getHomeContent();
   const itemCount = sections.reduce((total, section) => total + section.items.length, 0);
 

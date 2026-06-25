@@ -11,8 +11,18 @@ import {
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
 import { getCustomers } from "./lib/data"
+import { Suspense } from "react"
+import { AdminListPageLoading } from "../_components/admin-section-loading"
 
-export default async function CustomerPage() {
+export default function CustomerPage() {
+  return (
+    <Suspense fallback={<AdminListPageLoading stats={3} />}>
+      <CustomerContent />
+    </Suspense>
+  )
+}
+
+async function CustomerContent() {
   const customers = await getCustomers()
   const activeCustomers = customers.filter((customer) => customer.total_transactions > 0).length
   const totalTransactions = customers.reduce(

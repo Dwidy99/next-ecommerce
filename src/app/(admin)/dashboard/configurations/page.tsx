@@ -13,8 +13,18 @@ import {
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
 import { getConfigurations } from "./lib/data"
+import { Suspense } from "react"
+import { AdminListPageLoading } from "../_components/admin-section-loading"
 
-export default async function ConfigurationsPage() {
+export default function ConfigurationsPage() {
+  return (
+    <Suspense fallback={<AdminListPageLoading stats={2} />}>
+      <ConfigurationsContent />
+    </Suspense>
+  )
+}
+
+async function ConfigurationsContent() {
   const configs = await getConfigurations()
   const languages = new Set(configs.map((config) => config.language)).size
 

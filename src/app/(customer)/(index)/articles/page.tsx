@@ -1,6 +1,7 @@
 import { CalendarDays, Eye, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import Navbar from "../_components/navbar";
 import NoData from "../_components/no-data";
@@ -30,7 +31,6 @@ export default async function ArticlesPage({
   const params = await searchParams;
   const search = params?.search ?? "";
   const sort = params?.sort ?? "newest";
-  const articles = await getArticles({ search, sort });
 
   return (
     <main className="min-h-screen bg-[#edf2f6] pb-16">
@@ -96,26 +96,67 @@ export default async function ArticlesPage({
       </section>
 
       <section className="mx-auto mt-6 max-w-7xl px-4 sm:px-8 lg:px-16">
-        {articles.length === 0 ? (
-          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-            <NoData
-              title="No articles found"
-              message="Try another keyword or reset the article filter."
-            />
-          </div>
-        ) : (
-          <LoadMoreGrid
-            initialCount={9}
-            incrementBy={5}
-            buttonLabel="Load More Articles"
-          >
-            {articles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </LoadMoreGrid>
-        )}
+        <Suspense fallback={<ArticleGridLoading />}>
+          <ArticleList search={search} sort={sort} />
+        </Suspense>
       </section>
     </main>
+  );
+}
+
+async function ArticleList({
+  search,
+  sort,
+}: {
+  search: string;
+  sort: string;
+}) {
+  const articles = await getArticles({ search, sort });
+
+  if (articles.length === 0) {
+    return (
+      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+        <NoData
+          title="No articles found"
+          message="Try another keyword or reset the article filter."
+        />
+      </div>
+    );
+  }
+
+  return (
+    <LoadMoreGrid
+      initialCount={9}
+      incrementBy={5}
+      buttonLabel="Load More Articles"
+    >
+      {articles.map((article) => (
+        <ArticleCard key={article.id} article={article} />
+      ))}
+    </LoadMoreGrid>
+  );
+}
+
+function ArticleGridLoading() {
+  return (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div
+          key={index}
+          className="min-h-[430px] animate-pulse rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+        >
+          <div className="h-56 rounded-xl bg-slate-200" />
+          <div className="mt-4 h-6 w-4/5 rounded bg-slate-200" />
+          <div className="mt-3 h-4 w-1/2 rounded bg-slate-100" />
+          <div className="mt-5 space-y-2">
+            <div className="h-4 rounded bg-slate-100" />
+            <div className="h-4 w-5/6 rounded bg-slate-100" />
+            <div className="h-4 w-3/4 rounded bg-slate-100" />
+          </div>
+          <div className="mt-6 h-10 w-24 rounded-lg bg-slate-100" />
+        </div>
+      ))}
+    </div>
   );
 }
 

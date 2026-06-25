@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { getSiteConfig } from "@/lib/seo/config";
 import { defaultMetadata } from "@/lib/seo/default-metadata";
-import { CustomerNavigationLoading } from "../loading";
 import CustomerAuthAlert from "../_components/customer-auth-alert";
 
 export const dynamic = "force-dynamic";
@@ -57,7 +56,6 @@ export default async function CustomerLayout({
           </Link>
         </div>
       </div>
-      <CustomerNavigationLoading />
       <CustomerAuthAlert />
       <div className="min-h-screen">{children}</div>
       <Footer />

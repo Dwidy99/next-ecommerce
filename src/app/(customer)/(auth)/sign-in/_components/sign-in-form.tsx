@@ -2,7 +2,8 @@
 
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ActionResult } from "@/app/(customer)/types";
 import { SignIn } from "../lib/actions";
 import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
@@ -48,6 +49,14 @@ function LoginLoadingOverlay() {
 export default function SignInForm() {
   const [state, formAction] = useActionState(SignIn, initialState);
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!state.redirectUrl) return;
+
+    router.replace(state.redirectUrl);
+    router.refresh();
+  }, [router, state.redirectUrl]);
 
   const togglePassword = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

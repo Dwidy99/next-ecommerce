@@ -6,7 +6,6 @@ import { ActionResult } from "@/app/(customer)/types";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { prisma } from "lib/prisma";
 import { getErrorMessage } from "@/lib/error-message";
 
@@ -36,7 +35,7 @@ export async function SignIn(
   const currentAuth = await getUser();
 
   if (currentAuth.user?.role === "customer") {
-    redirect("/catalogs");
+    return { error: "", redirectUrl: "/catalogs" };
   }
 
   if (currentAuth.user?.role === "superadmin") {
@@ -83,7 +82,7 @@ export async function SignIn(
   }
 
   revalidatePath("/", "layout");
-  redirect("/catalogs?login=success");
+  return { error: "", redirectUrl: "/catalogs?login=success" };
 }
 
 // DELETE: Sign out the current customer session.

@@ -7,7 +7,6 @@ import { fetchCatalogProducts } from "../lib/client";
 import CardProduct from "../../_components/card-product";
 import LoadMoreGrid from "../../_components/load-more-grid";
 import NoData from "../../_components/no-data";
-import CustomerLoading from "@/app/(customer)/loading";
 import type { TProduct } from "@/app/(customer)/types";
 
 export default function ProductListing(): JSX.Element {
@@ -33,11 +32,7 @@ function ProductListingContent(): JSX.Element {
   });
 
   if (isLoading) {
-    return (
-      <div className="w-full">
-        <CustomerLoading count={6} type="grid" variant="section" />
-      </div>
-    );
+    return <ProductCardGridLoading />;
   }
 
   if (isError) {
@@ -73,5 +68,25 @@ function ProductListingContent(): JSX.Element {
         ))}
       </LoadMoreGrid>
     </section>
+  );
+}
+
+function ProductCardGridLoading() {
+  return (
+    <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8">
+      {Array.from({ length: 8 }).map((_, index) => (
+        <div
+          key={index}
+          className="flex animate-pulse flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5"
+        >
+          <div className="h-[140px] rounded-xl bg-[#FFF4CC] sm:h-[160px] md:h-[180px]" />
+          <div className="space-y-2">
+            <div className="h-4 w-4/5 rounded bg-slate-200" />
+            <div className="h-3 w-1/2 rounded bg-slate-100" />
+          </div>
+          <div className="h-4 w-24 rounded bg-[#FFC736]/40" />
+        </div>
+      ))}
+    </div>
   );
 }

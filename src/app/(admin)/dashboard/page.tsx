@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -25,6 +26,7 @@ import {
 } from "@/components/ui/card";
 import { rupiahFormat } from "@/lib/utils";
 import { ChartArea } from "./_components/chart-area";
+import { AdminCardTableLoading } from "./_components/admin-section-loading";
 import { SectionCards } from "./_components/dashboard-section-card";
 import { getDashboardData } from "./lib/data";
 
@@ -260,7 +262,34 @@ function BusinessHealth({
   );
 }
 
-export default async function DashboardPage() {
+function DashboardDataLoading() {
+  return (
+    <>
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Card key={index} className="border-border/70 bg-card/95 shadow-sm">
+            <CardHeader className="grid gap-3">
+              <div className="h-4 w-28 animate-pulse rounded-xl bg-muted" />
+              <div className="h-8 w-20 animate-pulse rounded-xl bg-muted" />
+            </CardHeader>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-[1.6fr_0.9fr]">
+        <AdminCardTableLoading />
+        <QuickActions />
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
+        <AdminCardTableLoading />
+        <AdminCardTableLoading />
+      </div>
+    </>
+  );
+}
+
+async function DashboardDataContent() {
   const {
     stats,
     chartData,
@@ -270,8 +299,7 @@ export default async function DashboardPage() {
   } = await getDashboardData();
 
   return (
-    <div className="flex flex-col gap-6">
-      <DashboardHero />
+    <>
       <SectionCards stats={stats} />
 
       <div className="grid gap-6 xl:grid-cols-[1.6fr_0.9fr]">
@@ -286,6 +314,17 @@ export default async function DashboardPage() {
           productStockCounts={productStockCounts}
         />
       </div>
+    </>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <div className="flex flex-col gap-6">
+      <DashboardHero />
+      <Suspense fallback={<DashboardDataLoading />}>
+        <DashboardDataContent />
+      </Suspense>
     </div>
   );
 }

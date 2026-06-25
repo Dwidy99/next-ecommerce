@@ -13,8 +13,18 @@ import {
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
 import { getLocations } from "./lib/data"
+import { Suspense } from "react"
+import { AdminListPageLoading } from "../_components/admin-section-loading"
 
-export default async function LocationsPage() {
+export default function LocationsPage() {
+  return (
+    <Suspense fallback={<AdminListPageLoading stats={2} />}>
+      <LocationsContent />
+    </Suspense>
+  )
+}
+
+async function LocationsContent() {
   const data = await getLocations()
   const totalProducts = data.reduce(
     (total, location) => total + location._count.products,

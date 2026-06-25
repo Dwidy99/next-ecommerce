@@ -2,7 +2,6 @@ import { Poppins } from "next/font/google";
 import React, { ReactNode } from "react";
 import { getCustomerUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { CustomerNavigationLoading } from "../loading";
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +37,6 @@ export default async function AuthRootLayout({
 
   return (
     <div className={poppins.className}>
-      <CustomerNavigationLoading />
       {children}
     </div>
   );

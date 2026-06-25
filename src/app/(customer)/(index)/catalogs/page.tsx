@@ -1,6 +1,7 @@
 import { generatePageSEO } from "@/lib/seo/seo-utils";
 import Image from "next/image";
 import { SlidersHorizontal } from "lucide-react";
+import { Suspense } from "react";
 import Navbar from "../_components/navbar";
 import SearchBar from "../_components/search-bar";
 import FilterSidebar from "./_components/filter/filter-sidebar";
@@ -21,14 +22,7 @@ export async function generateMetadata() {
   });
 }
 
-export default async function CatalogPage() {
-  const [hero, brands, categories, locations] = await Promise.all([
-    getCatalogHero(),
-    getFilterBrands(),
-    getFilterCategories(),
-    getFilterLocations(),
-  ]);
-
+export default function CatalogPage() {
   return (
     <main className="min-h-screen bg-[#edf2f6] pb-12">
       {/* Top strip */}
@@ -45,33 +39,9 @@ export default async function CatalogPage() {
         <div className="mx-auto max-w-7xl">
           <Navbar />
 
-          <section className="relative mt-6 overflow-hidden rounded-3xl bg-[#110843] p-7 shadow-xl md:p-10">
-            <div className="absolute left-0 top-0 h-40 w-40 rounded-full bg-[#FFC736]/25 blur-3xl" />
-            <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
-
-            <div className="relative z-10 max-w-2xl text-white">
-              <p className="mb-4 inline-flex rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-[#FFC736] backdrop-blur">
-                {hero.label}
-              </p>
-              <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">
-                {hero.title}
-              </h1>
-              <p className="mt-4 max-w-xl text-sm leading-7 text-white/75 md:text-base">
-                {hero.description}
-              </p>
-            </div>
-
-            <div className="absolute bottom-0 right-6 hidden w-96 opacity-90 lg:block">
-              <Image
-                src={hero.image}
-                alt="Featured gadget"
-                width={580}
-                height={360}
-                className="h-auto w-full object-contain drop-shadow-2xl"
-                priority
-              />
-            </div>
-          </section>
+          <Suspense fallback={<CatalogHeroLoading />}>
+            <CatalogHero />
+          </Suspense>
         </div>
       </header>
 
@@ -83,28 +53,9 @@ export default async function CatalogPage() {
       {/* Main content */}
       <section className="container mx-auto mt-8 max-w-7xl px-4 pb-[100px] md:px-6">
         <div className="grid gap-6 lg:grid-cols-4">
-          <aside className="hidden h-fit rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm ring-1 ring-white lg:col-span-1 lg:block">
-            <FilterSidebar
-              brands={brands}
-              categories={categories}
-              locations={locations}
-            />
-          </aside>
-
-          <details className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm lg:hidden">
-            <summary className="flex cursor-pointer list-none items-center justify-center gap-2 rounded-full bg-[#FFC736] py-3 font-semibold text-[#110843] shadow-sm transition hover:bg-[#ffda63]">
-              <SlidersHorizontal size={18} />
-              <span>Show Filters</span>
-            </summary>
-
-            <div className="mt-5">
-              <FilterSidebar
-                brands={brands}
-                categories={categories}
-                locations={locations}
-              />
-            </div>
-          </details>
+          <Suspense fallback={<CatalogFiltersLoading />}>
+            <CatalogFilters />
+          </Suspense>
 
           <main className="rounded-3xl border border-slate-200 bg-white/95 p-5 shadow-sm ring-1 ring-white md:p-6 lg:col-span-3">
             <div className="mb-5 flex flex-col justify-between gap-2 border-b border-slate-200 pb-4 md:flex-row md:items-end">
@@ -125,5 +76,122 @@ export default async function CatalogPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+async function CatalogHero() {
+  const hero = await getCatalogHero();
+
+  return (
+    <section className="relative mt-6 overflow-hidden rounded-3xl bg-[#110843] p-7 shadow-xl md:p-10">
+      <div className="absolute left-0 top-0 h-40 w-40 rounded-full bg-[#FFC736]/25 blur-3xl" />
+      <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
+
+      <div className="relative z-10 max-w-2xl text-white">
+        <p className="mb-4 inline-flex rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-[#FFC736] backdrop-blur">
+          {hero.label}
+        </p>
+        <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">
+          {hero.title}
+        </h1>
+        <p className="mt-4 max-w-xl text-sm leading-7 text-white/75 md:text-base">
+          {hero.description}
+        </p>
+      </div>
+
+      <div className="absolute bottom-0 right-6 hidden w-96 opacity-90 lg:block">
+        <Image
+          src={hero.image}
+          alt="Featured gadget"
+          width={580}
+          height={360}
+          className="h-auto w-full object-contain drop-shadow-2xl"
+          priority
+        />
+      </div>
+    </section>
+  );
+}
+
+function CatalogHeroLoading() {
+  return (
+    <section className="mt-6 overflow-hidden rounded-3xl bg-[#110843] p-7 shadow-xl md:p-10">
+      <div className="max-w-2xl animate-pulse">
+        <div className="h-9 w-48 rounded-full bg-white/10" />
+        <div className="mt-6 h-12 w-full max-w-xl rounded-xl bg-white/20 md:h-16" />
+        <div className="mt-4 h-4 w-full max-w-lg rounded bg-white/15" />
+        <div className="mt-3 h-4 w-2/3 rounded bg-white/15" />
+      </div>
+    </section>
+  );
+}
+
+async function CatalogFilters() {
+  const [brands, categories, locations] = await Promise.all([
+    getFilterBrands(),
+    getFilterCategories(),
+    getFilterLocations(),
+  ]);
+
+  return (
+    <>
+      <aside className="hidden h-fit rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm ring-1 ring-white lg:col-span-1 lg:block">
+        <FilterSidebar
+          brands={brands}
+          categories={categories}
+          locations={locations}
+        />
+      </aside>
+
+      <details className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm lg:hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-center gap-2 rounded-full bg-[#FFC736] py-3 font-semibold text-[#110843] shadow-sm transition hover:bg-[#ffda63]">
+          <SlidersHorizontal size={18} />
+          <span>Show Filters</span>
+        </summary>
+
+        <div className="mt-5">
+          <FilterSidebar
+            brands={brands}
+            categories={categories}
+            locations={locations}
+          />
+        </div>
+      </details>
+    </>
+  );
+}
+
+function CatalogFiltersLoading() {
+  return (
+    <>
+      <aside className="hidden h-fit rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm ring-1 ring-white lg:col-span-1 lg:block">
+        <FilterSkeleton />
+      </aside>
+
+      <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm lg:hidden">
+        <div className="h-12 animate-pulse rounded-full bg-[#FFC736]/60" />
+      </div>
+    </>
+  );
+}
+
+function FilterSkeleton() {
+  return (
+    <div className="animate-pulse space-y-5">
+      <div>
+        <div className="h-3 w-20 rounded bg-[#FFC736]/60" />
+        <div className="mt-3 h-7 w-28 rounded bg-slate-200" />
+      </div>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div key={index} className="border-b border-slate-200 pb-5">
+          <div className="h-5 w-32 rounded bg-slate-200" />
+          <div className="mt-4 space-y-3">
+            <div className="h-4 w-36 rounded bg-slate-100" />
+            <div className="h-4 w-28 rounded bg-slate-100" />
+            <div className="h-4 w-32 rounded bg-slate-100" />
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

@@ -13,8 +13,18 @@ import {
 import { DataTable } from "@/components/ui/data-table"
 import { columns } from "./columns"
 import { getProducts } from "./lib/data"
+import { Suspense } from "react"
+import { AdminListPageLoading } from "../_components/admin-section-loading"
 
-export default async function ProductPage() {
+export default function ProductPage() {
+  return (
+    <Suspense fallback={<AdminListPageLoading stats={3} />}>
+      <ProductContent />
+    </Suspense>
+  )
+}
+
+async function ProductContent() {
   const products = await getProducts()
   const readyProducts = products.filter((product) => product.stock === "ready").length
   const totalSales = products.reduce((total, product) => total + product.total_sales, 0)

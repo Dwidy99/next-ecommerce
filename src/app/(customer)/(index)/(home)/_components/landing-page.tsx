@@ -22,14 +22,21 @@ export default function LandingPage() {
         <Navbar />
       </header>
 
-      <HomeHero />
-      <BenefitStrip />
+      <Suspense fallback={<CustomerLoading variant="section" />}>
+        <HomeHero />
+      </Suspense>
+
+      <Suspense fallback={<CustomerLoading variant="section" />}>
+        <BenefitStrip />
+      </Suspense>
 
       <Suspense fallback={<CustomerLoading variant="section" />}>
         <CompactCategoryGrid />
       </Suspense>
 
-      <PromoMosaic />
+      <Suspense fallback={<CustomerLoading variant="section" />}>
+        <PromoMosaic />
+      </Suspense>
 
       <Suspense fallback={<CustomerLoading variant="section" />}>
         <ProductScroller />
@@ -39,7 +46,9 @@ export default function LandingPage() {
         <CollaborationSection />
       </Suspense>
 
-      <ArticleSection />
+      <Suspense fallback={<CustomerLoading variant="section" />}>
+        <ArticleSection />
+      </Suspense>
     </main>
   )
 }

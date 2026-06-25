@@ -1,5 +1,6 @@
 ﻿import Link from "next/link";
 import { FolderTree, Package, PlusCircle, Sparkles } from "lucide-react";
+import { Suspense } from "react";
 
 import { DataTable } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
@@ -13,8 +14,17 @@ import {
 } from "@/components/ui/card";
 import { columns } from "./columns";
 import { getCategories } from "./lib/data";
+import { AdminListPageLoading } from "../_components/admin-section-loading";
 
-export default async function CategoriesPage() {
+export default function CategoriesPage() {
+  return (
+    <Suspense fallback={<AdminListPageLoading stats={2} />}>
+      <CategoriesContent />
+    </Suspense>
+  );
+}
+
+async function CategoriesContent() {
   const data = await getCategories();
   const totalProducts = data.reduce(
     (total, category) => total + category._count.products,
