@@ -3,7 +3,7 @@
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { useActionState, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ActionResult } from "@/app/(customer)/types";
 import { SignIn } from "../lib/actions";
 import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
@@ -49,14 +49,14 @@ function LoginLoadingOverlay() {
 export default function SignInForm() {
   const [state, formAction] = useActionState(SignIn, initialState);
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
+  const pathname = usePathname();
+  const redirectTo = pathname === "/sign-in" ? "" : pathname;
 
   useEffect(() => {
     if (!state.redirectUrl) return;
 
-    router.replace(state.redirectUrl);
-    router.refresh();
-  }, [router, state.redirectUrl]);
+    window.location.replace(state.redirectUrl);
+  }, [state.redirectUrl]);
 
   const togglePassword = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -69,6 +69,9 @@ export default function SignInForm() {
       className="relative flex flex-col gap-5 rounded-3xl border border-[#E5E5E5] bg-white px-6 py-8 shadow-sm transition-all sm:px-10 sm:py-10"
     >
       <LoginLoadingOverlay />
+      {redirectTo && (
+        <input type="hidden" name="redirectTo" value={redirectTo} />
+      )}
 
       <div className="flex flex-col items-center gap-2 text-center">
         <img

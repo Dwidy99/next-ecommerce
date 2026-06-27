@@ -1,6 +1,8 @@
 import { generatePageSEO } from "@/lib/seo/seo-utils"
 import LandingPage from "./_components/landing-page"
 
+export const dynamic = "force-dynamic"
+
 export async function generateMetadata() {
   return await generatePageSEO({
     title: "Home",

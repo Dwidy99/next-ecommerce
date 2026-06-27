@@ -33,7 +33,7 @@ export default async function CustomerLayout({
     <div className={poppins.className}>
       <div className="lg:hidden md:hidden w-full bg-white border-b border-gray-100 shadow-sm py-3 px-4 sticky top-0 z-40">
         <div className="max-w-screen-xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" prefetch={false} className="flex items-center gap-2">
             <Image
               src="/assets/logos/logos-black.svg"
               alt="Shopverse logo"

@@ -18,11 +18,34 @@ function isDatabaseConnectionError(message: string) {
   );
 }
 
+function getSafeCustomerRedirectPath(value: FormDataEntryValue | null) {
+  if (typeof value !== "string") return "/catalogs";
+  if (!value.startsWith("/") || value.startsWith("//")) return "/catalogs";
+
+  const pathname = value.split("?")[0];
+  if (
+    pathname.startsWith("/sign-in") ||
+    pathname.startsWith("/sign-up") ||
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/dashboard")
+  ) {
+    return "/catalogs";
+  }
+
+  return value || "/catalogs";
+}
+
+function addLoginSuccessParam(path: string) {
+  return path.includes("?") ? `${path}&login=success` : `${path}?login=success`;
+}
+
 // CREATE: Sign in a customer and create a customer session.
 export async function SignIn(
   _: unknown,
   formData: FormData,
 ): Promise<ActionResult> {
+  const redirectTo = getSafeCustomerRedirectPath(formData.get("redirectTo"));
+
   const parsed = schemaSignIn.safeParse({
     email: String(formData.get("email") ?? ""),
     password: String(formData.get("password") ?? ""),
@@ -35,7 +58,7 @@ export async function SignIn(
   const currentAuth = await getUser();
 
   if (currentAuth.user?.role === "customer") {
-    return { error: "", redirectUrl: "/catalogs" };
+    return { error: "", redirectUrl: redirectTo };
   }
 
   if (currentAuth.user?.role === "superadmin") {
@@ -82,7 +105,10 @@ export async function SignIn(
   }
 
   revalidatePath("/", "layout");
-  return { error: "", redirectUrl: "/catalogs?login=success" };
+  revalidatePath("/", "page");
+  revalidatePath(redirectTo.split("?")[0] || "/", "page");
+
+  return { error: "", redirectUrl: addLoginSuccessParam(redirectTo) };
 }
 
 // DELETE: Sign out the current customer session.
@@ -110,6 +136,7 @@ export async function SignOut(): Promise<ActionResult> {
   }
 
   revalidatePath("/", "layout");
+  revalidatePath("/", "page");
 
   return { error: "", redirectUrl: "/?logout=success" };
 }

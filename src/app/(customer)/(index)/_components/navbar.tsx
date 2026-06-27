@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { unstable_noStore as noStore } from "next/cache";
 import { getCustomerUser } from "@/lib/auth";
 import { getSiteConfig } from "@/lib/seo/config";
 import { getCategories } from "../lib/data";
@@ -55,6 +56,8 @@ function NavbarFallback() {
 }
 
 async function NavbarContent() {
+  noStore();
+
   const { user } = await getCustomerUser();
   const categoriesData = await getCategories();
   const siteConfig = await getSiteConfig("ID");
