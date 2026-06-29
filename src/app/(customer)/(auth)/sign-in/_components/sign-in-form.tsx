@@ -2,7 +2,7 @@
 
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import { usePathname } from "next/navigation";
 import { ActionResult } from "@/app/(customer)/types";
 import { SignIn } from "../lib/actions";
@@ -51,12 +51,6 @@ export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const pathname = usePathname();
   const redirectTo = pathname === "/sign-in" ? "" : pathname;
-
-  useEffect(() => {
-    if (!state.redirectUrl) return;
-
-    window.location.replace(state.redirectUrl);
-  }, [state.redirectUrl]);
 
   const togglePassword = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

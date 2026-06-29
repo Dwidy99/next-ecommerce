@@ -6,6 +6,7 @@ import { ActionResult } from "@/app/(customer)/types";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { prisma } from "lib/prisma";
 import { getErrorMessage } from "@/lib/error-message";
 
@@ -36,7 +37,9 @@ function getSafeCustomerRedirectPath(value: FormDataEntryValue | null) {
 }
 
 function addLoginSuccessParam(path: string) {
-  return path.includes("?") ? `${path}&login=success` : `${path}?login=success`;
+  const separator = path.includes("?") ? "&" : "?";
+
+  return `${path}${separator}login=success&refresh=${Date.now()}`;
 }
 
 // CREATE: Sign in a customer and create a customer session.
@@ -58,7 +61,7 @@ export async function SignIn(
   const currentAuth = await getUser();
 
   if (currentAuth.user?.role === "customer") {
-    return { error: "", redirectUrl: redirectTo };
+    redirect(redirectTo);
   }
 
   if (currentAuth.user?.role === "superadmin") {
@@ -108,7 +111,7 @@ export async function SignIn(
   revalidatePath("/", "page");
   revalidatePath(redirectTo.split("?")[0] || "/", "page");
 
-  return { error: "", redirectUrl: addLoginSuccessParam(redirectTo) };
+  redirect(addLoginSuccessParam(redirectTo));
 }
 
 // DELETE: Sign out the current customer session.
