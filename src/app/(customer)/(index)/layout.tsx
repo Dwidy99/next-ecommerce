@@ -6,6 +6,7 @@ import Image from "next/image";
 import { getSiteConfig } from "@/lib/seo/config";
 import { defaultMetadata } from "@/lib/seo/default-metadata";
 import CustomerAuthAlert from "../_components/customer-auth-alert";
+import CustomerRouteProgress from "../_components/customer-route-progress";
 
 export const dynamic = "force-dynamic";
 
@@ -56,6 +57,7 @@ export default async function CustomerLayout({
           </Link>
         </div>
       </div>
+      <CustomerRouteProgress />
       <CustomerAuthAlert />
       <div className="min-h-screen">{children}</div>
       <Footer />
