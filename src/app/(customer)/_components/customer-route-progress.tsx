@@ -96,6 +96,19 @@ export default function CustomerRouteProgress() {
   return (
     <>
       <div
+        aria-hidden={!isNavigating}
+        className={`fixed inset-0 z-[9998] grid place-items-center bg-[#edf2f6]/60 backdrop-blur-[2px] transition-opacity duration-200 ${
+          isNavigating
+            ? "pointer-events-auto cursor-wait opacity-100"
+            : "pointer-events-none opacity-0"
+        }`}
+      >
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-xl ring-1 ring-slate-200">
+          <span className="h-6 w-6 animate-spin rounded-full border-2 border-[#110843]/20 border-t-[#FFC736]" />
+        </div>
+      </div>
+
+      <div
         aria-hidden="true"
         className={`fixed left-0 top-0 z-[9999] h-1 w-full overflow-hidden transition-opacity duration-200 ${
           isNavigating ? "opacity-100" : "pointer-events-none opacity-0"
