@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { prisma } from "lib/prisma";
+import { prisma } from "../../../../../../lib/prisma";
 import { getErrorMessage } from "@/lib/error-message";
 
 function isDatabaseConnectionError(message: string) {
