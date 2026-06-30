@@ -19,27 +19,8 @@ function isDatabaseConnectionError(message: string) {
   );
 }
 
-function getSafeCustomerRedirectPath(value: FormDataEntryValue | null) {
-  if (typeof value !== "string") return "/catalogs";
-  if (!value.startsWith("/") || value.startsWith("//")) return "/catalogs";
-
-  const pathname = value.split("?")[0];
-  if (
-    pathname.startsWith("/sign-in") ||
-    pathname.startsWith("/sign-up") ||
-    pathname.startsWith("/login") ||
-    pathname.startsWith("/dashboard")
-  ) {
-    return "/catalogs";
-  }
-
-  return value || "/catalogs";
-}
-
-function addLoginSuccessParam(path: string) {
-  const separator = path.includes("?") ? "&" : "?";
-
-  return `${path}${separator}login=success&refresh=${Date.now()}`;
+function getCatalogLoginRedirectUrl() {
+  return `/catalogs?login=success&refresh=${Date.now()}`;
 }
 
 // CREATE: Sign in a customer and create a customer session.
@@ -47,8 +28,6 @@ export async function SignIn(
   _: unknown,
   formData: FormData,
 ): Promise<ActionResult> {
-  const redirectTo = getSafeCustomerRedirectPath(formData.get("redirectTo"));
-
   const parsed = schemaSignIn.safeParse({
     email: String(formData.get("email") ?? ""),
     password: String(formData.get("password") ?? ""),
@@ -61,7 +40,7 @@ export async function SignIn(
   const currentAuth = await getUser();
 
   if (currentAuth.user?.role === "customer") {
-    redirect(redirectTo);
+    redirect("/catalogs");
   }
 
   if (currentAuth.user?.role === "superadmin") {
@@ -109,9 +88,9 @@ export async function SignIn(
 
   revalidatePath("/", "layout");
   revalidatePath("/", "page");
-  revalidatePath(redirectTo.split("?")[0] || "/", "page");
+  revalidatePath("/catalogs", "page");
 
-  redirect(addLoginSuccessParam(redirectTo));
+  redirect(getCatalogLoginRedirectUrl());
 }
 
 // DELETE: Sign out the current customer session.
