@@ -94,11 +94,38 @@ export default function CustomerRouteProgress() {
   }, [routeKey, stopLoading]);
 
   return (
-    <div
-      aria-hidden="true"
-      className={`fixed left-0 top-0 z-[9999] h-1 bg-[#FFC736] shadow-[0_0_14px_rgba(255,199,54,0.75)] transition-all duration-500 ease-out ${
-        isNavigating ? "w-full opacity-100" : "w-0 opacity-0"
-      }`}
-    />
+    <>
+      <div
+        aria-hidden="true"
+        className={`fixed left-0 top-0 z-[9999] h-1 w-full overflow-hidden transition-opacity duration-200 ${
+          isNavigating ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      >
+        <div
+          className="absolute inset-y-0 left-0 w-2/5 rounded-r-full bg-[#FFC736] shadow-[0_0_14px_rgba(255,199,54,0.75)]"
+          style={{
+            animation: isNavigating
+              ? "customer-route-progress 1.1s ease-in-out infinite"
+              : "none",
+          }}
+        />
+      </div>
+
+      <style>{`
+        @keyframes customer-route-progress {
+          0% {
+            transform: translateX(-110%);
+          }
+
+          50% {
+            transform: translateX(85%);
+          }
+
+          100% {
+            transform: translateX(260%);
+          }
+        }
+      `}</style>
+    </>
   );
 }
